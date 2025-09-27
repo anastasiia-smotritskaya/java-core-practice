@@ -13,8 +13,8 @@ public class StringPractice {
      * @param original строка для проверки
      * @return true если строка палиндром, false если строка не палиндром
      * @throws IllegalArgumentException если строка равна null
-     * @code boolean result = isPalindrome("А роза упала на лапу Азора"); // true
-     * boolean result = isPalindrome("От топота копыт пыль по полю летит"); // false
+     * @code boolean result = isPalindrome("Madam"); // true
+     * boolean result = isPalindrome("Adam"); // false
      * @see java.lang.StringBuilder
      */
     public static boolean isPalindrome(String original) {
