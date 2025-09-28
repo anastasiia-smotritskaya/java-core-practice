@@ -8,12 +8,18 @@ package com.github.anastasiiasmotritskaya.javacore;
  */
 public class Calculator {
     /**
+     * Конструктор по умолчанию для javadoc
+     */
+    private Calculator() {
+    }
+
+    /**
      * Складывает два числа типа double
      *
      * @param a первое слагаемое
      * @param b второе слагаемое
      * @return результат сложения типа double
-     * @code double result = add(15, 5); // 20.0
+     * {@code double result = add(15, 5);} // 20.0
      */
     public static double add(double a, double b) {
         return a + b;
@@ -25,7 +31,7 @@ public class Calculator {
      * @param a уменьшаемое
      * @param b вычитаемое
      * @return результат вычитания типа double
-     * @code double result = subtract(15, 5); // 10.0
+     * {@code double result = subtract(15, 5);} // 10.0
      */
     public static double subtract(double a, double b) {
         return a - b;
@@ -37,7 +43,7 @@ public class Calculator {
      * @param a множитель
      * @param b множитель
      * @return результат умножения типа double
-     * @code double result = subtract(15, 5); // 75.0
+     * {@code double result = subtract(15, 5);} // 75.0
      */
     public static double multiply(double a, double b) {
         return a * b;
@@ -49,7 +55,7 @@ public class Calculator {
      * @param a делимое
      * @param b делитель
      * @return результат деления типа double
-     * @code double result = divide(15, 5); // 3.0
+     * {@code double result = divide(15, 5);} // 3.0
      */
     public static double divide(double a, double b) {
         if (b == 0) {
@@ -64,7 +70,7 @@ public class Calculator {
      *
      * @param number число, которое необходимо проверить на четность
      * @return true если число четное, false если число нечетное
-     * @code boolean result = isEven(2); // true
+     * {@code boolean result = isEven(2);} // true
      * boolean result = isEven(3); // false
      */
     public static boolean isEven(int number) {
