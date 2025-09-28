@@ -8,19 +8,13 @@ package com.github.anastasiiasmotritskaya.javacore;
  */
 public class StringPractice {
     /**
-     * Конструктор по умолчанию
-     */
-    private StringPractice() {
-    }
-
-    /**
      * Определяет, является ли строка палиндромом.
      *
      * @param original строка для проверки
      * @return true если строка палиндром, false если строка не палиндром
      * @throws IllegalArgumentException если строка равна null
-     *                                  {@code boolean result = isPalindrome("Madam"); // true
-     *                                  boolean result = isPalindrome("Adam");} // false
+     * @code boolean result = isPalindrome("Madam"); // true
+     * boolean result = isPalindrome("Adam"); // false
      * @see java.lang.StringBuilder
      */
     public static boolean isPalindrome(String original) {
