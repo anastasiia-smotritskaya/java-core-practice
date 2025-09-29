@@ -71,7 +71,7 @@ public class Calculator {
      * @param number число, которое необходимо проверить на четность
      * @return true если число четное, false если число нечетное
      * {@code boolean result = isEven(2);} // true
-     * boolean result = isEven(3); // false
+     * {@code boolean result = isEven(3);} // false
      */
     public static boolean isEven(int number) {
         return number % 2 == 0;
