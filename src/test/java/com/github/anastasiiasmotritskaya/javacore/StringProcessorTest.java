@@ -70,5 +70,31 @@ public class StringProcessorTest {
         assertEquals("!@#$", StringProcessor.reverseString("$#@!"));
     }
 
+    @Test
+    void testCountVowelsPositive() {
+        assertEquals(2, StringProcessor.countVowels("camel"));
+        assertEquals(0, StringProcessor.countVowels("123"));
+        assertEquals(0, StringProcessor.countVowels("0"));
+        assertEquals(0, StringProcessor.countVowels(":*?)№*"));
+    }
 
+    @Test
+    void testCountVowelsNullString() {
+        assertEquals(0, StringProcessor.countVowels(null));
+    }
+
+    @Test
+    void testCountVowelsEmptyString() {
+        assertEquals(0, StringProcessor.countVowels(""));
+    }
+
+    @Test
+    void testCountVowelsDifferentCases() {
+        assertEquals(8, StringProcessor.countVowels("A camel is an animal"));
+    }
+
+    @Test
+    void testCountVowelsMixedLanguages() {
+        assertEquals(4, StringProcessor.countVowels("Привет Hello"));
+    }
 }
