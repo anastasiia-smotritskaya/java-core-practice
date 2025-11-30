@@ -78,4 +78,27 @@ public class StringProcessor {
         if (str == null) return null;
         return str.replaceAll("\\s", "");
     }
+
+    /**
+     * Приводит первую букву каждого слова к верхнему регистру, остальные - к нижнему
+     *
+     * @param str строка для обработки
+     * @return строку с заглавными первыми буквами каждого слова
+     * {@code String result = capitalizeWords("hello world");} // "Hello World"
+     */
+    public static String capitalizeWords(String str) {
+        if (str == null || str.isEmpty()) return str;
+
+        String [] words = str.split("\\s+");
+        StringBuilder result = new StringBuilder();
+
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                result.append(Character.toUpperCase(word.charAt(0)))
+                        .append(word.substring(1).toLowerCase())
+                        .append(" ");
+            }
+        }
+        return result.toString().trim();
+    }
 }

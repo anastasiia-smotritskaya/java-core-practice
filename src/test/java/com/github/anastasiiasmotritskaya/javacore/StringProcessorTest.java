@@ -102,7 +102,7 @@ public class StringProcessorTest {
     }
 
     @Test
-    void textRemoveSpaces() {
+    void testRemoveSpaces() {
         assertAll("removeSpaces should remove all spaces",
                 () -> assertEquals("camel", StringProcessor.removeSpaces("cam el")),
                 () -> assertEquals("camel", StringProcessor.removeSpaces(" camel")),
@@ -114,7 +114,25 @@ public class StringProcessorTest {
     }
 
     @Test
-    void textRemoveSpacesNull() {
+    void testRemoveSpacesNull() {
         assertNull(StringProcessor.removeSpaces(null));
+    }
+
+    @Test
+    void testCapitalizeWords() {
+        assertAll(
+                () -> assertEquals("The Camel Is Great", StringProcessor.capitalizeWords("the camel is great")),
+                () -> assertEquals("The Camel Is Great", StringProcessor.capitalizeWords("THE CAMEL IS GREAT")),
+                () -> assertEquals("", StringProcessor.capitalizeWords("")),
+                () -> assertEquals("", StringProcessor.capitalizeWords("   ")),
+                () -> assertEquals("One Two", StringProcessor.capitalizeWords("one   two")),
+                () -> assertEquals("123", StringProcessor.capitalizeWords("123")),
+                () -> assertEquals("@#$%", StringProcessor.capitalizeWords("@#$%"))
+        );
+    }
+
+    @Test
+    void testCapitalizeWordsNull() {
+        assertNull(StringProcessor.capitalizeWords(null));
     }
 }
