@@ -3,8 +3,8 @@ package com.github.anastasiiasmotritskaya.javacore;
 /**
  * Базовый калькулятор
  * Методы: сложение, вычитание, умножение, деление, проверка на четность
- * * @author Анастасия Смотрицкая
- * * @version 1.0
+ * @author Анастасия Смотрицкая
+ * @version 1.0
  */
 public class Calculator {
     /**
