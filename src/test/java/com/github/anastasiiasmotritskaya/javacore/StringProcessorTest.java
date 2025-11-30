@@ -45,6 +45,7 @@ public class StringProcessorTest {
 
     @Test
     void testReverseStringSpaces() {
+
         assertEquals(" tseT", StringProcessor.reverseString("Test "));
         assertEquals("tseT ", StringProcessor.reverseString(" Test"));
         assertEquals("ts   eT", StringProcessor.reverseString("Te   st"));
@@ -72,10 +73,12 @@ public class StringProcessorTest {
 
     @Test
     void testCountVowelsPositive() {
-        assertEquals(2, StringProcessor.countVowels("camel"));
-        assertEquals(0, StringProcessor.countVowels("123"));
-        assertEquals(0, StringProcessor.countVowels("0"));
-        assertEquals(0, StringProcessor.countVowels(":*?)№*"));
+        assertAll("testCountVowels should count vowels in all types of strings",
+                () -> assertEquals(2, StringProcessor.countVowels("camel")),
+                () -> assertEquals(0, StringProcessor.countVowels("123")),
+                () -> assertEquals(0, StringProcessor.countVowels("0")),
+                () -> assertEquals(0, StringProcessor.countVowels(":*?)№*"))
+        );
     }
 
     @Test
@@ -96,5 +99,22 @@ public class StringProcessorTest {
     @Test
     void testCountVowelsMixedLanguages() {
         assertEquals(4, StringProcessor.countVowels("Привет Hello"));
+    }
+
+    @Test
+    void textRemoveSpaces() {
+        assertAll("removeSpaces should remove all spaces",
+                () -> assertEquals("camel", StringProcessor.removeSpaces("cam el")),
+                () -> assertEquals("camel", StringProcessor.removeSpaces(" camel")),
+                () -> assertEquals("camel", StringProcessor.removeSpaces("camel ")),
+                () -> assertEquals("camel", StringProcessor.removeSpaces("c a m e l")),
+                () -> assertEquals("", StringProcessor.removeSpaces("")),
+                () -> assertEquals("", StringProcessor.removeSpaces("    "))
+        );
+    }
+
+    @Test
+    void textRemoveSpacesNull() {
+        assertNull(StringProcessor.removeSpaces(null));
     }
 }

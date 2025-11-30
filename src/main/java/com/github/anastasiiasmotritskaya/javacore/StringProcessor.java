@@ -66,4 +66,16 @@ public class StringProcessor {
         }
         return str.replaceAll("[^aeiouAEIOUауоыиэяюёеАУОЫИЭЯЮЁЕ]", "").length();
     }
+
+    /**
+     * Удаляет все пробелы из строки
+     *
+     * @param str строка для обработки
+     * @return строку без пробелов
+     * {@code String result = removeSpaces("c a m e l");} // "camel"
+     */
+    public static String removeSpaces(String str) {
+        if (str == null) return null;
+        return str.replaceAll("\\s", "");
+    }
 }
