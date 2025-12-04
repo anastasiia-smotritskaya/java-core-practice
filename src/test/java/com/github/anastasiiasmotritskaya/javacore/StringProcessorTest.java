@@ -7,22 +7,22 @@ import static org.junit.jupiter.api.Assertions.*;
 public class StringProcessorTest {
 
     @Test
-    void testIsPalindromeWithPalindromeString() {
+    void isPalindromeWithPalindromeStringTest() {
         assertTrue(StringProcessor.isPalindrome("madam"));
     }
 
     @Test
-    void testIsPalindromeWithNonPalindromeString() {
+    void isPalindromeWithNonPalindromeStringTest() {
         assertFalse(StringProcessor.isPalindrome("hello"));
     }
 
     @Test
-    void testIsPalindromeWithSingleCharacter() {
+    void isPalindromeWithSingleCharacterTest() {
         assertTrue(StringProcessor.isPalindrome("a"));
     }
 
     @Test
-    void testIsPalindromeWithNoCharacter() {
+    void isPalindromeWithNoCharacterTest() {
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> StringProcessor.isPalindrome(null)
@@ -32,48 +32,49 @@ public class StringProcessorTest {
     }
 
     @Test
-    void testReverseStringPositive() {
+    void reverseStringPositiveTest() {
         assertEquals("tseT", StringProcessor.reverseString("Test"));
     }
 
     @Test
-    void testReverseStringEmpty() {
+    void reverseStringEmptyTest() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> StringProcessor.reverseString(null));
         assertEquals("Illegal argument: empty variable, String argument required", exception.getMessage());
     }
 
     @Test
-    void testReverseStringSpaces() {
-
-        assertEquals(" tseT", StringProcessor.reverseString("Test "));
-        assertEquals("tseT ", StringProcessor.reverseString(" Test"));
-        assertEquals("ts   eT", StringProcessor.reverseString("Te   st"));
+    void reverseStringSpacesTest() {
+        assertAll(
+                () -> assertEquals(" tseT", StringProcessor.reverseString("Test ")),
+                () -> assertEquals("tseT ", StringProcessor.reverseString(" Test")),
+                () -> assertEquals("ts   eT", StringProcessor.reverseString("Te   st"))
+        );
     }
 
     @Test
-    void testReverseStringShortString() {
+    void reverseStringShortStringTest() {
         assertEquals("F", StringProcessor.reverseString("F"));
     }
 
     @Test
-    void testReverseStringEmptyString() {
+    void reverseStringEmptyStringTest() {
         assertEquals("", StringProcessor.reverseString(""));
     }
 
     @Test
-    void testReverseStringWithNumbers() {
+    void reverseStringWithNumbersTest() {
         assertEquals("321", StringProcessor.reverseString("123"));
     }
 
     @Test
-    void testReverseStringWithSpecialChars() {
+    void reverseStringWithSpecialCharsTest() {
         assertEquals("!@#$", StringProcessor.reverseString("$#@!"));
     }
 
     @Test
-    void testCountVowelsPositive() {
-        assertAll("testCountVowels should count vowels in all types of strings",
+    void countVowelsPositiveTest() {
+        assertAll(
                 () -> assertEquals(2, StringProcessor.countVowels("camel")),
                 () -> assertEquals(0, StringProcessor.countVowels("123")),
                 () -> assertEquals(0, StringProcessor.countVowels("0")),
@@ -82,27 +83,27 @@ public class StringProcessorTest {
     }
 
     @Test
-    void testCountVowelsNullString() {
+    void countVowelsNullStringTest() {
         assertEquals(0, StringProcessor.countVowels(null));
     }
 
     @Test
-    void testCountVowelsEmptyString() {
+    void countVowelsEmptyStringTest() {
         assertEquals(0, StringProcessor.countVowels(""));
     }
 
     @Test
-    void testCountVowelsDifferentCases() {
+    void countVowelsDifferentCasesTest() {
         assertEquals(8, StringProcessor.countVowels("A camel is an animal"));
     }
 
     @Test
-    void testCountVowelsMixedLanguages() {
+    void countVowelsMixedLanguagesTest() {
         assertEquals(4, StringProcessor.countVowels("Привет Hello"));
     }
 
     @Test
-    void testRemoveSpaces() {
+    void removeSpacesTest() {
         assertAll("removeSpaces should remove all spaces",
                 () -> assertEquals("camel", StringProcessor.removeSpaces("cam el")),
                 () -> assertEquals("camel", StringProcessor.removeSpaces(" camel")),
@@ -114,12 +115,12 @@ public class StringProcessorTest {
     }
 
     @Test
-    void testRemoveSpacesNull() {
+    void removeSpacesNullTest() {
         assertNull(StringProcessor.removeSpaces(null));
     }
 
     @Test
-    void testCapitalizeWords() {
+    void capitalizeWordsTest() {
         assertAll(
                 () -> assertEquals("The Camel Is Great", StringProcessor.capitalizeWords("the camel is great")),
                 () -> assertEquals("The Camel Is Great", StringProcessor.capitalizeWords("THE CAMEL IS GREAT")),
@@ -132,7 +133,7 @@ public class StringProcessorTest {
     }
 
     @Test
-    void testCapitalizeWordsNull() {
+    void capitalizeWordsNull() {
         assertNull(StringProcessor.capitalizeWords(null));
     }
 }

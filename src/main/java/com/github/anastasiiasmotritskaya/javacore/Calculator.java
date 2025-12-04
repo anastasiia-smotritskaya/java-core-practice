@@ -3,6 +3,7 @@ package com.github.anastasiiasmotritskaya.javacore;
 /**
  * Базовый калькулятор
  * Методы: сложение, вычитание, умножение, деление, проверка на четность
+ *
  * @author Анастасия Смотрицкая
  * @version 1.0
  */
@@ -56,6 +57,7 @@ public class Calculator {
      * @param b делитель
      * @return результат деления типа double
      * {@code double result = divide(15, 5);} // 3.0
+     * @throws IllegalArgumentException если b равен 0
      */
     public static double divide(double a, double b) {
         if (b == 0) {

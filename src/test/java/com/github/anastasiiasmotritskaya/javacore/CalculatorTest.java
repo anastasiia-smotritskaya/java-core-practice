@@ -7,27 +7,27 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CalculatorTest {
 
     @Test
-    void testAdd() {
+    void addTest() {
         assertEquals(20.0, Calculator.add(15, 5), 0.001);
     }
 
     @Test
-    void testSubtract() {
+    void subtractTest() {
         assertEquals(10.0, Calculator.subtract(15, 5), 0.001);
     }
 
     @Test
-    void testMultiply() {
+    void multiplyTest() {
         assertEquals(75.0, Calculator.multiply(15, 5), 0.001);
     }
 
     @Test
-    void testDivide() {
+    void divideTest() {
         assertEquals(3.0, Calculator.divide(15, 5), 0.001);
     }
 
     @Test
-    void testDivideWithIllegalArgumentException() {
+    void divideNullTest() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> Calculator.divide(10.0, 0.0));
 
@@ -35,17 +35,17 @@ public class CalculatorTest {
     }
 
     @Test
-    void testIsEvenEvenNumber() {
+    void isEvenEvenNumberTest() {
         assertTrue(Calculator.isEven(10));
     }
 
     @Test
-    void testIsEvenOddNumber() {
+    void isEvenOddNumberTest() {
         assertFalse(Calculator.isEven(15));
     }
 
     @Test
-    void testIsEvenNull() {
+    void isEvenNullTest() {
         assertTrue(Calculator.isEven(0));
     }
 }
