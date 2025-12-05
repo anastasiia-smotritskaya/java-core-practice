@@ -25,4 +25,59 @@ public class BasicOperators {
         result[1] = a % b;
         return result;
     }
+
+    /**
+     * Конвертирует температуру между шкалами
+     *
+     * @param value значение температуры
+     * @param from  исходная шкала ("C", "F", "K")
+     * @param to    целевая шкала ("C", "F", "K")
+     * @return конвертированная температура
+     * {@code double result = convertTemperature(-273.15, "C", "K");} // 0.0
+     * @throws IllegalArgumentException если {@code from} или {@code to}
+     *         не равны "C", "F" или "K"
+     * @throws IllegalArgumentException если температура в Кельвинах ниже
+     *         абсолютного нуля (0K)
+     * @throws IllegalArgumentException если температура в градусах Цельсия
+     *         ниже -273.15°C при конвертации в Кельвины
+     * @throws IllegalArgumentException если температура в градусах Фаренгейта
+     *         ниже -459.67°F при конвертации в Кельвины
+     */
+    public static double convertTemperature(double value, String from, String to) {
+
+        double result = 0.0;
+
+        if (from == null || to == null) throw new IllegalArgumentException("Scale cannot be null");
+
+        if (!isValidScale(from) || !isValidScale(to)) throw new IllegalArgumentException("This is not a scale! You must select Celsius (C), Fahrenheit (F), or Kelvin (K).");
+
+        if (from.equalsIgnoreCase("C")) {
+            if (to.equalsIgnoreCase(from)) result = value;
+            else if (to.equalsIgnoreCase("K") && value < -273.15)
+                throw new IllegalArgumentException("Kelvins are never negative. Check the data.");
+            else if (to.equalsIgnoreCase("K") && value >= -273.15) result = value + 273.15;
+            else if (to.equalsIgnoreCase("F")) result = (value * 9.0 / 5.0) + 32.0;
+
+        } else if (from.equalsIgnoreCase("F")) {
+            if (to.equalsIgnoreCase(from)) result = value;
+            else if (to.equalsIgnoreCase("C")) result = (value - 32.0) * 5.0 / 9.0;
+            else if (to.equalsIgnoreCase("K") && value < -459.67)
+                throw new IllegalArgumentException("Kelvins are never negative. Check the data.");
+            else if (to.equalsIgnoreCase("K") && value >= -459.67) result = (value - 32.0) * 5.0 / 9.0 + 273.15;
+
+        } else if (from.equalsIgnoreCase("K")) {
+            if (value < 0.0) throw new IllegalArgumentException("Kelvins are never negative. Check the data.");
+            else if (to.equalsIgnoreCase(from)) result = value;
+            else if (to.equalsIgnoreCase("C")) result = value - 273.15;
+            else if (to.equalsIgnoreCase("F")) result = (value - 273.15) * 9.0 / 5.0 + 32.0;
+        }
+        return result;
+    }
+
+    private static boolean isValidScale(String scale) {
+        return scale != null
+                && (scale.equalsIgnoreCase("C")
+                || scale.equalsIgnoreCase("K")
+                || scale.equalsIgnoreCase("F"));
+    }
 }
