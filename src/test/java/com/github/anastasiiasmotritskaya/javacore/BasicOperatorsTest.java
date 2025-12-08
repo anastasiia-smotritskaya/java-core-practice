@@ -2,6 +2,7 @@ package com.github.anastasiiasmotritskaya.javacore;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -166,4 +167,117 @@ public class BasicOperatorsTest {
         assertEquals("Scale cannot be null", fromToException.getMessage());
     }
 
+    @ParameterizedTest
+    @CsvSource({
+            "2_147_483_647, 1", // Integer.MAX_VALUE + 1
+            "2_147_483_647, 10", // Integer.MAX_VALUE + 10
+            "-2_147_483_648, -1", // Integer.MIN_VALUE + (-1)
+            "-2_147_483_648, -10" // Integer.MIN_VALUE + (-10)
+    })
+    void willOverflowAddTrueTest(int a, int b) {
+        assertTrue(BasicOperators.willOverflow(a, b, "+"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "2_147_483_647, 0", // Integer.MAX_VALUE + 0
+            "2_147_483_646, 1", // (Integer.MAX_VALUE-1) + 1
+            "2_147_483_645, 1", // (Integer.MAX_VALUE-2) + 1
+            "-2_147_483_648, 0", // Integer.MIN_VALUE + 0
+            "-2_147_483_647, -1", // (Integer.MIN_VALUE+1) + (-1)
+            "-2_147_483_646, -1", // (Integer.MIN_VALUE+2) + (-1)
+            "5, 3",
+            "-5, -3",
+            "-5, 5"
+    })
+    void willOverflowAddFalseTest(int a, int b) {
+        assertFalse(BasicOperators.willOverflow(a, b, "+"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "2_147_483_647, -1", // Integer.MAX_VALUE - (-1)
+            "2_147_483_647, -10", // Integer.MAX_VALUE - (-10)
+            "-2_147_483_648, 1", // Integer.MIN_VALUE - 1
+            "-2_147_483_648, 10" // Integer.MIN_VALUE - 10
+    })
+    void willOverflowSubtractTrueTest(int a, int b) {
+        assertTrue(BasicOperators.willOverflow(a, b, "-"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "2_147_483_647, 0", // Integer.MAX_VALUE - 0
+            "2_147_483_646, -1", // (Integer.MAX_VALUE-1) - (-1)
+            "2_147_483_645, -1", // (Integer.MAX_VALUE-2) - (-1)
+            "-2_147_483_648, 0", // Integer.MIN_VALUE - 0
+            "-2_147_483_647, 1", // (Integer.MIN_VALUE+1) + 1
+            "-2_147_483_646, 1", // (Integer.MIN_VALUE+2) + 1
+            "5, 3",
+            "-5, -3",
+            "5, 5"
+    })
+    void willOverflowSubtractFalseTest(int a, int b) {
+        assertFalse(BasicOperators.willOverflow(a, b, "-"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1_073_741_824, 2", // ((Integer.MAX_VALUE+1)/2) * 2
+            "1_073_741_828, 2", // ((Integer.MAX_VALUE+5)/2) * 2
+            "2_147_483_647, 2_147_483_647", // Integer.MAX_VALUE * Integer.MAX_VALUE
+            "-1_073_741_825, 2", // ((Integer.MIN_VALUE-2)/2) * 2
+            "-1_073_741_826, 2", // ((Integer.MIN_VALUE-4)/2) * 2
+            "-2_147_483_648, -2_147_483_648" // Integer.MIN_VALUE * Integer.MIN_VALUE
+    })
+    void willOverflowMultiplyTrueTest(int a, int b) {
+        assertTrue(BasicOperators.willOverflow(a, b, "*"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "2_147_483_647, 1", // Integer.MAX_VALUE * 1
+            "1_073_741_823, 2", // ((Integer.MAX_VALUE-1)/2) * 2
+            "-1_073_741_824, 2", // (Integer.MIN_VALUE/2) * 2
+            "-2_147_483_647, 1", // (Integer.MIN_VALUE+1) * 1
+            "5, 3",
+            "-5, 3",
+            "5, 0"
+    })
+    void willOverflowMultiplyFalseTest(int a, int b) {
+        assertFalse(BasicOperators.willOverflow(a, b, "*"));
+    }
+
+    @Test
+    void willOverflowDivideNullTest() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> BasicOperators.willOverflow(100, 0, "/"));
+
+        assertEquals("You can't divide by zero", exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "2_147_483_647, 2", // Integer.MAX_VALUE / 2
+            "2_147_483_647, -2", // Integer.MAX_VALUE / (-2)
+            "2_147_483_647, 2_147_483_647", // Integer.MAX_VALUE / Integer.MAX_VALUE
+            "2_147_483_647, 2_147_483_646", // Integer.MAX_VALUE / (Integer.MAX_VALUE-1)
+            "2_147_483_646, 2_147_483_647", // (Integer.MAX_VALUE-1) / Integer.MAX_VALUE
+            "-2_147_483_648, 2", // Integer.MIN_VALUE / 2
+            "-2_147_483_648, -2", // Integer.MIN_VALUE / (-2)
+            "-2_147_483_648, -2_147_483_648,", // Integer.MIN_VALUE / Integer.MIN_VALUE
+            "-2_147_483_648, -2_147_483_647,", // Integer.MIN_VALUE / (Integer.MIN_VALUE+1)
+            "-2_147_483_647, -2_147_483_648," //  (Integer.MIN_VALUE+1) / Integer.MIN_VALUE
+    })
+    void willOverflowDivideFalseTest(int a, int b) {
+        assertFalse(BasicOperators.willOverflow(a, b, "/"));
+    }
+
+    @Test
+    void willOverflowInvalidOperatorTest() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> BasicOperators.willOverflow(100, 5, "деление"));
+
+        assertEquals("Invalid operator: деление", exception.getMessage());
+    }
 }

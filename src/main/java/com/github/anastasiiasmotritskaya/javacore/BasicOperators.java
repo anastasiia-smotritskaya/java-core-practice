@@ -1,5 +1,12 @@
 package com.github.anastasiiasmotritskaya.javacore;
 
+/**
+ * Работа с примитивами и операторами
+ * Методы: вычисление частного и остатка, конвертер температур, проверка переполнения
+ *
+ * @author Анастасия Смотрицкая
+ * @version 1.0
+ */
 public class BasicOperators {
     /**
      * Конструктор по умолчанию для javadoc
@@ -35,13 +42,13 @@ public class BasicOperators {
      * @return конвертированная температура
      * {@code double result = convertTemperature(-273.15, "C", "K");} // 0.0
      * @throws IllegalArgumentException если {@code from} или {@code to}
-     *         не равны "C", "F" или "K"
+     *                                  не равны "C", "F" или "K"
      * @throws IllegalArgumentException если температура в Кельвинах ниже
-     *         абсолютного нуля (0K)
+     *                                  абсолютного нуля (0K)
      * @throws IllegalArgumentException если температура в градусах Цельсия
-     *         ниже -273.15°C при конвертации в Кельвины
+     *                                  ниже -273.15°C при конвертации в Кельвины
      * @throws IllegalArgumentException если температура в градусах Фаренгейта
-     *         ниже -459.67°F при конвертации в Кельвины
+     *                                  ниже -459.67°F при конвертации в Кельвины
      */
     public static double convertTemperature(double value, String from, String to) {
 
@@ -49,7 +56,8 @@ public class BasicOperators {
 
         if (from == null || to == null) throw new IllegalArgumentException("Scale cannot be null");
 
-        if (!isValidScale(from) || !isValidScale(to)) throw new IllegalArgumentException("This is not a scale! You must select Celsius (C), Fahrenheit (F), or Kelvin (K).");
+        if (!isValidScale(from) || !isValidScale(to))
+            throw new IllegalArgumentException("This is not a scale! You must select Celsius (C), Fahrenheit (F), or Kelvin (K).");
 
         if (from.equalsIgnoreCase("C")) {
             if (to.equalsIgnoreCase(from)) result = value;
@@ -79,5 +87,59 @@ public class BasicOperators {
                 && (scale.equalsIgnoreCase("C")
                 || scale.equalsIgnoreCase("K")
                 || scale.equalsIgnoreCase("F"));
+    }
+
+    /**
+     * Проверяет, вызовет ли арифметическая операция переполнение типа int
+     *
+     * @param a первое число
+     * @param b второе число
+     * @param operator арифметический оператор ("+", "-", "*", "/")
+     * @return true если операция вызовет переполнение
+     * @throws IllegalArgumentException если:
+     *         <ul>
+     *           <li>operator не "+", "-", "*", или "/"</li>
+     *           <li>происходит деление на ноль (b == 0 при operator == "/")</li>
+     *         </ul>
+     * {@code boolean result = willOverflow(Integer.MAX_VALUE, 1, "+");} // true
+     */
+    public static boolean willOverflow(int a, int b, String operator) {
+
+        switch (operator) {
+            case "+":
+                try {
+                    Math.addExact(a, b);
+                    return false;
+                } catch (ArithmeticException e) {
+                    return true;
+                }
+
+            case "-":
+                try {
+                    Math.subtractExact(a, b);
+                    return false;
+                } catch (ArithmeticException e) {
+                    return true;
+                }
+
+            case "*":
+                try {
+                    Math.multiplyExact(a, b);
+                    return false;
+                } catch (ArithmeticException e) {
+                    return true;
+                }
+
+            case "/":
+                if (b == 0) throw new IllegalArgumentException("You can't divide by zero");
+                try {
+                    Math.divideExact(a, b);
+                    return false;
+                } catch (ArithmeticException e) {
+                    return true;
+                }
+            default:
+                throw new IllegalArgumentException("Invalid operator: " + operator);
+        }
     }
 }
