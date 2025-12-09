@@ -1,5 +1,6 @@
 package com.github.anastasiiasmotritskaya.javacore;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -42,6 +43,39 @@ public class ConditionalOperatorsTest {
                     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                             () -> ConditionalOperators.convertToGrade_switch_exp(score));
                     assertEquals("The rating is incorrect! Rating range: 0 to 100 points", exception.getMessage());
+                }
+        );
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "12, Winter", "1, Winter", "2, Winter",
+            "3, Spring", "4, Spring", "5, Spring",
+            "6, Summer", "7, Summer", "8, Summer",
+            "9, Autumn", "10, Autumn", "11, Autumn"})
+    public void getSeasonTest(int month, String season) {
+        assertAll(
+                () -> assertEquals(season, ConditionalOperators.getSeason_if(month)),
+                () -> assertEquals(season, ConditionalOperators.getSeason_switch(month)),
+                () -> assertEquals(season, ConditionalOperators.getSeason_switch_exp(month))
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {-5, 0, 13, 22})
+    public void getSeasonIllegalArgumentTest(int illegalMonth) {
+        assertAll(
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConditionalOperators.getSeason_if(illegalMonth));
+                    assertEquals("The month number is entered incorrectly! The month number must be between 1 and 12.", exception.getMessage());
+                },
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConditionalOperators.getSeason_switch(illegalMonth));
+                    assertEquals("The month number is entered incorrectly! The month number must be between 1 and 12.", exception.getMessage());
+                },
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConditionalOperators.getSeason_switch_exp(illegalMonth));
+                    assertEquals("The month number is entered incorrectly! The month number must be between 1 and 12.", exception.getMessage());
                 }
         );
     }
