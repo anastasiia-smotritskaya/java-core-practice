@@ -1,6 +1,5 @@
 package com.github.anastasiiasmotritskaya.javacore;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -111,5 +110,43 @@ public class ConditionalOperatorsTest {
                 () -> assertEquals(discountedPrice, ConditionalOperators.calculateDiscount_switch(price)),
                 () -> assertEquals(discountedPrice, ConditionalOperators.calculateDiscount_switch_exp(price))
         );
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "-0.01, true",
+            "-100.00, false",
+            "0.00, true",
+            "0.01, false",
+            "0.99, true"
+    })
+    public void calculateDiscountWithCardIllegalArgumentTest(double price, boolean hasCard) {
+        assertAll(
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConditionalOperators.calculateDiscountWithCard(price, hasCard));
+                    assertEquals("The price of a product cannot be less than 1.00.", exception.getMessage());
+                }
+        );
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1.00, 1.00, false", "500.00, 500.00, false", "999.99, 999.99, false",
+            "1000.00, 950.00, false", "1000.01, 950.01, false", "2000.00, 1900.00, false", "4999.99, 4749.99, false",
+            "5000.00, 4500.00, false", "5000.01, 4500.01, false", "6000.00, 5400.00, false", "100_000.00, 90_000.00, false"
+    })
+    public void calculateDiscountNoCardTest(double price, double discountedPrice,boolean hasCard) {
+        assertEquals(discountedPrice, ConditionalOperators.calculateDiscountWithCard(price, hasCard));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1.01, 1.00, true", "1.02, 1.00, true",
+            "1.00, 1.00, true", "500.00, 490.00, true", "999.99, 979.99, true",
+            "1000.00, 931.00, true", "1000.01, 931.01, true", "2000.00, 1862.00, true", "4999.99, 4654.99, true",
+            "5000.00, 4410.00, true", "5000.01, 4410.01, true", "6000.00, 5292.00, true", "100_000.00, 88_200.00, true"
+    })
+    public void calculateDiscountWithCardTest(double price, double discountedPrice, boolean hasCard) {
+        assertEquals(discountedPrice, ConditionalOperators.calculateDiscountWithCard(price, hasCard));
     }
 }

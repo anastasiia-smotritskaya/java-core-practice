@@ -229,4 +229,25 @@ public class ConditionalOperators {
             default -> BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
         };
     }
+
+    /**
+     * Рассчитывает итоговую цену с учетом скидки и бонусной карты
+     *
+     * @param price        исходная цена
+     * @param hasBonusCard есть ли бонусная карта
+     * @return double итоговая цена со всеми скидками
+     * {@code double discountedPrice = calculateDiscountWithCard(1000.00, true);} // 931.00
+     * @throws IllegalArgumentException если цена меньше 1.00
+     */
+    public static double calculateDiscountWithCard(double price, boolean hasBonusCard) {
+        double minPrice = 1.00;
+        if (price < minPrice) throw new IllegalArgumentException("The price of a product cannot be less than 1.00.");
+
+        double discount = (price >= 5000.00) ? 0.90 :
+                (price >= 1000.00) ? 0.95 : 1;
+
+        double discountedPrice = hasBonusCard ? price * discount * 0.98 : price * discount;
+
+        return Math.max(BigDecimal.valueOf(discountedPrice).setScale(2, RoundingMode.HALF_UP).doubleValue(), minPrice);
+    }
 }
