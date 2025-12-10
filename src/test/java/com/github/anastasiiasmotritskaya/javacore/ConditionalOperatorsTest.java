@@ -149,4 +149,37 @@ public class ConditionalOperatorsTest {
     public void calculateDiscountWithCardTest(double price, double discountedPrice, boolean hasCard) {
         assertEquals(discountedPrice, ConditionalOperators.calculateDiscountWithCard(price, hasCard));
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "0, 4, 5", "3, 0, 5", "3, 4, 0",
+            "0, 0, 5", "3, 0, 0", " 0, 4, 0",
+            "0, 0, 0",
+            "-3, 4, 5", "3, -4, 5", "3, 4, -5",
+            "-3, -4, 5", "3, -4, -5", " -3, 4, -5",
+            "-3, -4, -5", "-15, -3, -4"
+    })
+    public void triangleTypeZeroTest(int a, int b, int c) {
+                IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->ConditionalOperators.triangleType(a, b, c));
+                assertEquals("The length of a side of a triangle must be greater than zero.", exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "15, 3, 4", "3, 15, 4", "3, 4, 15"
+    })
+    public void triangleTypeGreaterThanThirdTest(int a, int b, int c) {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->ConditionalOperators.triangleType(a, b, c));
+        assertEquals("A triangle is possible if the sum of any two sides is greater than the third.", exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "5, 5, 5, Equilateral",
+            "6, 6, 5, Isosceles",
+            "3, 4, 5, Scalene: all sides are different"
+    })
+    public void triangleTypeTest(int a, int b, int c, String triangleType) {
+        assertEquals(triangleType, ConditionalOperators.triangleType(a, b, c));
+    }
 }

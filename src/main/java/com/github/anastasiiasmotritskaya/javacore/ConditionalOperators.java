@@ -250,4 +250,24 @@ public class ConditionalOperators {
 
         return Math.max(BigDecimal.valueOf(discountedPrice).setScale(2, RoundingMode.HALF_UP).doubleValue(), minPrice);
     }
+
+
+    /**
+     * Проверяет, можно ли построить треугольник с заданными сторонами и определяет его тип (равносторонний, равнобедренный, разносторонний)
+     * @param a сторона A
+     * @param b сторона B
+     * @param c сторона C
+     * @return String тип треугольника или сообщение "Треугольник невозможен"
+     * {@code String triangleType = triangleType(5, 5, 5);} // Equilateral
+     * {@code String triangleType = triangleType(6, 6, 5);} // Isosceles
+     * {@code String triangleType = triangleType(3, 4, 5);} // Scalene: all sides are different
+     * @throws IllegalArgumentException если одна из сторон треугольника меньше нуля
+     * @throws IllegalArgumentException если сумма любых двух сторон меньше третьей
+     */
+    public static String triangleType(double a, double b, double c) {
+        if (a <= 0 || b <= 0 || c <= 0) throw new IllegalArgumentException("The length of a side of a triangle must be greater than zero.");
+        if (a + b < c || b + c < a || a + c < b) throw new IllegalArgumentException("A triangle is possible if the sum of any two sides is greater than the third.");
+        return (a == b && b == c) ? "Equilateral" :
+                (a == b || b == c || a == c) ? "Isosceles" : "Scalene: all sides are different";
+    }
 }
