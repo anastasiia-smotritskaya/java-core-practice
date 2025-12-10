@@ -1,5 +1,8 @@
 package com.github.anastasiiasmotritskaya.javacore;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * Работа с условными операторами
  * Методы: перевод оценок из численного формата в буквенные, определитель времени года, калькулятор скидок
@@ -23,10 +26,10 @@ public class ConditionalOperators {
      * @return char буквенная оценка
      * {@code char result = convertToGrade_if(95);} // A
      * @throws IllegalArgumentException если:
-     *                                                                   <ul>
-     *                                                                    <li>score больше 100 баллов</li>
-     *                                                                    <li>score меньше 0 баллов</li>
-     *                                                                   </ul>
+     *                                  <ul>
+     *                                   <li>score больше 100 баллов</li>
+     *                                   <li>score меньше 0 баллов</li>
+     *                                  </ul>
      */
     public static char convertToGrade_if(int score) {
         if (score > 100 || score < 0)
@@ -46,10 +49,10 @@ public class ConditionalOperators {
      * @return char буквенная оценка
      * {@code char result = convertToGrade_switch(95);} // A
      * @throws IllegalArgumentException если:
-     *                                                                   <ul>
-     *                                                                    <li>score больше 100 баллов</li>
-     *                                                                    <li>score меньше 0 баллов</li>
-     *                                                                   </ul>
+     *                                  <ul>
+     *                                   <li>score больше 100 баллов</li>
+     *                                   <li>score меньше 0 баллов</li>
+     *                                  </ul>
      */
     public static char convertToGrade_switch(int score) {
         if (score > 100 || score < 0)
@@ -77,10 +80,10 @@ public class ConditionalOperators {
      * @return char буквенная оценка
      * {@code char result = convertToGrade_switch_exp(95);} // A
      * @throws IllegalArgumentException если:
-     *                                                                   <ul>
-     *                                                                    <li>score больше 100 баллов</li>
-     *                                                                    <li>score меньше 0 баллов</li>
-     *                                                                   </ul>
+     *                                  <ul>
+     *                                   <li>score больше 100 баллов</li>
+     *                                   <li>score меньше 0 баллов</li>
+     *                                  </ul>
      */
     public static char convertToGrade_switch_exp(int score) {
         if (score > 100 || score < 0)
@@ -159,6 +162,71 @@ public class ConditionalOperators {
             case 3, 4, 5 -> "Spring";
             case 6, 7, 8 -> "Summer";
             default -> "Autumn";
+        };
+    }
+
+    /**
+     * Рассчитывает итоговую цену со скидкой
+     * Скидки: 0% до 1000, 5% 1000-5000, 10% 5000+
+     *
+     * @param price цена
+     * @return double цена со скидкой
+     * {@code double discountedPrice = calculateDiscount_if(1000.00);} // 950.00
+     * @throws IllegalArgumentException если цена меньше нуля
+     */
+    public static double calculateDiscount_if(double price) {
+        if (price < 0.00) throw new IllegalArgumentException("The price of a product cannot be less than zero.");
+        if (price >= 5000.00) return BigDecimal.valueOf(0.90 * price).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        if (price >= 1000.00) return BigDecimal.valueOf(0.95 * price).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        return BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    }
+
+    /**
+     * Рассчитывает итоговую цену со скидкой
+     * Скидки: 0% до 1000, 5% 1000-5000, 10% 5000+
+     *
+     * @param price цена
+     * @return double цена со скидкой
+     * {@code double discountedPrice = calculateDiscount_switch(1000.00);} // 950.00
+     * @throws IllegalArgumentException если цена меньше нуля
+     */
+    public static double calculateDiscount_switch(double price) {
+        if (price < 0.00) throw new IllegalArgumentException("The price of a product cannot be less than zero.");
+
+        String category = "price < 1000.00";
+        if (price >= 5000.00) category = "price >= 5000.00";
+        else if (price >= 1000.00) category = "price >= 1000.00";
+
+        switch (category) {
+            case "price >= 5000.00":
+                return BigDecimal.valueOf(0.90 * price).setScale(2, RoundingMode.HALF_UP).doubleValue();
+            case "price >= 1000.00":
+                return BigDecimal.valueOf(0.95 * price).setScale(2, RoundingMode.HALF_UP).doubleValue();
+            default:
+                return BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        }
+    }
+
+    /**
+     * Рассчитывает итоговую цену со скидкой
+     * Скидки: 0% до 1000, 5% 1000-5000, 10% 5000+
+     *
+     * @param price цена
+     * @return double цена со скидкой
+     * {@code double discountedPrice = calculateDiscount_switch_exp(1000.00);} // 950.00
+     * @throws IllegalArgumentException если цена меньше нуля
+     */
+    public static double calculateDiscount_switch_exp(double price) {
+        if (price < 0.00) throw new IllegalArgumentException("The price of a product cannot be less than zero.");
+
+        String category = "price < 1000.00";
+        if (price >= 5000.00) category = "price >= 5000.00";
+        else if (price >= 1000.00) category = "price >= 1000.00";
+
+        return switch (category) {
+            case "price >= 5000.00" -> BigDecimal.valueOf(0.90 * price).setScale(2, RoundingMode.HALF_UP).doubleValue();
+            case "price >= 1000.00" -> BigDecimal.valueOf(0.95 * price).setScale(2, RoundingMode.HALF_UP).doubleValue();
+            default -> BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
         };
     }
 }

@@ -79,4 +79,37 @@ public class ConditionalOperatorsTest {
                 }
         );
     }
+
+    @ParameterizedTest
+    @ValueSource(doubles = {-0.01, -100.00})
+    public void calculateDiscountIllegalArgumentTest(double price) {
+        assertAll(
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConditionalOperators.calculateDiscount_if(price));
+                    assertEquals("The price of a product cannot be less than zero.", exception.getMessage());
+                },
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConditionalOperators.calculateDiscount_switch(price));
+                    assertEquals("The price of a product cannot be less than zero.", exception.getMessage());
+                },
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConditionalOperators.calculateDiscount_switch_exp(price));
+                    assertEquals("The price of a product cannot be less than zero.", exception.getMessage());
+                }
+        );
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "0.00, 0.00", "500.00, 500.00", "999.99, 999.99",
+            "1000.00, 950.00", "1000.01, 950.01", "2000.00, 1900.00", "4999.99, 4749.99",
+            "5000.00, 4500.00", "5000.01, 4500.01", "6000.00, 5400.00", "100_000.00, 90_000.00"
+    })
+    public void calculateDiscountTest(double price, double discountedPrice) {
+        assertAll(
+                () -> assertEquals(discountedPrice, ConditionalOperators.calculateDiscount_if(price)),
+                () -> assertEquals(discountedPrice, ConditionalOperators.calculateDiscount_switch(price)),
+                () -> assertEquals(discountedPrice, ConditionalOperators.calculateDiscount_switch_exp(price))
+        );
+    }
 }
