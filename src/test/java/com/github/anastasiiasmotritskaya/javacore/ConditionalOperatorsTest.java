@@ -121,12 +121,8 @@ public class ConditionalOperatorsTest {
             "0.99, true"
     })
     public void calculateDiscountWithCardIllegalArgumentTest(double price, boolean hasCard) {
-        assertAll(
-                () -> {
-                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConditionalOperators.calculateDiscountWithCard(price, hasCard));
-                    assertEquals("The price of a product cannot be less than 1.00.", exception.getMessage());
-                }
-        );
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConditionalOperators.calculateDiscountWithCard(price, hasCard));
+        assertEquals("The price of a product cannot be less than 1.00.", exception.getMessage());
     }
 
     @ParameterizedTest
@@ -135,7 +131,7 @@ public class ConditionalOperatorsTest {
             "1000.00, 950.00, false", "1000.01, 950.01, false", "2000.00, 1900.00, false", "4999.99, 4749.99, false",
             "5000.00, 4500.00, false", "5000.01, 4500.01, false", "6000.00, 5400.00, false", "100_000.00, 90_000.00, false"
     })
-    public void calculateDiscountNoCardTest(double price, double discountedPrice,boolean hasCard) {
+    public void calculateDiscountNoCardTest(double price, double discountedPrice, boolean hasCard) {
         assertEquals(discountedPrice, ConditionalOperators.calculateDiscountWithCard(price, hasCard));
     }
 
@@ -160,8 +156,8 @@ public class ConditionalOperatorsTest {
             "-3, -4, -5", "-15, -3, -4"
     })
     public void triangleTypeZeroTest(int a, int b, int c) {
-                IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->ConditionalOperators.triangleType(a, b, c));
-                assertEquals("The length of a side of a triangle must be greater than zero.", exception.getMessage());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConditionalOperators.triangleType(a, b, c));
+        assertEquals("The length of a side of a triangle must be greater than zero.", exception.getMessage());
     }
 
     @ParameterizedTest
@@ -169,7 +165,7 @@ public class ConditionalOperatorsTest {
             "15, 3, 4", "3, 15, 4", "3, 4, 15"
     })
     public void triangleTypeGreaterThanThirdTest(int a, int b, int c) {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->ConditionalOperators.triangleType(a, b, c));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConditionalOperators.triangleType(a, b, c));
         assertEquals("A triangle is possible if the sum of any two sides is greater than the third.", exception.getMessage());
     }
 
