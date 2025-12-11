@@ -1,5 +1,8 @@
 package com.github.anastasiiasmotritskaya.javacore;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Работа с циклами
  * Методы: вычисление суммы чисел, поиск простых чисел, таблица умножения
@@ -75,5 +78,42 @@ public class Cycles {
         while (term <= n);
 
         return sum;
+    }
+
+    /**
+     * Находит все простые числа в диапазоне от start до end включительно
+     * Простое число - натуральное число больше 1, которое делится только на 1 и на себя
+     * @param start начало диапазона
+     * @param end конец диапазона
+     * @return список простых чисел в диапазоне
+     * {@code ArrayList<Integer> primeNumbers = findPrimeNumbers(2, 10);} // {2, 3, 5, 7}
+     * @throws IllegalArgumentException если start больше end или start меньше 2
+     */
+    public static List<Integer> findPrimeNumbers(int start, int end) {
+        if (start < 2) throw new IllegalArgumentException("Start must be at least 2. Given: " + start + ".");
+        if (start > end) throw new IllegalArgumentException("The start must be <= end. Given: start = " + start + ", end = " + end + ".");
+
+        List<Integer> primeNumbers = new ArrayList<>();
+
+        for (int i = start; i <= end; i++) {
+            if (isPrime(i)) {
+                primeNumbers.add(i);
+            }
+        }
+        return primeNumbers;
+    }
+
+    private static boolean isPrime(int number) {
+        if (number < 2) return false;
+        if (number == 2) return true;
+        if (number % 2 == 0) return false;
+
+        int limit = (int)Math.sqrt(number);
+        for (int i = 3; i <= limit; i += 2) {
+            if (number % i == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
