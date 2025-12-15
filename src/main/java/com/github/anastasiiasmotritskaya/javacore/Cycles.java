@@ -71,7 +71,7 @@ public class Cycles {
         int sum = 0;
         int term = 1;
 
-         do {
+        do {
             sum = Math.addExact(sum, term);
             term++;
         }
@@ -83,15 +83,17 @@ public class Cycles {
     /**
      * Находит все простые числа в диапазоне от start до end включительно
      * Простое число - натуральное число больше 1, которое делится только на 1 и на себя
+     *
      * @param start начало диапазона
-     * @param end конец диапазона
+     * @param end   конец диапазона
      * @return список простых чисел в диапазоне
      * {@code ArrayList<Integer> primeNumbers = findPrimeNumbers(2, 10);} // {2, 3, 5, 7}
      * @throws IllegalArgumentException если start больше end или start меньше 2
      */
     public static List<Integer> findPrimeNumbers(int start, int end) {
         if (start < 2) throw new IllegalArgumentException("Start must be at least 2. Given: " + start + ".");
-        if (start > end) throw new IllegalArgumentException("The start must be <= end. Given: start = " + start + ", end = " + end + ".");
+        if (start > end)
+            throw new IllegalArgumentException("The start must be <= end. Given: start = " + start + ", end = " + end + ".");
 
         List<Integer> primeNumbers = new ArrayList<>();
 
@@ -108,12 +110,33 @@ public class Cycles {
         if (number == 2) return true;
         if (number % 2 == 0) return false;
 
-        int limit = (int)Math.sqrt(number);
+        int limit = (int) Math.sqrt(number);
         for (int i = 3; i <= limit; i += 2) {
             if (number % i == 0) {
                 return false;
             }
         }
         return true;
+    }
+
+    /**
+     * Генерирует таблицу умножения размера n x n
+     *
+     * @param n размер таблицы (от 1 до 10 включительно)
+     * @return двумерный массив таблицы умножения
+     * {@code int[][] table = multiplicationTable(3);} // [[1,2,3],[2,4,6],[3,6,9]]
+     * @throws IllegalArgumentException если n вне диапазона [1, 10]
+     */
+    public static int[][] multiplicationTable(int n) {
+        if (n < 1 || n > 10) throw new IllegalArgumentException("The entered value must be between 1 and 10.");
+
+        int[][] table = new int[n][n];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                table[i][j] = (i + 1) * (j + 1);
+            }
+        }
+        return table;
     }
 }
