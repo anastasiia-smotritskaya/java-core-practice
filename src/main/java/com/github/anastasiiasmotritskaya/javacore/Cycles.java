@@ -139,4 +139,25 @@ public class Cycles {
         }
         return table;
     }
+
+    /**
+     * Возвращает число с цифрами в обратном порядке
+     *
+     * @param number целое число
+     * @return число с обратным порядком цифр
+     * {@code int reverseNumber = reverseDigits(123);} // 321
+     * {@code int reverseNumber = reverseDigits(-123);} // -321
+     * @throws ArithmeticException если reversedNumber больше Integer.MAX_VALUE или меньше Integer.MIN_VALUE
+     */
+    public static int reverseDigits(int number) {
+        int reverseNumber = 0;
+
+        while (number != 0) {
+            int modulo = number % 10;
+            reverseNumber = Math.multiplyExact(reverseNumber, 10);
+            reverseNumber = Math.addExact(reverseNumber, modulo);
+            number /= 10;
+        }
+        return reverseNumber;
+    }
 }

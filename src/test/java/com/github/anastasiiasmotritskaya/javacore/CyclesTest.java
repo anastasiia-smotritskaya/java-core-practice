@@ -132,4 +132,31 @@ public class CyclesTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> Cycles.multiplicationTable(tableLength));
         assertEquals("The entered value must be between 1 and 10.", exception.getMessage());
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "12345, 54321",
+            "-12345, -54321",
+            "0, 0",
+            "1, 1",
+            "10, 1",
+            "1000, 1",
+            "120, 21",
+            "10020, 2001",
+            "121, 121",
+            "222, 222",
+            "-1, -1",
+            "-10, -1",
+            "463_847_412, 214_748_364",
+            "-463_847_412, -214_748_364",
+    })
+    public void reverseDigitsTest(int number, int reverseNumber) {
+        assertEquals(reverseNumber, Cycles.reverseDigits(number));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {Integer.MAX_VALUE, Integer.MIN_VALUE, 1_999_999_999, -1_999_999_999})
+    public void reverseDigitsBorderTest(int number) {
+        assertThrows(ArithmeticException.class, () -> Cycles.reverseDigits(number));
+    }
 }
