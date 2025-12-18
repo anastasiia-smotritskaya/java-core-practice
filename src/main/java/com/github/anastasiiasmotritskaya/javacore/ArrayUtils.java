@@ -1,5 +1,7 @@
 package com.github.anastasiiasmotritskaya.javacore;
 
+import java.util.Arrays;
+
 /**
  * Работа с одномерными и двумерными массивами
  * Методы: поиск максимума и минимума
@@ -45,10 +47,11 @@ public class ArrayUtils {
 
     /**
      * Сортирует массив методом пузырька
+     *
      * @param array массив для сортировки (исходный массив модифицируется)
-     * {@code int[] bubbleSort = bubbleSort(new int[]{5, 2, 8, 1, 9})} || [1, 2, 5, 8, 9]
-     * @throws IllegalArgumentException если массив null или пустой
+     *              {@code int[] bubbleSort = bubbleSort(new int[]{5, 2, 8, 1, 9})} || [1, 2, 5, 8, 9]
      * @return отсортированный массив (тот же массив)
+     * @throws IllegalArgumentException если массив null или пустой
      */
     public static int[] bubbleSort(int[] array) {
         if (array == null) {
@@ -61,13 +64,42 @@ public class ArrayUtils {
 
         for (int i = 0; i < array.length - 1; i++) {
             for (int j = 0; j < array.length - 1 - i; j++) {
-                if (array[j] > array[j+1]) {
+                if (array[j] > array[j + 1]) {
                     int temp = array[j];
-                    array[j] = array[j+1];
-                    array[j+1] = temp;
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
                 }
             }
         }
         return array;
+    }
+
+    /**
+     * Ищет элемент в двумерном массиве
+     *
+     * @param matrix двумерный массив целых чисел
+     * @param target элемент для поиска
+     * @return массив с координатами [row, col] или [-1, -1] если не найден
+     * {@code int[] targetCoordinate = findInMatrix(new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}}, 4)} || [1, 0]
+     * @throws IllegalArgumentException если matrix null или пустой
+     */
+    public static int[] findInMatrix(int[][] matrix, int target) {
+        if (matrix == null) {
+            throw new IllegalArgumentException("Matrix cannot be null.");
+        }
+
+        if (matrix.length == 0) {
+            throw new IllegalArgumentException("Matrix cannot be empty (0 rows).");
+        }
+
+        for (int i = 0; i < matrix.length; i++) {
+            if (matrix[i] == null) continue;
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (matrix[i][j] == target) {
+                    return new int[]{i, j};
+                }
+            }
+        }
+        return new int[]{-1, -1};
     }
 }

@@ -3,6 +3,7 @@ package com.github.anastasiiasmotritskaya.javacore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
@@ -90,4 +91,89 @@ public class ArrayUtilsTest {
         );
     }
 
+    @Test
+    public void findInMatrixIllegalArgumentTest() {
+        assertAll(
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.findInMatrix(null, 6));
+                    assertEquals("Matrix cannot be null.", exception.getMessage());
+                },
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.findInMatrix(new int[0][0], 6));
+                    assertEquals("Matrix cannot be empty (0 rows).", exception.getMessage());
+                }
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("findInMatrixPositiveDataProvider")
+    public void findInMatrixPositiveTest(int[] expected, int[][] matrix, int target) {
+        assertArrayEquals(expected, ArrayUtils.findInMatrix(matrix, target));
+    }
+
+    static Stream<Arguments> findInMatrixPositiveDataProvider() {
+        return Stream.of(
+                Arguments.of(new int[]{1, 0}, new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}}, 4,
+                        "Поиск числа в матрице из положительных чисел"),
+                Arguments.of(new int[]{1, 0}, new int[][]{{1, 2, 3}, {4, 5, 6}, null, {10, 11, 12}}, 4,
+                        "Поиск числа в матрице, где одна строка - null"),
+                Arguments.of(new int[]{1, 0}, new int[][]{{1, 2, 3}, {4, 0, 6}, {7, 8, 9}, {10, 11, 12}}, 4,
+                        "Поиск числа в матрице, где есть ноль"),
+                Arguments.of(new int[]{1, 1}, new int[][]{{1, 2, 3}, {4, 0, 6}, {7, 8, 9}, {10, 11, 12}}, 0,
+                        "Поиск нуля в матрице"),
+                Arguments.of(new int[]{0, 0}, new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}}, 1,
+                        "Поиск числа в матрице из положительных чисел число является первым в матрице"),
+                Arguments.of(new int[]{2, 2}, new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}}, 9,
+                        "Поиск числа в матрице из положительных чисел число является последним в матрице"),
+                Arguments.of(new int[]{1, 0}, new int[][]{{-1, -2, -3}, {-4, -5, -6}, {-7, -8, -9}, {-10, -11, -12}}, -4,
+                        "Поиск числа в матрице из отрицательных чисел"),
+                Arguments.of(new int[]{0, 0}, new int[][]{{5}}, 5, "Поиск числа в матрице из одного числа"),
+                Arguments.of(new int[]{0, 0}, new int[][]{{0, 0, 0}, {0, 0, 0}}, 0, "Поиск нуля в матрице из нулей"),
+                Arguments.of(new int[]{1, 0}, new int[][]{{1, 2, 3}, {4, 4, 6}, {4, 8, 9}, {10, 11, 12}}, 4,
+                        "Поиск числа в матрице, где таких чисел несколько (только первое вхождение)"),
+                Arguments.of(new int[]{0, 0}, new int[][]{{1, 2, 3}, {}, {7, 8, 9}}, 1,
+                        "Поиск числа в матрице, где одна из строк - пустая({})")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("findInMatrixNegativeDataProvider")
+    public void findInMatrixNegativeTest(int[][] matrix, int target) {
+        assertArrayEquals(new int[]{-1, -1}, ArrayUtils.findInMatrix(matrix, target));
+    }
+
+    static Stream<Arguments> findInMatrixNegativeDataProvider() {
+        return Stream.of(
+                Arguments.of(new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}}, 345,
+                        "Поиск положительного числа, которого нет в матрице"),
+                Arguments.of(new int[][]{{1, 2, 3}, {4, 5, 6}, null, {10, 11, 12}}, 345,
+                        "Поиск положительного числа, которого нет в матрице, но одна из строк матрицы - null"),
+                Arguments.of(new int[][]{{1, 2, 3}, {4, 5, 6}, null, {10, 11, 12}}, 0,
+                        "Поиск нуля, которого нет в матрице, но одна из строк матрицы - null"),
+                Arguments.of(new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}}, -2,
+                        "Поиск отрицательного числа, которого нет в матрице, но есть равное по модулю положительное"),
+                Arguments.of(new int[][]{{-1, -2, -3}, {-4, -5, -6}, {-7, -8, -9}, {-10, -11, -12}}, 2,
+                        "Поиск положительного числа, которого нет в матрице, но есть равное по модулю отрицательное"),
+                Arguments.of(new int[][]{{1, 20, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}}, 2,
+                        "Поиск числа, которого нет в матрице, но это число есть в виду цифры"),
+                Arguments.of(new int[][]{{50}}, 5, "Поиск числа в матрице из одного числа"),
+                Arguments.of(new int[][]{null, null, null}, 5, "Поиск числа в матрице, где все строки - null"),
+                Arguments.of(new int[][]{{1, 2, 3}, {}, {7, 8, 9}}, 5, "Поиск числа в матрице, где одна строка - пустая ({})")
+        );
+    }
+
+    @Test
+    public void findInMatrixJaggedTest() {
+        int[][] jagged = {
+                {1, 2},
+                {3, 4, 5, 6},
+                {7},
+                {8, 9, 10}
+        };
+        assertAll(
+                () -> assertArrayEquals(new int[]{1, 3}, ArrayUtils.findInMatrix(jagged, 6)),
+                () -> assertArrayEquals(new int[]{2, 0}, ArrayUtils.findInMatrix(jagged, 7)),
+                () -> assertArrayEquals(new int[]{-1, -1}, ArrayUtils.findInMatrix(jagged, 11))
+        );
+    }
 }
