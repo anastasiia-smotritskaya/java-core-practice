@@ -42,4 +42,32 @@ public class ArrayUtils {
 
         return new int[]{min, max};
     }
+
+    /**
+     * Сортирует массив методом пузырька
+     * @param array массив для сортировки (исходный массив модифицируется)
+     * {@code int[] bubbleSort = bubbleSort(new int[]{5, 2, 8, 1, 9})} || [1, 2, 5, 8, 9]
+     * @throws IllegalArgumentException если массив null или пустой
+     * @return отсортированный массив (тот же массив)
+     */
+    public static int[] bubbleSort(int[] array) {
+        if (array == null) {
+            throw new IllegalArgumentException("The array must not be null.");
+        }
+
+        if (array.length == 0) {
+            throw new IllegalArgumentException("The array must not be empty.");
+        }
+
+        for (int i = 0; i < array.length - 1; i++) {
+            for (int j = 0; j < array.length - 1 - i; j++) {
+                if (array[j] > array[j+1]) {
+                    int temp = array[j];
+                    array[j] = array[j+1];
+                    array[j+1] = temp;
+                }
+            }
+        }
+        return array;
+    }
 }
