@@ -1,5 +1,6 @@
-package com.github.anastasiiasmotritskaya.javacore;
+package com.github.anastasiiasmotritskaya.javacore.basicsyntaxtest;
 
+import com.github.anastasiiasmotritskaya.javacore.basicsyntax.NumberAnalyzer;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

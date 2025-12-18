@@ -1,4 +1,4 @@
-package com.github.anastasiiasmotritskaya.javacore;
+package com.github.anastasiiasmotritskaya.javacore.basicsyntax;
 
 /**
  * Анализатор чисел

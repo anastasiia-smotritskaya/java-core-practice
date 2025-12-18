@@ -1,5 +1,7 @@
-package com.github.anastasiiasmotritskaya.javacore;
+package com.github.anastasiiasmotritskaya.javacore.basicsyntaxtest;
 
+import com.github.anastasiiasmotritskaya.javacore.basicsyntax.Calculator;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,7 +10,7 @@ public class CalculatorTest {
 
     @Test
     void addTest() {
-        assertEquals(20.0, Calculator.add(15, 5), 0.001);
+        Assertions.assertEquals(20.0, Calculator.add(15, 5), 0.001);
     }
 
     @Test
