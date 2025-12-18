@@ -1,5 +1,7 @@
-package com.github.anastasiiasmotritskaya.javacore;
+package com.github.anastasiiasmotritskaya.javacore.basicsyntaxtest;
 
+import com.github.anastasiiasmotritskaya.javacore.basicsyntax.ConditionalOperators;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -18,7 +20,7 @@ public class ConditionalOperatorsTest {
     })
     public void convertToGradeTest(int score, char mark) {
         assertAll(
-                () -> assertEquals(mark, ConditionalOperators.convertToGrade_if(score)),
+                () -> Assertions.assertEquals(mark, ConditionalOperators.convertToGrade_if(score)),
                 () -> assertEquals(mark, ConditionalOperators.convertToGrade_switch(score)),
                 () -> assertEquals(mark, ConditionalOperators.convertToGrade_switch_exp(score))
         );

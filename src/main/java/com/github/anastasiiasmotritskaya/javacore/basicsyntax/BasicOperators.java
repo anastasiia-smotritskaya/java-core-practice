@@ -1,4 +1,4 @@
-package com.github.anastasiiasmotritskaya.javacore;
+package com.github.anastasiiasmotritskaya.javacore.basicsyntax;
 
 /**
  * Работа с примитивами и операторами

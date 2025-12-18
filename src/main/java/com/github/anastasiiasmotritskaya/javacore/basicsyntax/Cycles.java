@@ -1,4 +1,4 @@
-package com.github.anastasiiasmotritskaya.javacore;
+package com.github.anastasiiasmotritskaya.javacore.basicsyntax;
 
 import java.util.ArrayList;
 import java.util.List;

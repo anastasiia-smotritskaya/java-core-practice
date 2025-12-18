@@ -1,4 +1,4 @@
-package com.github.anastasiiasmotritskaya.javacore;
+package com.github.anastasiiasmotritskaya.javacore.basicsyntax;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
