@@ -181,4 +181,58 @@ public class ArrayUtilsTest {
                 () -> assertArrayEquals(new int[]{-1, -1}, ArrayUtils.findInMatrix(jagged, 11))
         );
     }
+
+    @Test
+    @DisplayName("transposeMatrix should throw IllegalArgumentException for null matrix")
+    public void transposeMatrixTest_nullMatrix_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.transposeMatrix(null));
+        assertEquals("Matrix cannot be null.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("transposeMatrix should throw IllegalArgumentException for empty matrix")
+    public void transposeMatrixTest_emptyMatrix_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.transposeMatrix(new int[][]{}));
+        assertEquals("Matrix cannot be empty (0 rows).", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("transposeMatrix should throw IllegalArgumentException for not rectangular matrix")
+    public void transposeMatrixTest_notRectangularMatrix_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.transposeMatrix(new int[][]{{1, 2, 3}, {5, 6}, {7, 8, 9}}));
+        assertEquals("The matrix must be rectangular.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("transposeMatrix should throw IllegalArgumentException for matrix with empty rows")
+    public void transposeMatrixTest_emptyRowsMatrix_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.transposeMatrix(new int[][]{{}, {}, {}}));
+        assertEquals("The matrix cannot have empty rows.", exception.getMessage());
+    }
+
+    @ParameterizedTest(name = "[{index}] {2}")
+    @MethodSource("transposeMatrixProviderData")
+    @DisplayName("transposeMatrix with various types of matrix")
+    public void transposeMatrixTest(int[][] expected, int[][] matrix, String description) {
+        assertArrayEquals(expected, ArrayUtils.transposeMatrix(matrix));
+    }
+
+    static Stream<Arguments> transposeMatrixProviderData() {
+        return Stream.of(
+                Arguments.of(new int[][]{{1, 4}, {2, 5}, {3, 6}}, new int[][]{{1, 2, 3}, {4, 5, 6}},
+                        "Rectangular matrix: The number of columns is greater than the number of rows"),
+                Arguments.of(new int[][]{{1, 2, 3}, {4, 5, 6}}, new int[][]{{1, 4}, {2, 5}, {3, 6}},
+                        "Rectangular matrix: The number of rows is greater than the number of columns"),
+                Arguments.of(new int[][]{{1, 4, 7}, {2, 5, 8}, {3, 6, 9}}, new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}},
+                        "Square matrix"),
+                Arguments.of(new int[][]{{1, 4}, {2, 0}, {3, 6}}, new int[][]{{1, 2, 3}, {4, 0, 6}},
+                        "Matrix containing zero"),
+                Arguments.of(new int[][]{{-1, 4}, {-2, 5}, {-3, 6}}, new int[][]{{-1, -2, -3}, {4, 5, 6}},
+                        "Rectangular matrix with negative and positive numbers"),
+                Arguments.of(new int[][]{{-1, -4}, {-2, -5}, {-3, -6}}, new int[][]{{-1, -2, -3}, {-4, -5, -6}},
+                        "Rectangular matrix with negative numbers"),
+                Arguments.of(new int[][]{{0, 0, 0}}, new int[][]{{0}, {0}, {0}},
+                        "Matrix containing only zeros")
+        );
+    }
 }
