@@ -211,13 +211,13 @@ public class ArrayUtilsTest {
     }
 
     @ParameterizedTest(name = "[{index}] {2}")
-    @MethodSource("transposeMatrixProviderData")
+    @MethodSource("transposeMatrixDataProvider")
     @DisplayName("transposeMatrix with various types of matrix")
     public void transposeMatrixTest(int[][] expected, int[][] matrix, String description) {
         assertArrayEquals(expected, ArrayUtils.transposeMatrix(matrix));
     }
 
-    static Stream<Arguments> transposeMatrixProviderData() {
+    static Stream<Arguments> transposeMatrixDataProvider() {
         return Stream.of(
                 Arguments.of(new int[][]{{1, 4}, {2, 5}, {3, 6}}, new int[][]{{1, 2, 3}, {4, 5, 6}},
                         "Rectangular matrix: The number of columns is greater than the number of rows"),
@@ -233,6 +233,96 @@ public class ArrayUtilsTest {
                         "Rectangular matrix with negative numbers"),
                 Arguments.of(new int[][]{{0, 0, 0}}, new int[][]{{0}, {0}, {0}},
                         "Matrix containing only zeros")
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {2}")
+    @MethodSource("mergeSortedArraysTest_nullArray_DataProvider")
+    public void mergeSortedArraysTest_nullArray_throwsIllegalArgumentException(int[] arr1, int[] arr2, String description) {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.mergeSortedArrays(arr1, arr2));
+        assertEquals("Array cannot be null.", exception.getMessage());
+    }
+
+    static Stream<Arguments> mergeSortedArraysTest_nullArray_DataProvider() {
+        return Stream.of(
+                Arguments.of(null, new int[]{4, 5, 6}, "The first array is null"),
+                Arguments.of(new int[]{1, 2, 3}, null, "The second array is null"),
+                Arguments.of(null, null, "Both arrays are null")
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {2}")
+    @MethodSource("mergeSortedArraysTest_emptyArray_DataProvider")
+    public void mergeSortedArraysTest_emptyArray_throwsIllegalArgumentException(int[] arr1, int[] arr2, String description) {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.mergeSortedArrays(arr1, arr2));
+        assertEquals("Array cannot be empty.", exception.getMessage());
+    }
+
+    static Stream<Arguments> mergeSortedArraysTest_emptyArray_DataProvider() {
+        return Stream.of(
+                Arguments.of(new int[]{}, new int[]{4, 5, 6}, "The first array is empty"),
+                Arguments.of(new int[]{1, 2, 3}, new int[]{}, "The second array is empty"),
+                Arguments.of(new int[]{}, new int[]{}, "Both arrays are empty")
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {2}")
+    @MethodSource("mergeSortedArrays_notSortedArray_DataProvider")
+    public void mergeSortedArraysTest_notSortedArray_throwsIllegalArgumentException(int[] arr1, int[] arr2, String description) {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.mergeSortedArrays(arr1, arr2));
+        assertEquals("At least one array is unsorted.", exception.getMessage());
+    }
+
+    static Stream<Arguments> mergeSortedArrays_notSortedArray_DataProvider() {
+        return Stream.of(
+                Arguments.of(new int[]{3, 1, 2}, new int[]{4, 5, 6}, "arr1 is unsorted"),
+                Arguments.of(new int[]{1, 2, 3}, new int[]{6, 4, 5}, "arr2 is unsorted"),
+                Arguments.of(new int[]{3, 1, 2}, new int[]{6, 4, 5}, "Both arrays are unsorted")
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {3}")
+    @MethodSource("mergeSortedArraysDataProvider")
+    public void mergeSortedArraysTest(int[] arr1, int[] arr2, int[] resultArr, String description) {
+        assertArrayEquals(resultArr, ArrayUtils.mergeSortedArrays(arr1, arr2));
+    }
+
+    static Stream<Arguments> mergeSortedArraysDataProvider() {
+        return Stream.of(
+                Arguments.of(new int[]{1, 2, 3}, new int[]{4, 5, 6}, new int[]{1, 2, 3, 4, 5, 6},
+                        "The positive numbers in the first array are less than those in the second; the numbers in the result array are not mixed."),
+                Arguments.of(new int[]{4, 5, 6}, new int[]{1, 2, 3}, new int[]{1, 2, 3, 4, 5, 6},
+                        "The positive numbers in the first array are bigger than those in the second; the numbers in the result array are not mixed."),
+                Arguments.of(new int[]{1, 3, 5}, new int[]{2, 4, 6}, new int[]{1, 2, 3, 4, 5, 6},
+                        "The positive numbers in the first array are less than those in the second; the numbers in the result array are mixed."),
+                Arguments.of(new int[]{2, 4, 6}, new int[]{1, 3, 5}, new int[]{1, 2, 3, 4, 5, 6},
+                        "The positive numbers in the first array are bigger than those in the second; the numbers in the result array are mixed."),
+                Arguments.of(new int[]{-3, -2, -1}, new int[]{-6, -5, -4}, new int[]{-6, -5, -4, -3, -2, -1},
+                        "The negative numbers in the first array are bigger than those in the second; the numbers in the result array are not mixed."),
+                Arguments.of(new int[]{-6, -5, -4}, new int[]{-3, -2, -1}, new int[]{-6, -5, -4, -3, -2, -1},
+                        "The negative numbers in the first array are less than those in the second; the numbers in the result array are not mixed."),
+                Arguments.of(new int[]{-5, -3, -1}, new int[]{-6, -4, -2}, new int[]{-6, -5, -4, -3, -2, -1},
+                        "The negative numbers in the first array are bigger than those in the second; the numbers in the result array are mixed."),
+                Arguments.of(new int[]{-6, -4, -2}, new int[]{-5, -3, -1}, new int[]{-6, -5, -4, -3, -2, -1},
+                        "The negative numbers in the first array are less than those in the second; the numbers in the result array are mixed."),
+                Arguments.of(new int[]{-6, -4, -2}, new int[]{1, 3, 5}, new int[]{-6, -4, -2, 1, 3, 5},
+                        "The first array has negative numbers, the second array has positive numbers"),
+                Arguments.of(new int[]{1, 3, 5}, new int[]{-6, -4, -2}, new int[]{-6, -4, -2, 1, 3, 5},
+                        "The first array has positive numbers, the second array has negative numbers"),
+                Arguments.of(new int[]{-6, 3, 5}, new int[]{-4, -2, 1}, new int[]{-6, -4, -2, 1, 3, 5},
+                        "Both arrays have positive and negative numbers"),
+                Arguments.of(new int[]{1, 3, 3, 5}, new int[]{2, 4, 4, 6}, new int[]{1, 2, 3, 3, 4, 4, 5, 6},
+                        "Both arrays have duplicates"),
+                Arguments.of(new int[]{3, 3, 3}, new int[]{1, 2, 4, 4, 5, 6}, new int[]{1, 2, 3, 3, 3, 4, 4, 5, 6},
+                        "One array consists of duplicates"),
+                Arguments.of(new int[]{0, 1, 2}, new int[]{3, 4, 5}, new int[]{0, 1, 2, 3, 4, 5},
+                        "There is a zero in one of the arrays"),
+                Arguments.of(new int[]{1}, new int[]{2, 3, 4, 5}, new int[]{1, 2, 3, 4, 5},
+                        "One array consists of only one number"),
+                Arguments.of(new int[]{1}, new int[]{2}, new int[]{1, 2},
+                        "Both arrays consist of only one number"),
+                Arguments.of(new int[]{0}, new int[]{2, 3, 4, 5}, new int[]{0, 2, 3, 4, 5},
+                        "One array consists of only one number and it is zero")
         );
     }
 }
