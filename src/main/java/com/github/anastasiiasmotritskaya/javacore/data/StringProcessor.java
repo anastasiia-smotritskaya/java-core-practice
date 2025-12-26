@@ -28,11 +28,37 @@ public class StringProcessor {
     public static boolean isPalindrome(String original) {
 
         if (original == null) {
-            throw new IllegalArgumentException("Illegal argument: empty variable, String argument required");
+            throw new IllegalArgumentException("Input string cannot be null.");
         }
+
         // регулярное выражение \\s+ удаляет все пробелы (не только одинарные)
         String cleaned = original.replaceAll("\\s+", "").toLowerCase();
         return new StringBuilder(cleaned).reverse().toString().equals(cleaned);
+    }
+
+    /**
+     * Определяет, является ли строка палиндромом (неэффективно, для демонстрации)
+     * Не использовать для больших строк!
+     *
+     * @param original строка для проверки
+     * @return true если строка палиндром, false если строка не палиндром
+     * @throws IllegalArgumentException если строка равна null
+     * {@code boolean result = isPalindrome_char("Madam")}; // true
+     * {@code boolean result = isPalindrome_char("Adam");} // false
+     */
+    public static boolean isPalindrome_char(String original) {
+
+        if (original == null) {
+            throw new IllegalArgumentException("Input string cannot be null.");
+        }
+
+        String cleaned = original.replaceAll("\\s+", "").toLowerCase();
+
+        String result = "";
+        for (int i = cleaned.length()-1; i > -1; i--) {
+            result += cleaned.charAt(i);
+        }
+        return result.equals(cleaned);
     }
 
     /**
@@ -46,7 +72,7 @@ public class StringProcessor {
      */
     public static String reverseString(String str) {
         if (str == null) {
-            throw new IllegalArgumentException("Input string cannot be null");
+            throw new IllegalArgumentException("Input string cannot be null.");
         }
         return new StringBuilder(str).reverse().toString();
     }
@@ -62,7 +88,7 @@ public class StringProcessor {
      */
     public static String reverseString_char(String str) {
         if (str == null) {
-            throw new IllegalArgumentException("Input string cannot be null");
+            throw new IllegalArgumentException("Input string cannot be null.");
         }
         String result = "";
         for (int i = str.length()-1; i > -1; i--) {

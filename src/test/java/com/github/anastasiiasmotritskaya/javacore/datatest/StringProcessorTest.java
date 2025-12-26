@@ -1,40 +1,83 @@
 package com.github.anastasiiasmotritskaya.javacore.datatest;
 
 import com.github.anastasiiasmotritskaya.javacore.data.StringProcessor;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StringProcessorTest {
 
     @Test
+    @DisplayName("isPalindrome and isPalindrome_char simple positive test")
     void isPalindromeWithPalindromeStringTest() {
-        Assertions.assertTrue(StringProcessor.isPalindrome("madam"));
-    }
-
-    @Test
-    void isPalindromeWithNonPalindromeStringTest() {
-        assertFalse(StringProcessor.isPalindrome("hello"));
-    }
-
-    @Test
-    void isPalindromeWithSingleCharacterTest() {
-        assertTrue(StringProcessor.isPalindrome("a"));
-    }
-
-    @Test
-    void isPalindromeWithNoCharacterTest() {
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> StringProcessor.isPalindrome(null)
+        assertAll(
+                () -> assertTrue(StringProcessor.isPalindrome("madam")),
+                () -> assertTrue(StringProcessor.isPalindrome_char("madam"))
         );
+    }
 
-        assertEquals("Illegal argument: empty variable, String argument required", exception.getMessage());
+    @Test
+    @DisplayName("isPalindrome and isPalindrome_char simple positive test with upper case")
+    void isPalindromeUpperCaseTest() {
+        assertAll(
+                () -> assertTrue(StringProcessor.isPalindrome("Madam")),
+                () -> assertTrue(StringProcessor.isPalindrome_char("Madam"))
+        );
+    }
+
+    @Test
+    @DisplayName("isPalindrome and isPalindrome_char simple negative test")
+    void isPalindromeWithNonPalindromeStringTest() {
+        assertAll(
+                () -> assertFalse(StringProcessor.isPalindrome("hello")),
+                () -> assertFalse(StringProcessor.isPalindrome_char("hello"))
+        );
+    }
+
+    @Test
+    @DisplayName("isPalindrome and isPalindrome_char should work properly with short strings")
+    void isPalindromeWithSingleCharacterTest() {
+        assertAll(
+                () -> assertTrue(StringProcessor.isPalindrome("a")),
+                () -> assertTrue(StringProcessor.isPalindrome_char("a"))
+        );
+    }
+
+    @Test
+    @DisplayName("isPalindrome and isPalindrome_char should throw IllegalArgumentException, if the string is null")
+    void isPalindromeWithNoCharacterTest() {
+        assertAll(
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                            () -> StringProcessor.isPalindrome(null));
+                    assertEquals("Input string cannot be null.", exception.getMessage());
+                },
+
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                            () -> StringProcessor.isPalindrome_char(null));
+                    assertEquals("Input string cannot be null.", exception.getMessage());
+                }
+        );
+    }
+
+
+    @ParameterizedTest(name = "{index}: {1}")
+    @DisplayName("isPalindrome and isPalindrome_char should work properly with strings with spaces")
+    @CsvSource({
+            "'A man a plan a canal Panama   ', 'Spaces in the end of the input string'",
+            "'   A man a plan a canal Panama', 'Spaces in the beginning of the input string'",
+            "'race car', 'Spaces in the middle of the input string'",
+            "'', 'Empty string'"
+    })
+    void isPalindromeSpacesTest(String original, String description) {
+        assertAll(
+                () -> assertTrue(StringProcessor.isPalindrome(original)),
+                () -> assertTrue(StringProcessor.isPalindrome_char(original))
+        );
     }
 
     @Test
@@ -53,12 +96,12 @@ public class StringProcessorTest {
                 () -> {
                     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                             () -> StringProcessor.reverseString(null));
-                    assertEquals("Input string cannot be null", exception.getMessage());
+                    assertEquals("Input string cannot be null.", exception.getMessage());
                 },
                 () -> {
                     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                             () -> StringProcessor.reverseString_char(null));
-                    assertEquals("Input string cannot be null", exception.getMessage());
+                    assertEquals("Input string cannot be null.", exception.getMessage());
                 }
         );
     }
