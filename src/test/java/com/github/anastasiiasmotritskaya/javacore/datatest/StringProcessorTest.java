@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -225,21 +226,20 @@ public class StringProcessorTest {
     }
 
     @Test
-    void capitalizeWordsNull() {
+    void capitalizeWordsNullTest() {
         assertNull(StringProcessor.capitalizeWords(null));
     }
 
     @Test
     @DisplayName("countCharacters should throws IllegalArgumentException, when the string is null")
-
-    void countCharacters_nullString_throwsIllegalArgumentException() {
+    void countCharactersTest_nullString_throwsIllegalArgumentException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.countCharacters(null));
         assertEquals("Input string cannot be null.", exception.getMessage());
     }
 
     @Test
     @DisplayName("countCharacters should return empty map, when the string is empty")
-    void countCharacters_emptyString_throwsIllegalArgumentException() {
+    void countCharactersTest_emptyString_throwsIllegalArgumentException() {
         assertEquals(new HashMap<>(), StringProcessor.countCharacters(""));
     }
 
@@ -252,23 +252,64 @@ public class StringProcessorTest {
 
     static Stream<Arguments> countCharactersDataProvider() {
         return Stream.of(
-                Arguments.of(Map.of('h', 1, 'e', 1, 'L', 2, 'o', 1),  "heLLo", "String has duplicates in upper case"),
-                Arguments.of(Map.of('a', 2, 'd', 1, 'm', 2),  "madam", "String has several duplicates in lower case"),
-                Arguments.of(Map.of('a', 2, 'd', 1, 'm', 1, 'M', 1),  "Madam", "Mixed case letters"),
-                Arguments.of(Map.of('a', 1, 'c', 1, 't', 1),  "cat", "String has no duplicates"),
-                Arguments.of(Map.of(' ', 2, 'a', 1, 'b', 1, 'B', 1,'c', 1,
+                Arguments.of(Map.of('h', 1, 'e', 1, 'L', 2, 'o', 1), "heLLo", "String has duplicates in upper case"),
+                Arguments.of(Map.of('a', 2, 'd', 1, 'm', 2), "madam", "String has several duplicates in lower case"),
+                Arguments.of(Map.of('a', 2, 'd', 1, 'm', 1, 'M', 1), "Madam", "Mixed case letters"),
+                Arguments.of(Map.of('a', 1, 'c', 1, 't', 1), "cat", "String has no duplicates"),
+                Arguments.of(Map.of(' ', 2, 'a', 1, 'b', 1, 'B', 1, 'c', 1,
                                 't', 2, 'e', 1, 'h', 1, 'o', 1),
                         "Bob the cat", "Complicated string with several spaces in the middle and duplicates"),
-                Arguments.of(Map.of('2', 1, '5', 1, '6', 1, '8', 1),  "6825", "Numbers without duplicates"),
-                Arguments.of(Map.of('2', 1, '5', 1, '6', 2, '8', 2),  "868625", "Numbers without duplicates"),
-                Arguments.of(Map.of('%', 1, '№', 1, '*', 1, '?', 1),  "№%?*", "Special characters without duplicates"),
-                Arguments.of(Map.of(' ', 3, 'a', 1, 'c', 1, 't', 1),  "   cat", "Several spaces in the beginning"),
-                Arguments.of(Map.of(' ', 3, 'a', 1, 'c', 1, 't', 1),  "cat   ", "Several spaces in the end"),
-                Arguments.of(Map.of(' ', 1),  " ", "Only one space as a string"),
-                Arguments.of(Map.of('a', 1),  "a", "Only one letter as a string"),
-                Arguments.of(Map.of('2', 1),  "2", "Only one number as a string"),
-                Arguments.of(Map.of('$', 1),  "$", "Only one special character as a string"),
-                Arguments.of(Map.of(' ', 3),  "   ", "Several spaces as a string")
+                Arguments.of(Map.of('2', 1, '5', 1, '6', 1, '8', 1), "6825", "Numbers without duplicates"),
+                Arguments.of(Map.of('2', 1, '5', 1, '6', 2, '8', 2), "868625", "Numbers without duplicates"),
+                Arguments.of(Map.of('%', 1, '№', 1, '*', 1, '?', 1), "№%?*", "Special characters without duplicates"),
+                Arguments.of(Map.of(' ', 3, 'a', 1, 'c', 1, 't', 1), "   cat", "Several spaces in the beginning"),
+                Arguments.of(Map.of(' ', 3, 'a', 1, 'c', 1, 't', 1), "cat   ", "Several spaces in the end"),
+                Arguments.of(Map.of(' ', 1), " ", "Only one space as a string"),
+                Arguments.of(Map.of('a', 1), "a", "Only one letter as a string"),
+                Arguments.of(Map.of('2', 1), "2", "Only one number as a string"),
+                Arguments.of(Map.of('$', 1), "$", "Only one special character as a string"),
+                Arguments.of(Map.of(' ', 3), "   ", "Several spaces as a string")
         );
+    }
+
+    @Test
+    @DisplayName("findLongestWord should throw IllegalArgumentException, when the string is null")
+    void findLongestWordTest_nullString_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.findLongestWord(null));
+        assertEquals("Input string cannot be null.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("findLongestWord should throw IllegalArgumentException, when the string is empty")
+    void findLongestWordTest_emptyString_throwsIllegalArgumentException() {
+        assertAll(
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.findLongestWord(""));
+                    assertEquals("Input string cannot be empty.", exception.getMessage());
+                },
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.findLongestWord("   "));
+                    assertEquals("Input string cannot be empty.", exception.getMessage());
+                }
+        );
+    }
+
+
+    @ParameterizedTest(name = "[{index}] {2}")
+    @DisplayName("findLongestWord positive tests with different arguments")
+    @CsvSource({
+            "'programming', 'Java is a programming language', 'Simple sentence test'",
+            "'programming', 'Java is  a   programming     language', 'Multiple spaces between words'",
+            "'programming', 'Java\tis\na\tprogramming\tlanguage', 'Tabulation and hyphenation'",
+            "'Java', 'Java', 'One word test'",
+            "'Java', ' Java', 'One space in the beginning test'",
+            "'Java', 'Java ', 'One space in the end test'",
+            "'Java', ' Java ', 'Two spaces in the beginning and in the end test'",
+            "'cat', 'My cat and my dog', 'Method returns the first of several longest words'",
+            "'4567', '123 4567 89', 'Numbers'",
+            "'(*&^)', '$%^ (*&^) @#$', 'Characters'"
+    })
+    void findLongestWordTest(String expected, String str, String description) {
+        assertEquals(expected, StringProcessor.findLongestWord(str));
     }
 }

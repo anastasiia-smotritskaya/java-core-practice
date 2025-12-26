@@ -70,7 +70,7 @@ public class StringProcessor {
      * @param str строка для переворота (не может быть null)
      * @return перевернутую строку
      * @throws IllegalArgumentException если str равен null
-     * {@code String result = reverseString("Test")}; // tseT
+     *                                  {@code String result = reverseString("Test")}; // tseT
      * @see java.lang.StringBuilder
      */
     public static String reverseString(String str) {
@@ -87,7 +87,7 @@ public class StringProcessor {
      * @param str строка для переворота (не может быть null)
      * @return перевернутую строку
      * @throws IllegalArgumentException если str равен null
-     * {@code String result = reverseString_char("Test")}; // tseT
+     *                                  {@code String result = reverseString_char("Test")}; // tseT
      */
     public static String reverseString_char(String str) {
         if (str == null) {
@@ -176,5 +176,39 @@ public class StringProcessor {
         }
 
         return charCountMap;
+    }
+
+    /**
+     * Находит самое длинное слово в строке
+     * Слово - последовательность символов без пробелов
+     *
+     * @param text исходный текст
+     * @return самое длинное слово
+     * {@code = String word = findLongestWord("Java is a programming language");} // programming
+     * @throws IllegalArgumentException если строка null, пустая или состоит только из пробелов
+     */
+    public static String findLongestWord(String text) {
+        if (text == null) {
+            throw new IllegalArgumentException("Input string cannot be null.");
+        }
+
+        String trimmed = text.trim();
+
+        if (trimmed.isEmpty()) {
+            throw new IllegalArgumentException("Input string cannot be empty.");
+        }
+
+        String[] words = trimmed.split("\\s+");
+
+        String longestWord = words[0];
+        int longestWordLength = words[0].length();
+
+        for (String word : words) {
+            if (word.length() > longestWordLength) {
+                longestWordLength = word.length();
+                longestWord = word;
+            }
+        }
+        return longestWord;
     }
 }
