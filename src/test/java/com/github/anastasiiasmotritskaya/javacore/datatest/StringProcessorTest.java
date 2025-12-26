@@ -1,6 +1,12 @@
-package com.github.anastasiiasmotritskaya.javacore;
+package com.github.anastasiiasmotritskaya.javacore.datatest;
 
+import com.github.anastasiiasmotritskaya.javacore.data.StringProcessor;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,7 +14,7 @@ public class StringProcessorTest {
 
     @Test
     void isPalindromeWithPalindromeStringTest() {
-        assertTrue(StringProcessor.isPalindrome("madam"));
+        Assertions.assertTrue(StringProcessor.isPalindrome("madam"));
     }
 
     @Test
@@ -32,44 +38,81 @@ public class StringProcessorTest {
     }
 
     @Test
+    @DisplayName("reverseString and reverseString_char simple positive test")
     void reverseStringPositiveTest() {
-        assertEquals("tseT", StringProcessor.reverseString("Test"));
-    }
-
-    @Test
-    void reverseStringEmptyTest() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> StringProcessor.reverseString(null));
-        assertEquals("Illegal argument: empty variable, String argument required", exception.getMessage());
-    }
-
-    @Test
-    void reverseStringSpacesTest() {
         assertAll(
-                () -> assertEquals(" tseT", StringProcessor.reverseString("Test ")),
-                () -> assertEquals("tseT ", StringProcessor.reverseString(" Test")),
-                () -> assertEquals("ts   eT", StringProcessor.reverseString("Te   st"))
+                () -> assertEquals("tseT", StringProcessor.reverseString("Test")),
+                () -> assertEquals("tseT", StringProcessor.reverseString_char("Test"))
         );
     }
 
     @Test
+    @DisplayName("reverseString and reverseString_char should throw IllegalArgumentException for null string")
+    void reverseStringEmptyTest() {
+        assertAll(
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                            () -> StringProcessor.reverseString(null));
+                    assertEquals("Input string cannot be null", exception.getMessage());
+                },
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                            () -> StringProcessor.reverseString_char(null));
+                    assertEquals("Input string cannot be null", exception.getMessage());
+                }
+        );
+    }
+
+    @ParameterizedTest(name = "{index}: {2}")
+    @DisplayName("reverseString and reverseString_char should work properly with strings with spaces")
+    @CsvSource({
+            "' tseT', 'Test ', 'Spaces in the end of the input string'",
+            "'tseT ', ' Test', 'Spaces in the beginning of the input string'",
+            "'ts   eT', 'Te   st', 'Spaces in the middle of the input string'"
+    }
+
+    )
+    void reverseStringSpacesTest(String expected, String input, String description) {
+        assertAll(
+                () -> assertEquals(expected, StringProcessor.reverseString(input)),
+                () -> assertEquals(expected, StringProcessor.reverseString_char(input))
+        );
+    }
+
+    @Test
+    @DisplayName("reverseString and reverseString_char should work properly with short strings")
     void reverseStringShortStringTest() {
-        assertEquals("F", StringProcessor.reverseString("F"));
+        assertAll(
+                () -> assertEquals("F", StringProcessor.reverseString("F")),
+                () -> assertEquals("F", StringProcessor.reverseString_char("F"))
+        );
     }
 
     @Test
+    @DisplayName("reverseString and reverseString_char should work properly with empty strings")
     void reverseStringEmptyStringTest() {
-        assertEquals("", StringProcessor.reverseString(""));
+        assertAll(
+                () -> assertEquals("", StringProcessor.reverseString("")),
+                () -> assertEquals("", StringProcessor.reverseString_char(""))
+        );
     }
 
     @Test
+    @DisplayName("reverseString and reverseString_char should work properly with numbers")
     void reverseStringWithNumbersTest() {
-        assertEquals("321", StringProcessor.reverseString("123"));
+        assertAll(
+                () -> assertEquals("321", StringProcessor.reverseString("123")),
+                () -> assertEquals("321", StringProcessor.reverseString_char("123"))
+        );
     }
 
     @Test
+    @DisplayName("reverseString and reverseString_char should work properly with special characters")
     void reverseStringWithSpecialCharsTest() {
-        assertEquals("!@#$", StringProcessor.reverseString("$#@!"));
+        assertAll(
+                () -> assertEquals("!@#$", StringProcessor.reverseString("$#@!")),
+                () -> assertEquals("!@#$", StringProcessor.reverseString_char("$#@!"))
+        );
     }
 
     @Test

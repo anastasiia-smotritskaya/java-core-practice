@@ -1,4 +1,4 @@
-package com.github.anastasiiasmotritskaya.javacore;
+package com.github.anastasiiasmotritskaya.javacore.data;
 
 /**
  * Обработчик строк с различными операциями
@@ -21,8 +21,8 @@ public class StringProcessor {
      * @param original строка для проверки
      * @return true если строка палиндром, false если строка не палиндром
      * @throws IllegalArgumentException если строка равна null
-     *                                  {@code boolean result = isPalindrome("Madam")}; // true
-     *                                  {@code boolean result = isPalindrome("Adam");} // false
+     * {@code boolean result = isPalindrome("Madam")}; // true
+     * {@code boolean result = isPalindrome("Adam");} // false
      * @see java.lang.StringBuilder
      */
     public static boolean isPalindrome(String original) {
@@ -41,14 +41,34 @@ public class StringProcessor {
      * @param str строка для переворота (не может быть null)
      * @return перевернутую строку
      * @throws IllegalArgumentException если str равен null
-     *                                  {@code String result = reverseString("Test")}; // tseT
+     * {@code String result = reverseString("Test")}; // tseT
      * @see java.lang.StringBuilder
      */
     public static String reverseString(String str) {
         if (str == null) {
-            throw new IllegalArgumentException("Illegal argument: empty variable, String argument required");
+            throw new IllegalArgumentException("Input string cannot be null");
         }
         return new StringBuilder(str).reverse().toString();
+    }
+
+    /**
+     * Переворачивает строку с помощью конкатенации (неэффективно, для демонстрации)
+     * Не использовать для больших строк!
+     *
+     * @param str строка для переворота (не может быть null)
+     * @return перевернутую строку
+     * @throws IllegalArgumentException если str равен null
+     * {@code String result = reverseString_char("Test")}; // tseT
+     */
+    public static String reverseString_char(String str) {
+        if (str == null) {
+            throw new IllegalArgumentException("Input string cannot be null");
+        }
+        String result = "";
+        for (int i = str.length()-1; i > -1; i--) {
+            result += str.charAt(i);
+        }
+        return result;
     }
 
     /**
