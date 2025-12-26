@@ -4,7 +4,13 @@ import com.github.anastasiiasmotritskaya.javacore.data.StringProcessor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -65,7 +71,7 @@ public class StringProcessorTest {
     }
 
 
-    @ParameterizedTest(name = "{index}: {1}")
+    @ParameterizedTest(name = "[{index}]: {1}")
     @DisplayName("isPalindrome and isPalindrome_char should work properly with strings with spaces")
     @CsvSource({
             "'A man a plan a canal Panama   ', 'Spaces in the end of the input string'",
@@ -106,7 +112,7 @@ public class StringProcessorTest {
         );
     }
 
-    @ParameterizedTest(name = "{index}: {2}")
+    @ParameterizedTest(name = "[{index}]: {2}")
     @DisplayName("reverseString and reverseString_char should work properly with strings with spaces")
     @CsvSource({
             "' tseT', 'Test ', 'Spaces in the end of the input string'",
@@ -221,5 +227,48 @@ public class StringProcessorTest {
     @Test
     void capitalizeWordsNull() {
         assertNull(StringProcessor.capitalizeWords(null));
+    }
+
+    @Test
+    @DisplayName("countCharacters should throws IllegalArgumentException, when the string is null")
+
+    void countCharacters_nullString_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.countCharacters(null));
+        assertEquals("Input string cannot be null.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("countCharacters should return empty map, when the string is empty")
+    void countCharacters_emptyString_throwsIllegalArgumentException() {
+        assertEquals(new HashMap<>(), StringProcessor.countCharacters(""));
+    }
+
+    @ParameterizedTest(name = "[{index}] {2}")
+    @DisplayName("countCharacter positive tests with different arguments")
+    @MethodSource("countCharactersDataProvider")
+    void countCharactersTest(Map<Character, Integer> expected, String str, String description) {
+        assertEquals(expected, StringProcessor.countCharacters(str));
+    }
+
+    static Stream<Arguments> countCharactersDataProvider() {
+        return Stream.of(
+                Arguments.of(Map.of('h', 1, 'e', 1, 'L', 2, 'o', 1),  "heLLo", "String has duplicates in upper case"),
+                Arguments.of(Map.of('a', 2, 'd', 1, 'm', 2),  "madam", "String has several duplicates in lower case"),
+                Arguments.of(Map.of('a', 2, 'd', 1, 'm', 1, 'M', 1),  "Madam", "Mixed case letters"),
+                Arguments.of(Map.of('a', 1, 'c', 1, 't', 1),  "cat", "String has no duplicates"),
+                Arguments.of(Map.of(' ', 2, 'a', 1, 'b', 1, 'B', 1,'c', 1,
+                                't', 2, 'e', 1, 'h', 1, 'o', 1),
+                        "Bob the cat", "Complicated string with several spaces in the middle and duplicates"),
+                Arguments.of(Map.of('2', 1, '5', 1, '6', 1, '8', 1),  "6825", "Numbers without duplicates"),
+                Arguments.of(Map.of('2', 1, '5', 1, '6', 2, '8', 2),  "868625", "Numbers without duplicates"),
+                Arguments.of(Map.of('%', 1, '№', 1, '*', 1, '?', 1),  "№%?*", "Special characters without duplicates"),
+                Arguments.of(Map.of(' ', 3, 'a', 1, 'c', 1, 't', 1),  "   cat", "Several spaces in the beginning"),
+                Arguments.of(Map.of(' ', 3, 'a', 1, 'c', 1, 't', 1),  "cat   ", "Several spaces in the end"),
+                Arguments.of(Map.of(' ', 1),  " ", "Only one space as a string"),
+                Arguments.of(Map.of('a', 1),  "a", "Only one letter as a string"),
+                Arguments.of(Map.of('2', 1),  "2", "Only one number as a string"),
+                Arguments.of(Map.of('$', 1),  "$", "Only one special character as a string"),
+                Arguments.of(Map.of(' ', 3),  "   ", "Several spaces as a string")
+        );
     }
 }

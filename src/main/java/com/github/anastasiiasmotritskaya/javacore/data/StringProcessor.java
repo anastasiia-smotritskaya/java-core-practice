@@ -1,5 +1,8 @@
 package com.github.anastasiiasmotritskaya.javacore.data;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Обработчик строк с различными операциями
  * Примеры: методы класса String, методы класса StringBuilder
@@ -21,8 +24,8 @@ public class StringProcessor {
      * @param original строка для проверки
      * @return true если строка палиндром, false если строка не палиндром
      * @throws IllegalArgumentException если строка равна null
-     * {@code boolean result = isPalindrome("Madam")}; // true
-     * {@code boolean result = isPalindrome("Adam");} // false
+     *                                  {@code boolean result = isPalindrome("Madam")}; // true
+     *                                  {@code boolean result = isPalindrome("Adam");} // false
      * @see java.lang.StringBuilder
      */
     public static boolean isPalindrome(String original) {
@@ -43,8 +46,8 @@ public class StringProcessor {
      * @param original строка для проверки
      * @return true если строка палиндром, false если строка не палиндром
      * @throws IllegalArgumentException если строка равна null
-     * {@code boolean result = isPalindrome_char("Madam")}; // true
-     * {@code boolean result = isPalindrome_char("Adam");} // false
+     *                                  {@code boolean result = isPalindrome_char("Madam")}; // true
+     *                                  {@code boolean result = isPalindrome_char("Adam");} // false
      */
     public static boolean isPalindrome_char(String original) {
 
@@ -55,7 +58,7 @@ public class StringProcessor {
         String cleaned = original.replaceAll("\\s+", "").toLowerCase();
 
         String result = "";
-        for (int i = cleaned.length()-1; i > -1; i--) {
+        for (int i = cleaned.length() - 1; i > -1; i--) {
             result += cleaned.charAt(i);
         }
         return result.equals(cleaned);
@@ -91,7 +94,7 @@ public class StringProcessor {
             throw new IllegalArgumentException("Input string cannot be null.");
         }
         String result = "";
-        for (int i = str.length()-1; i > -1; i--) {
+        for (int i = str.length() - 1; i > -1; i--) {
             result += str.charAt(i);
         }
         return result;
@@ -135,7 +138,7 @@ public class StringProcessor {
     public static String capitalizeWords(String str) {
         if (str == null || str.isEmpty()) return str;
 
-        String [] words = str.split("\\s+");
+        String[] words = str.split("\\s+");
         StringBuilder result = new StringBuilder();
 
         for (String word : words) {
@@ -146,5 +149,32 @@ public class StringProcessor {
             }
         }
         return result.toString().trim();
+    }
+
+    /**
+     * Подсчитывает частоту каждого символа в строке
+     *
+     * @param str исходная строка
+     * @return Map (ключ - Character - символ, значение - Integer - количество)
+     * {@code Map<Character, Integer> charCountMap = countCharacters("hello");} // {e=1, h=1, l=2, o=1}
+     * @throws IllegalArgumentException если строка пустая или равно null
+     */
+    public static Map<Character, Integer> countCharacters(String str) {
+        if (str == null) {
+            throw new IllegalArgumentException("Input string cannot be null.");
+        }
+
+        if (str.isEmpty()) {
+            return new HashMap<>();
+        }
+
+        Map<Character, Integer> charCountMap = new HashMap<>();
+
+        for (int i = 0; i < str.length(); i++) {
+            int currentCount = charCountMap.getOrDefault(str.charAt(i), 0);
+            charCountMap.put(str.charAt(i), ++currentCount);
+        }
+
+        return charCountMap;
     }
 }
