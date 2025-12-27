@@ -312,4 +312,77 @@ public class StringProcessorTest {
     void findLongestWordTest(String expected, String str, String description) {
         assertEquals(expected, StringProcessor.findLongestWord(str));
     }
+
+    @Test
+    @DisplayName("formatPhoneNumber methods should throws IllegalArgumentException, when the string is null")
+    void formatPhoneNumber_nullString_throwsIllegalArgumentException() {
+        assertAll(
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.formatPhoneNumber_replace(null));
+                    assertEquals("Input string cannot be null.", exception.getMessage());
+                },
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.formatPhoneNumber_append(null));
+                    assertEquals("Input string cannot be null.", exception.getMessage());
+                }
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {1}")
+    @DisplayName("formatPhoneNumber methods should throws IllegalArgumentException, when the number doesn't consist from 11 digits")
+    @CsvSource({
+            "'', 'Empty string'",
+            "'   ', 'Multiple spaces string'",
+            "'7123456789', '10 digits string'",
+            "'one7123456789two', '10 digits with letters string'",
+            "'7OOO1234567', 'String with letters O instead of digits 0'",
+            "'711122233445', 'Too long phone number'"
+    })
+    void formatPhoneNumber_shortNumber_throwsIllegalArgumentException(String str, String description) {
+        assertAll(
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.formatPhoneNumber_replace(str));
+                    assertEquals("The phone number must be 11 digits long.", exception.getMessage());
+                },
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.formatPhoneNumber_append(str));
+                    assertEquals("The phone number must be 11 digits long.", exception.getMessage());
+                }
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {1}")
+    @DisplayName("formatPhoneNumber methods should throws IllegalArgumentException, when the number doesn't begin with 7 or 8")
+    @CsvSource({
+            "'01234567890', '11 digits string with first not 7 or 8'",
+            "'one01234567890two', '11 digits with letters string with first not 7 or 8'"
+    })
+    void formatPhoneNumber_wrongBeginning_throwsIllegalArgumentException(String str, String description) {
+        assertAll(
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.formatPhoneNumber_replace(str));
+                    assertEquals("Please check that your phone number is entered correctly. Russian numbers must begin with 7 or 8.", exception.getMessage());
+                },
+                () -> {
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.formatPhoneNumber_append(str));
+                    assertEquals("Please check that your phone number is entered correctly. Russian numbers must begin with 7 or 8.", exception.getMessage());
+                }
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {2}")
+    @DisplayName("formatPhoneNumber methods positive tests with different arguments")
+    @CsvSource({
+            "'+7 (999) 888-77-66', '79998887766', 'phone number only with digits starts with 7'",
+            "'+7 (999) 888-77-66', '89998887766', 'phone number only with digits starts with 8'",
+            "'+7 (999) 888-77-66', '7 999 888 77 66', 'phone number with digits and spaces",
+            "'+7 (999) 888-77-66', '8-999-888-77-66', 'phone number with digits and dashes'",
+            "'+7 (999) 888-77-66', '8 (999) 888-77-66', 'phone number with digits, spaces, dashes and brackets'",
+            "'+7 (999) 888-77-66', 'o8o(999)o888-77-66o', 'phone number with digits, spaces, dashes, letters and brackets'"
+    })
+    void formatPhoneNumberTest(String expected, String str, String description) {
+        assertAll(
+                () -> assertEquals(expected, StringProcessor.formatPhoneNumber_replace(str)),
+                () -> assertEquals(expected, StringProcessor.formatPhoneNumber_append(str)));
+    }
 }

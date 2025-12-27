@@ -184,7 +184,7 @@ public class StringProcessor {
      *
      * @param text исходный текст
      * @return самое длинное слово
-     * {@code = String word = findLongestWord("Java is a programming language");} // programming
+     * {@code String word = findLongestWord("Java is a programming language");} // programming
      * @throws IllegalArgumentException если строка null, пустая или состоит только из пробелов
      */
     public static String findLongestWord(String text) {
@@ -210,5 +210,76 @@ public class StringProcessor {
             }
         }
         return longestWord;
+    }
+
+    /**
+     * Форматирует номер телефона
+     *
+     * @param phoneNumber строка с цифрами
+     * @return отформатированный номер: +7 (XXX) XXX-XX-XX
+     * {@code String phoneNumber = formatPhoneNumber_replace("89123456789");} // +7 (912) 345-67-89
+     * @throws IllegalArgumentException если номер не из 11 цифр
+     */
+    public static String formatPhoneNumber_replace(String phoneNumber) {
+        final int NUMBER_OF_DIGITS = 11;
+
+        if (phoneNumber == null) {
+            throw new IllegalArgumentException("Input string cannot be null.");
+        }
+
+        String cleaned = phoneNumber.replaceAll("\\D", "");
+
+        if (cleaned.length() != NUMBER_OF_DIGITS) {
+            throw new IllegalArgumentException("The phone number must be 11 digits long.");
+        }
+
+        if (!(cleaned.charAt(0) == '7' || cleaned.charAt(0) == '8')) {
+            throw new IllegalArgumentException("Please check that your phone number is entered correctly. Russian numbers must begin with 7 or 8.");
+        }
+
+        StringBuilder sb = new StringBuilder("+7 (XXX) XXX-XX-XX");
+        sb.replace(4, 7, cleaned.substring(1, 4));
+        sb.replace(9, 12, cleaned.substring(4, 7));
+        sb.replace(13, 15, cleaned.substring(7, 9));
+        sb.replace(16, 18, cleaned.substring(9, 11));
+
+        return sb.toString();
+    }
+
+    /**
+     * Форматирует номер телефона
+     *
+     * @param phoneNumber строка с цифрами
+     * @return отформатированный номер: +7 (XXX) XXX-XX-XX
+     * {@code String phoneNumber = formatPhoneNumber_append("89123456789");} // +7 (912) 345-67-89
+     * @throws IllegalArgumentException если номер не из 11 цифр
+     */
+    public static String formatPhoneNumber_append(String phoneNumber) {
+        final int NUMBER_OF_DIGITS = 11;
+
+        if (phoneNumber == null) {
+            throw new IllegalArgumentException("Input string cannot be null.");
+        }
+
+        String cleaned = phoneNumber.replaceAll("\\D", "");
+
+        if (cleaned.length() != NUMBER_OF_DIGITS) {
+            throw new IllegalArgumentException("The phone number must be 11 digits long.");
+        }
+
+        if (!(cleaned.charAt(0) == '7' || cleaned.charAt(0) == '8')) {
+            throw new IllegalArgumentException("Please check that your phone number is entered correctly. Russian numbers must begin with 7 or 8.");
+        }
+
+        StringBuilder sb = new StringBuilder("+7 (")
+                .append(cleaned, 1, 4)
+                .append(") ")
+                .append(cleaned,4, 7)
+                .append("-")
+                .append(cleaned,7, 9)
+                .append("-")
+                .append(cleaned,9, 11);
+
+        return sb.toString();
     }
 }
