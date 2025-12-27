@@ -385,4 +385,50 @@ public class StringProcessorTest {
                 () -> assertEquals(expected, StringProcessor.formatPhoneNumber_replace(str)),
                 () -> assertEquals(expected, StringProcessor.formatPhoneNumber_append(str)));
     }
+
+    @Test
+    @DisplayName("isValidEmail should return false if email is null")
+    void isValidEmail_nullEmail_throwsIllegalArgumentException() {
+        assertFalse(StringProcessor.isValidEmail(null));
+    }
+
+    @ParameterizedTest(name = "[{index}] {1}")
+    @DisplayName("isValidEmail positive tests with various arguments")
+    @CsvSource({
+            "'test@example.com', 'Email is valid'",
+            "'Test@example.com', 'Email with first letter upper case is valid'",
+            "'TEST@EXAMPLE.COM', 'Email with all letters upper case is valid'",
+            "' test@example.com', 'Email has space in the beginning'",
+            "'test@example.com ', 'Email has space in the end'",
+            "'user.name@domain.co.uk', 'Email has more than one dot'",
+            "'user+tag@example.com', 'Email has special characters'"
+    })
+    void isValidEmailTest(String email, String description) {
+        assertTrue(StringProcessor.isValidEmail(email));
+    }
+
+    @ParameterizedTest(name = "[{index}] {1}")
+    @DisplayName("isValidEmail negative tests with various arguments")
+    @CsvSource({
+            "'@domain.com', 'Email has no local part",
+            "'user@.com', 'Email has dot after at sign'",
+            "'user@domain.', 'Dot in the end'",
+            "'user@domain.c', 'TLD is too short'",
+            "'user@-domain.com', '- in the beginning of the domain",
+            "'юзер@яндекс.ру', 'Cyrillic symbols in the email",
+            "'test.test.ru ', 'Email has no at sign'",
+            "'test@test@test.ru ', 'Email has two at signs in the middle'",
+            "'test@@test.ru ', 'Email has two at signs in the middle near each other'",
+            "'@test@test.ru ', 'Email has two at signs: one is in the beginning'",
+            "'test@test.ru@ ', 'Email has two at signs: one is in the end'",
+            "'t est@test.ru ', 'Email has space in the middle'",
+            "'test @test.ru ', 'Email has space before at sign'",
+            "'test@ test.ru ', 'Email has space after at sign'",
+            "'','Empty email'",
+            "' ','Email consists of only one space'",
+            "'   ','Email consists of multiple spaces'"
+    })
+    void isValidEmailNegativeTest(String email, String description) {
+        assertFalse(StringProcessor.isValidEmail(email));
+    }
 }

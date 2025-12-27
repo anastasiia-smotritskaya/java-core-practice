@@ -274,12 +274,42 @@ public class StringProcessor {
         StringBuilder sb = new StringBuilder("+7 (")
                 .append(cleaned, 1, 4)
                 .append(") ")
-                .append(cleaned,4, 7)
+                .append(cleaned, 4, 7)
                 .append("-")
-                .append(cleaned,7, 9)
+                .append(cleaned, 7, 9)
                 .append("-")
-                .append(cleaned,9, 11);
+                .append(cleaned, 9, 11);
 
         return sb.toString();
+    }
+
+    /**
+     * Проверяет валидность email адреса
+     * Простая проверка: содержит @, есть домен, нет пробелов
+     *
+     * @param email строка для проверки
+     * @return true если email валиден
+     * {@code boolean isValid = isValidEmail("test@example.com");} // true
+     * {@code boolean isValid = isValidEmail("invalid.email");} // false
+     * @throws IllegalArgumentException если email не соответствует шаблону
+     */
+    public static boolean isValidEmail(String email) {
+        if (email == null) return false;
+
+        String trimmed = email.trim();
+        if (trimmed.isEmpty() || trimmed.contains(" ")) return false;
+
+        char[] chars = trimmed.toCharArray();
+        int atSignCount = 0;
+
+        for (char c : chars) {
+            if (c == '@') atSignCount++;
+        }
+
+        if (atSignCount != 1) return false;
+
+        final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9][A-Za-z0-9.-]*\\.[A-Za-z]{2,}$";
+
+        return trimmed.matches(EMAIL_PATTERN);
     }
 }
