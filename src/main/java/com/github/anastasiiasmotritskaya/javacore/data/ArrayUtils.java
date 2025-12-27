@@ -1,6 +1,4 @@
-package com.github.anastasiiasmotritskaya.javacore;
-
-import java.util.Arrays;
+package com.github.anastasiiasmotritskaya.javacore.data;
 
 /**
  * Работа с одномерными и двумерными массивами

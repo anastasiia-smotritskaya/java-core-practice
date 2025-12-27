@@ -1,5 +1,7 @@
-package com.github.anastasiiasmotritskaya.javacore;
+package com.github.anastasiiasmotritskaya.javacore.datatest;
 
+import com.github.anastasiiasmotritskaya.javacore.data.ArrayUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,7 +18,7 @@ public class ArrayUtilsTest {
     @MethodSource("findMinMaxDataProvider")
     @DisplayName("findMinMax with various input arrays")
     public void findMinMaxTest(int[] expectedArray, int[] array, String description) {
-        assertArrayEquals(expectedArray, ArrayUtils.findMinMax(array));
+        Assertions.assertArrayEquals(expectedArray, ArrayUtils.findMinMax(array));
     }
 
     static Stream<Arguments> findMinMaxDataProvider() {
