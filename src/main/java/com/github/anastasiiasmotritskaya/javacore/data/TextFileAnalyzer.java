@@ -3,6 +3,11 @@ package com.github.anastasiiasmotritskaya.javacore.data;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringBufferInputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * Работа с системами ввода-вывода
@@ -26,7 +31,7 @@ public class TextFileAnalyzer {
      * @param filePath путь к файлу
      * @return int количество строк в файле
      * {@code int linesCount = countLines_br(data.txt);} || возвращает количество строк
-     * @throws IOException если файл не найден или произошла ошибка ввода-вывода
+     * @throws IOException              если файл не найден или произошла ошибка ввода-вывода
      * @throws IllegalArgumentException если путь к файлу пустой или null
      * @see BufferedReader
      * @see FileReader
@@ -43,5 +48,29 @@ public class TextFileAnalyzer {
             }
             return lineCount;
         }
+    }
+
+    /**
+     * Считает количество строк в файле, используя Files.readAllLines().
+     * Пустые строки внутри файла учитываются.
+     * Поведение для последней пустой строки без перевода строки зависит от реализации JVM.
+     * Для более предсказуемого поведения с пустыми строками используйте countLines_br().
+     *
+     * @param filePath путь к файлу
+     * @return int количество строк в файле
+     * {@code int linesCount = countLines_files(data.txt);} || возвращает количество строк
+     * @throws IOException              если файл не найден или произошла ошибка ввода-вывода
+     * @throws IllegalArgumentException если путь к файлу пустой или null
+     * @see Path
+     * @see Files
+     */
+    public static int countLines_files(String filePath) throws IOException {
+        if (filePath == null || filePath.trim().isEmpty()) {
+            throw new IllegalArgumentException("File path must not be null or empty. Enter the file path.");
+        }
+
+        Path path = Paths.get(filePath);
+        List<String> lines = Files.readAllLines(path);
+        return lines.size();
     }
 }
