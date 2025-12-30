@@ -1,9 +1,6 @@
 package com.github.anastasiiasmotritskaya.javacore.data;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.StringBufferInputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,7 +35,7 @@ public class TextFileAnalyzer {
      */
     public static int countLines_br(String filePath) throws IOException {
         if (filePath == null || filePath.trim().isEmpty()) {
-            throw new IllegalArgumentException("File path must not be null or empty. Enter the file path.");
+            throw new IllegalArgumentException("File path must not be null or empty.");
         }
 
         int lineCount = 0;
@@ -66,11 +63,46 @@ public class TextFileAnalyzer {
      */
     public static int countLines_files(String filePath) throws IOException {
         if (filePath == null || filePath.trim().isEmpty()) {
-            throw new IllegalArgumentException("File path must not be null or empty. Enter the file path.");
+            throw new IllegalArgumentException("File path must not be null or empty.");
         }
 
         Path path = Paths.get(filePath);
         List<String> lines = Files.readAllLines(path);
         return lines.size();
+    }
+
+    /**
+     * Находит самое длинное слово в файле, обрабатывая файл построчно для эффективности.
+     * Слово определяется как последовательность букв, может содержать дефисы и апострофы внутри.
+     * Регистр не учитывается при сравнении длины, но возвращается слово в оригинальном виде.
+     *
+     * <p>Пример: "mother-in-law", "O'Connor", "hello" считаются словами.
+     *
+     * @param filePath путь к файлу
+     * @return самое длинное слово или пустую строку, если слов нет
+     * @throws IOException              если файл не найден или ошибка ввода-вывода
+     * @throws IllegalArgumentException если путь null или пустой
+     * @see BufferedReader
+     * @see FileReader
+     */
+    public static String findLongestWord_br(String filePath) throws IOException {
+        if (filePath == null || filePath.trim().isEmpty()) {
+            throw new IllegalArgumentException("File path must not be null or empty.");
+        }
+
+        String longestWord = "";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] words = line.split("[^\\p{L}'-]+");
+                for (String word : words) {
+                    if (word.length() > longestWord.length()) {
+                        longestWord = word;
+                    }
+                }
+            }
+        }
+        return longestWord;
     }
 }
