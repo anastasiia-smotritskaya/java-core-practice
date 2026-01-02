@@ -1,6 +1,7 @@
 package com.github.anastasiiasmotritskaya.javacore.data;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -92,7 +93,7 @@ public class TextFileAnalyzer {
 
         String longestWord = "";
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath, StandardCharsets.UTF_8))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] words = line.split("[^\\p{L}'-]+");
@@ -103,6 +104,39 @@ public class TextFileAnalyzer {
                 }
             }
         }
+        return longestWord;
+    }
+
+    /**
+     * Находит самое длинное слово в файле, обрабатывая файл построчно для эффективности.
+     * Слово определяется как последовательность букв, может содержать дефисы и апострофы внутри.
+     * Регистр не учитывается при сравнении длины, но возвращается слово в оригинальном виде.
+     *
+     * <p>Пример: "mother-in-law", "O'Connor", "hello" считаются словами.
+     *
+     * @param filePath путь к файлу
+     * @return самое длинное слово или пустую строку, если слов нет
+     * @throws IOException              если файл не найден или ошибка ввода-вывода
+     * @throws IllegalArgumentException если путь null или пустой
+     * @see Files
+     */
+    public static String findLongestWord_files(String filePath) throws IOException {
+        if (filePath == null || filePath.trim().isEmpty()) {
+            throw new IllegalArgumentException("File path must not be null or empty.");
+        }
+
+        Path path = Paths.get(filePath);
+        String longestWord = "";
+
+        for (String line : Files.readAllLines(path)) {
+            String[] words = line.split("[^\\p{L}'-]+");
+            for (String word : words) {
+                if (word.length() > longestWord.length()) {
+                    longestWord = word;
+                }
+            }
+        }
+
         return longestWord;
     }
 }
