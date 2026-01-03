@@ -5,7 +5,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Работа с системами ввода-вывода
@@ -138,5 +140,39 @@ public class TextFileAnalyzer {
         }
 
         return longestWord;
+    }
+
+    /**
+     * Подсчитывает частоту слов в файле (без учёта регистра).
+     * Слово определяется как последовательность букв, может содержать дефисы и апострофы внутри.
+     * Пустые строки и не-слова (числа, спецсимволы) игнорируются.
+     *
+     * <p>Пример: "Hello", "HELLO", "hello" считаются одним словом "hello"
+     *
+     * @param filePath путь к файлу
+     * @return карта частоты слов (слово в нижнем регистре → количество повторений)
+     * @throws IOException              если файл не найден или ошибка ввода-вывода
+     * @throws IllegalArgumentException если путь null или пустой
+     * @see Files
+     */
+    public static Map<String, Integer> countWordFrequency(String filePath) throws IOException {
+        if (filePath == null || filePath.trim().isEmpty()) {
+            throw new IllegalArgumentException("File path must not be null or empty.");
+        }
+
+        Path path = Paths.get(filePath);
+        Map<String, Integer> wordFrequency = new HashMap<>();
+
+        for (String line : Files.readAllLines(path)) {
+            String[] words = line.split("[^\\p{L}'-]+");
+            for (String word : words) {
+                if (!word.isEmpty()) {
+                    String wordInLowerCase = word.toLowerCase();
+                    int currentCount = wordFrequency.getOrDefault(wordInLowerCase, 0);
+                    wordFrequency.put(wordInLowerCase, currentCount + 1);
+                }
+            }
+        }
+        return wordFrequency;
     }
 }

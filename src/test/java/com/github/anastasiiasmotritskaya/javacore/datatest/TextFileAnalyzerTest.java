@@ -10,8 +10,7 @@ import org.junit.jupiter.params.provider.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -556,5 +555,114 @@ public class TextFileAnalyzerTest {
         Path twoApostrophesFile = tempDir.resolve("two-apostrophes-file-findLongestWord_files.txt");
         Files.write(twoApostrophesFile, List.of("doggy'dog kitty''cat"));
         assertEquals("kitty''cat", TextFileAnalyzer.findLongestWord_files(twoApostrophesFile.toString()));
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("countWordFrequency should throw IllegalArgumentException when the file path is null or empty")
+    void countWordFrequencyTest_IllegalArgumentException(String filePath) {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> TextFileAnalyzer.countWordFrequency(filePath));
+        assertEquals("File path must not be null or empty.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("countWordFrequency should return an empty map if the file is without any text")
+    void countWordFrequency_emptyFileTest() throws IOException {
+        Path zeroBytesFile = tempDir.resolve("zero-bytes-file-countWordFrequency.txt");
+        Files.write(zeroBytesFile, new byte[0]);
+        assertEquals(new HashMap<>(), TextFileAnalyzer.countWordFrequency(zeroBytesFile.toString()));
+    }
+
+    @Test
+    @DisplayName("countWordFrequency should return empty map for file with empty line")
+    void countWordFrequency_oneEmptyLineTest() throws IOException {
+        Path emptyLineFile = tempDir.resolve("empty-line-file-countWordFrequency.txt");
+        Files.write(emptyLineFile, List.of(""));
+        assertEquals(Map.of(), TextFileAnalyzer.countWordFrequency(emptyLineFile.toString()));
+    }
+
+    @ParameterizedTest(name = "[{index}] {1}")
+    @DisplayName("countWordFrequency positive tests with different arguments")
+    @CsvSource({
+            "'src/test/resources/three-paragraphs-lower-case.txt', 'Three paragraphs: all words in lower case'",
+            "'src/test/resources/three-paragraphs-upper-case.txt', 'Three paragraphs: some words has letters in upper case'",
+            "'src/test/resources/three-lines-upper-case.txt', 'Three lines: some words has letters in upper case'",
+            "'src/test/resources/three-paragraphs-has-numbers.txt', 'There are numbers between words'",
+            "'src/test/resources/three-paragraphs-has-special-characters.txt', 'There are special characters between words'"
+    })
+    void countWordFrequencyPositiveTest(String filePath, String description) throws IOException {
+        Map<String, Integer> expected = Map.of("first", 1,
+                "second", 1,
+                "third", 1,
+                "line", 3);
+        assertEquals(expected, TextFileAnalyzer.countWordFrequency(filePath));
+    }
+
+    @Test
+    @DisplayName("countWordFrequency should handle words with hyphens")
+    void countWordFrequency_hyphenTest() throws IOException {
+        Path hyphenWordsFile = tempDir.resolve("hyphen-words-file-countWordFrequency.txt");
+        String content = "mother-in-law test test father-in-law";
+        Files.write(hyphenWordsFile, List.of(content));
+
+        Map<String, Integer> expected = Map.of(
+                "mother-in-law", 1,
+                "father-in-law", 1,
+                "test", 2
+        );
+
+        assertEquals(expected, TextFileAnalyzer.countWordFrequency(hyphenWordsFile.toString()));
+    }
+
+    @Test
+    @DisplayName("countWordFrequency should handle words with apostrophes")
+    void countWordFrequency_apostropheTest() throws IOException {
+        Path apostropheWordsFile = tempDir.resolve("apostrophe-words-file-countWordFrequency.txt");
+        String content = "O'Brian O'Connor test test";
+        Files.write(apostropheWordsFile, List.of(content));
+
+        Map<String, Integer> expected = Map.of(
+                "o'brian", 1,
+                "o'connor", 1,
+                "test", 2
+        );
+
+        assertEquals(expected, TextFileAnalyzer.countWordFrequency(apostropheWordsFile.toString()));
+    }
+
+    @Test
+    @DisplayName("countWordFrequency should ignore numbers")
+    void countWordFrequency_numbersTest() throws IOException {
+        Path numbersFile = tempDir.resolve("numbers-file-countWordFrequency.txt");
+        String content = "word1 987 word2 123 word1";
+        Files.write(numbersFile, List.of(content));
+
+        Map<String, Integer> expected = Map.of("word", 3);
+
+        assertEquals(expected, TextFileAnalyzer.countWordFrequency(numbersFile.toString()));
+    }
+
+    @Test
+    @DisplayName("countWordFrequency should ignore special characters")
+    void countWordFrequency_specialCharactersTest() throws IOException {
+        Path file = tempDir.resolve("non-words.txt");
+        String content = "word! !@# word? %^# word*";
+        Files.write(file, List.of(content));
+
+        Map<String, Integer> expected = Map.of("word", 3);
+
+        assertEquals(expected, TextFileAnalyzer.countWordFrequency(file.toString()));
+    }
+
+    @Test
+    @DisplayName("countWordFrequency should be case insensitive")
+    void countWordFrequency_caseInsensitiveTest() throws IOException {
+        Path caseTestFile = tempDir.resolve("case-test-countWordFrequency.txt");
+        String content = "Hello HELLO hello HeLlO";
+        Files.write(caseTestFile, List.of(content));
+
+        Map<String, Integer> expected = Map.of("hello", 4);
+
+        assertEquals(expected, TextFileAnalyzer.countWordFrequency(caseTestFile.toString()));
     }
 }
