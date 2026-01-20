@@ -30,7 +30,8 @@ public class LibrarySavingTest {
                 "author" : "Richard Bachman",
                 "year" : 1977,
                 "isbn" : "KU7K3MBQV9LU6",
-                "status" : "AVAILABLE"
+                "status" : "AVAILABLE",
+                "currentBorrower" : null
               }
             }""");
 
@@ -127,6 +128,7 @@ public class LibrarySavingTest {
         Path tempPath = tempDir.resolve("threeBooksLibraryFile.json");
         Files.createFile(tempPath);
         threeBooksLibrary.saveToExistingJsonFile(String.valueOf(tempPath));
+//        System.out.println(Files.readString(tempPath));
 
         emptyLibrary.loadFromJsonFile(String.valueOf(tempPath));
 

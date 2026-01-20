@@ -30,7 +30,8 @@ public class BookTest {
     @DisplayName("book toString positive test")
     public void bookToStringPositiveTest() {
         Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
-        String expected = "Book{title='Rage', author='Richard Bachman', year=1977, isbn='KU7K3MBQV9LU9'}";
+        String expected = "Book{title='Rage', author='Richard Bachman', year=1977, isbn='KU7K3MBQV9LU9', " +
+                "status=AVAILABLE, currentBorrower='null'}";
         assertEquals(expected, book.toString());
     }
 
@@ -243,5 +244,93 @@ public class BookTest {
 
         book.setStatus(BookStatus.AVAILABLE);
         assertEquals(BookStatus.AVAILABLE, book.getStatus());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("borrow should throw IllegalArguments exception if the borrower's name is null or empty")
+    public void borrowNullOrEmptyBorrowersNameTest_IllegalArgumentException(String borrowersName) {
+        Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> book.borrow(borrowersName));
+        String expectedMessage = "Borrower name must not be null or empty. Enter the borrower's name.";
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @DisplayName("borrow should throw IllegalStateException if the book is borrowed or reserved")
+    @EnumSource(names = {"BORROWED", "RESERVED"})
+    public void borrowStatusNegativeTest_IllegalStateException(BookStatus status) {
+        Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
+        book.setStatus(status);
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> book.borrow("Jane Doe"));
+        String expectedMessage = String.format("This book status: %s", book.getStatus());
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @ParameterizedTest(name = "[{index}] {1}")
+    @DisplayName("borrow should change the book status to BORROWED and save the borrower's name when someone borrows the book")
+    @CsvSource({
+            "'Jane Doe','Plain positive test'",
+            "' Jane Doe','One space in the beginning'",
+            "'Jane Doe ','One space in the end'",
+            "'   Jane Doe','Few spaces in the beginning'",
+            "'Jane Doe   ','Few spaces in the end''",
+    })
+    public void borrowStatusPositiveTest(String borrower, String description) {
+        Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
+        book.borrow(borrower);
+        assertEquals(BookStatus.BORROWED, book.getStatus());
+        assertEquals(borrower.trim(), book.getCurrentBorrower());
+    }
+
+    @ParameterizedTest
+    @DisplayName("return should throw IllegalStateException if the book is borrowed or reserved if thw book is AVAILABLE or RESERVED")
+    @EnumSource(names = {"AVAILABLE", "RESERVED"})
+    public void returnStatusNegativeTest_IllegalStateException(BookStatus status) {
+        Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
+        book.setStatus(status);
+        IllegalStateException exception = assertThrows(IllegalStateException.class, book::returnBook);
+        String expectedMessage = String.format("This book has not been issued. Current status: %s", status);
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("return should change book status to AVAILABLE and save the borrower's name as null if book status is BORROWED")
+    public void returnStatusPositiveTest() {
+        Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
+        book.borrow("Jane Doe");
+        book.returnBook();
+        assertEquals(BookStatus.AVAILABLE, book.getStatus());
+        assertNull(book.getCurrentBorrower());
+    }
+
+    @ParameterizedTest
+    @DisplayName("isAvailable returns true if book is AVAILABLE and false in the other cases")
+    @MethodSource("isAvailableDataProvider")
+    public void isAvailableTest(BookStatus status, boolean isAvailable) {
+        Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
+        book.setStatus(status);
+        assertEquals(isAvailable, book.isAvailable());
+    }
+
+    static Stream<Arguments> isAvailableDataProvider(){
+        return Stream.of(
+                Arguments.of(BookStatus.AVAILABLE, true),
+                Arguments.of(BookStatus.BORROWED, false),
+                Arguments.of(BookStatus.RESERVED, false)
+        );
+    }
+
+    @Test
+    @DisplayName("getCurrentBorrower return null if there is no borrower anf the name of borrower if there is a borrower")
+    public void getCurrentBorrowerTest() {
+        Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
+        assertNull(book.getCurrentBorrower());
+        book.borrow("Jane Doe");
+        assertEquals("Jane Doe", book.getCurrentBorrower());
+        book.returnBook();
+        assertNull(book.getCurrentBorrower());
     }
 }
