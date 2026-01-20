@@ -1,6 +1,7 @@
 package com.github.anastasiiasmotritskaya.javacore.ooptest;
 
 import com.github.anastasiiasmotritskaya.javacore.oop.Book;
+import com.github.anastasiiasmotritskaya.javacore.oop.BookStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -219,5 +220,28 @@ public class BookTest {
                 () -> assertNotEquals(book_1, book_2),
                 () -> assertNotEquals(book_1.hashCode(), book_2.hashCode())
         );
+    }
+
+    @Test
+    @DisplayName("A new book has default status AVAILABLE")
+    public void bookDefaultStatusTest(){
+        Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
+        assertEquals(BookStatus.AVAILABLE, book.getStatus());
+    }
+
+    @Test
+    @DisplayName("setBookStatus changes a book status")
+    public void bookSetStatusTest(){
+        Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
+        assertEquals(BookStatus.AVAILABLE, book.getStatus());
+
+        book.setStatus(BookStatus.BORROWED);
+        assertEquals(BookStatus.BORROWED, book.getStatus());
+
+        book.setStatus(BookStatus.RESERVED);
+        assertEquals(BookStatus.RESERVED, book.getStatus());
+
+        book.setStatus(BookStatus.AVAILABLE);
+        assertEquals(BookStatus.AVAILABLE, book.getStatus());
     }
 }

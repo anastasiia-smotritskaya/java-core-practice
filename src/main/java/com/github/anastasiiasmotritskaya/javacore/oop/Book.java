@@ -16,6 +16,7 @@ public class Book {
     private String author;
     private int year;
     private String isbn;
+    private BookStatus status;
 
     /**
      * Пустой конструктор класса Book необходим для сесериализации json
@@ -42,6 +43,7 @@ public class Book {
         this.author = author.trim();
         this.year = year;
         this.isbn = isbn.trim();
+        this.status = BookStatus.AVAILABLE;
     }
 
     public String getTitle() {
@@ -115,6 +117,14 @@ public class Book {
             throw new IllegalArgumentException(
                     "ISBN must contain only letters and digits. Got: " + isbn.trim());
         }
+    }
+
+    public BookStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BookStatus status) {
+        this.status = status;
     }
 
     @Override

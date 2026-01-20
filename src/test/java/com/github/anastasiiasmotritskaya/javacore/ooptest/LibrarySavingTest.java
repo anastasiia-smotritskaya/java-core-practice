@@ -29,7 +29,8 @@ public class LibrarySavingTest {
                 "title" : "Rage",
                 "author" : "Richard Bachman",
                 "year" : 1977,
-                "isbn" : "KU7K3MBQV9LU6"
+                "isbn" : "KU7K3MBQV9LU6",
+                "status" : "AVAILABLE"
               }
             }""");
 
