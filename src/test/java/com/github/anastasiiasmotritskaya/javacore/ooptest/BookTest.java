@@ -65,7 +65,7 @@ public class BookTest {
         return Stream.of(
                 Arguments.of(1457),
                 Arguments.of(1458),
-                Arguments.of(LocalDate.now().getYear()-1),
+                Arguments.of(LocalDate.now().getYear() - 1),
                 Arguments.of(LocalDate.now().getYear())
         );
     }
