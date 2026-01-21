@@ -269,4 +269,25 @@ public class Library {
             throw new IllegalArgumentException("Title field should not be null or empty. Enter the title.");
         }
     }
+
+    /**
+     * Возвращает основную информацию о книгах из разных категорий (Book, TechnicalBook, FictionBook)
+     */
+    public String getAllBooksBasicInfo() {
+        StringBuilder booksInfo = new StringBuilder();
+        for (Book book : books.values()) {
+            if (book instanceof FictionBook) {
+                booksInfo.append(String.format("Fiction: %s, genre: %s%n",
+                        book.getTitle(), ((FictionBook) book).getGenre()));
+                continue;
+            }
+            if (book instanceof TechnicalBook) {
+                booksInfo.append(String.format("Technical: %s, subject: %s, difficulty Level: %s%n",
+                        book.getTitle(), ((TechnicalBook) book).getSubject(), ((TechnicalBook) book).getDifficultyLevel()));
+            } else {
+                booksInfo.append(String.format("Book: %s%n", book.getTitle()));
+            }
+        }
+        return String.valueOf(booksInfo);
+    }
 }

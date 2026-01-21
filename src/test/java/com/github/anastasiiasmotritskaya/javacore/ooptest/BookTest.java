@@ -473,7 +473,6 @@ public class BookTest {
     public void technicalBookToStringTest() {
         TechnicalBook book = new TechnicalBook("Physics for beginners", "John Smith", 2001,
                 "TB7K3MBQV9LU9", "physics", DifficultyLevel.BEGINNER);
-        System.out.println(book);
         String expected = "TechnicalBook{title='Physics for beginners', author='John Smith', year=2001, " +
                 "isbn='TB7K3MBQV9LU9', status=AVAILABLE, currentBorrower='null', subject='physics', " +
                 "difficultyLevel='BEGINNER'}";

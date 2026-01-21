@@ -1,7 +1,6 @@
 package com.github.anastasiiasmotritskaya.javacore.ooptest;
 
-import com.github.anastasiiasmotritskaya.javacore.oop.Book;
-import com.github.anastasiiasmotritskaya.javacore.oop.Library;
+import com.github.anastasiiasmotritskaya.javacore.oop.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -252,5 +251,35 @@ public class LibraryTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> library.findBookByTitle(author));
         String expectedMessage = "Title field should not be null or empty. Enter the title.";
         assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("getAllBooksBasicInfo should return proper information about books in the library")
+    public void getAllBooksBasicInfoTest() {
+        TechnicalBook technicalBook = new TechnicalBook("Physics for beginners", "John Smith", 2001,
+                "TB7K3MBQV9LU9", "physics", DifficultyLevel.BEGINNER);
+        FictionBook fictionBook = new FictionBook("Rage", "Richard Bachman", 1977,
+                "FB7K3MBQV9LU9", "drama");
+        Book book = new Book("The Long walk", "Richard Bachman", 1983, "KU7K3MBQV9LU9");
+
+        Library getAllBooksLibrary = new Library();
+        getAllBooksLibrary.addBook(technicalBook);
+        getAllBooksLibrary.addBook(fictionBook);
+        getAllBooksLibrary.addBook(book);
+
+        String expected = """
+                Technical: Physics for beginners, subject: physics, difficulty Level: BEGINNER
+                Fiction: Rage, genre: drama
+                Book: The Long walk
+                """;
+        assertEquals(expected, getAllBooksLibrary.getAllBooksBasicInfo()
+                .replace("\r\n", "\n").replace("\r", "\n"));
+    }
+
+    @Test
+    @DisplayName("getAllBooksBasicInfo should return proper information about books in the library")
+    public void getAllBooksBasicInfoEmptyLibraryTest() {
+        Library emptyLibrary = new Library();
+        assertEquals("", emptyLibrary.getAllBooksBasicInfo());
     }
 }
