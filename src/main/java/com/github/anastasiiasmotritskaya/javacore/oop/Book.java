@@ -12,7 +12,7 @@ import java.util.Objects;
  * @author Анастасия Смотрицкая
  * @version 1.0
  */
-public class Book implements Borrowable {
+public class Book extends LibraryItem implements Borrowable {
     private String title;
     private String author;
     private int year;
@@ -132,9 +132,10 @@ public class Book implements Borrowable {
 
     /**
      * Выдаёт объект читателю.
+     *
      * @param borrowerName имя читателя
      * @throws IllegalStateException если объект уже выдан или забронирован
-     * @throws IllegalStateException    если книга уже в статусе BORROWED или RESERVED
+     * @throws IllegalStateException если книга уже в статусе BORROWED или RESERVED
      */
     @Override
     public void borrow(String borrowerName) {
@@ -150,6 +151,7 @@ public class Book implements Borrowable {
 
     /**
      * Возвращает объект в библиотеку.
+     *
      * @throws IllegalStateException если объект не был выдан
      */
     @Override
@@ -199,5 +201,11 @@ public class Book implements Borrowable {
     @Override
     public int hashCode() {
         return Objects.hashCode(isbn);
+    }
+
+    @Override
+    @JsonIgnore
+    public String getDescription() {
+        return String.format("Title: '%s'%nAuthor: %s%nStatus: %s%n", title, author, status);
     }
 }

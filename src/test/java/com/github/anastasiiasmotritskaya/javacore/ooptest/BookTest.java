@@ -478,4 +478,45 @@ public class BookTest {
                 "difficultyLevel='BEGINNER'}";
         assertEquals(expected, book.toString());
     }
+
+    @ParameterizedTest(name = "[{index}] {1}")
+    @DisplayName("All kind of books should have the inventory number")
+    @MethodSource("getInventoryNumberDataProvider")
+    public void getInventoryNumberTest(Book book, String description) {
+        assertNotNull(book.getInventoryNumber());
+        int UUIDLength = 36;
+        assertEquals(UUIDLength, book.getInventoryNumber().length());
+    }
+
+    static Stream<Arguments> getInventoryNumberDataProvider() {
+        return Stream.of(
+                Arguments.of(new TechnicalBook("Physics for beginners", "John Smith", 2001,
+                        "TB7K3MBQV9LU9", "physics", DifficultyLevel.BEGINNER), "TechnicalBook"),
+                Arguments.of(new FictionBook("Rage", "Richard Bachman", 1977,
+                        "FB7K3MBQV9LU9", "drama"), "FictionBook"),
+                Arguments.of(new Book("The Long walk", "Richard Bachman", 1983,
+                        "KU7K3MBQV9LU9"), "Book")
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {2}")
+    @DisplayName("All kind of books should have the proper description")
+    @MethodSource("getDescriptionNumberDataProvider")
+    public void getDescriptionTest(Book book, BookStatus status, String description) {
+        book.setStatus(status);
+        String expected = String.format("Title: '%s'%nAuthor: %s%nStatus: %s%n",
+                book.getTitle(), book.getAuthor(), book.getStatus());
+        assertEquals(expected, book.getDescription());
+    }
+
+    static Stream<Arguments> getDescriptionNumberDataProvider() {
+        return Stream.of(
+                Arguments.of(new TechnicalBook("Physics for beginners", "John Smith", 2001,
+                        "TB7K3MBQV9LU9", "physics", DifficultyLevel.BEGINNER), BookStatus.AVAILABLE, "TechnicalBook"),
+                Arguments.of(new FictionBook("Rage", "Richard Bachman", 1977,
+                        "FB7K3MBQV9LU9", "drama"), BookStatus.BORROWED, "FictionBook"),
+                Arguments.of(new Book("The Long walk", "Richard Bachman", 1983,
+                        "KU7K3MBQV9LU9"), BookStatus.RESERVED, "Book")
+        );
+    }
 }

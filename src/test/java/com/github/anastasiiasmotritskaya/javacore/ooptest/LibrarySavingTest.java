@@ -23,18 +23,6 @@ public class LibrarySavingTest {
     private Library oneBookLibrary;
     private Library threeBooksLibrary;
 
-    private final String oneBookLibraryContent = ("""
-            {
-              "KU7K3MBQV9LU6" : {
-                "title" : "Rage",
-                "author" : "Richard Bachman",
-                "year" : 1977,
-                "isbn" : "KU7K3MBQV9LU6",
-                "status" : "AVAILABLE",
-                "currentBorrower" : null
-              }
-            }""");
-
     @TempDir
     Path tempDir;
 
@@ -118,8 +106,12 @@ public class LibrarySavingTest {
         Path tempPath = tempDir.resolve("oneBookLibraryFile.json");
         Files.createFile(tempPath);
         oneBookLibrary.saveToExistingJsonFile(String.valueOf(tempPath));
-        String content = Files.readString(tempPath).replace("\r\n", "\n").replace("\r", "\n");
-        assertEquals(oneBookLibraryContent, content);
+
+        emptyLibrary.loadFromJsonFile(String.valueOf(tempPath));
+        assertEquals(1, emptyLibrary.getAllBooks().size());
+        assertTrue(emptyLibrary.getAllBooks().containsKey("KU7K3MBQV9LU6"));
+        Book book = emptyLibrary.getAllBooks().get("KU7K3MBQV9LU6");
+        assertBookMatches(book, "Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU6");
     }
 
     @Test
@@ -128,7 +120,6 @@ public class LibrarySavingTest {
         Path tempPath = tempDir.resolve("threeBooksLibraryFile.json");
         Files.createFile(tempPath);
         threeBooksLibrary.saveToExistingJsonFile(String.valueOf(tempPath));
-//        System.out.println(Files.readString(tempPath));
 
         emptyLibrary.loadFromJsonFile(String.valueOf(tempPath));
 
@@ -183,8 +174,13 @@ public class LibrarySavingTest {
         Path tempFile = tempDir.resolve(filePath.trim());
         Files.createFile(tempFile);
         oneBookLibrary.saveToExistingJsonFile(String.valueOf(tempFile));
-        String content = Files.readString(tempFile).replace("\r\n", "\n").replace("\r", "\n");
-        assertEquals(oneBookLibraryContent, content);
+
+        emptyLibrary.loadFromJsonFile(String.valueOf(tempFile));
+
+        assertEquals(1, emptyLibrary.getAllBooks().size());
+        assertTrue(emptyLibrary.getAllBooks().containsKey("KU7K3MBQV9LU6"));
+        Book book = emptyLibrary.getAllBooks().get("KU7K3MBQV9LU6");
+        assertBookMatches(book, "Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU6");
     }
 
     @Test
@@ -203,8 +199,12 @@ public class LibrarySavingTest {
         Path tempPath = tempDir.resolve("saveToNewJsonFileOneBookLibraryFile.json");
         oneBookLibrary.saveToNewJsonFile(String.valueOf(tempPath));
         assertTrue(Files.exists(tempPath));
-        String content = Files.readString(tempPath).replace("\r\n", "\n").replace("\r", "\n");
-        assertEquals(oneBookLibraryContent, content);
+        emptyLibrary.loadFromJsonFile(String.valueOf(tempPath));
+
+        assertEquals(1, emptyLibrary.getAllBooks().size());
+        assertTrue(emptyLibrary.getAllBooks().containsKey("KU7K3MBQV9LU6"));
+        Book book = emptyLibrary.getAllBooks().get("KU7K3MBQV9LU6");
+        assertBookMatches(book, "Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU6");
     }
 
     @Test
@@ -241,8 +241,13 @@ public class LibrarySavingTest {
     public void saveToNewJsonFileSpacesLibraryTest(String filePath, String description) throws IOException {
         Path tempPath = tempDir.resolve(filePath.trim());
         oneBookLibrary.saveToNewJsonFile(String.valueOf(tempPath));
-        String content = Files.readString(tempPath).replace("\r\n", "\n").replace("\r", "\n");
-        assertEquals(oneBookLibraryContent, content);
+
+        emptyLibrary.loadFromJsonFile(String.valueOf(tempPath));
+
+        assertEquals(1, emptyLibrary.getAllBooks().size());
+        assertTrue(emptyLibrary.getAllBooks().containsKey("KU7K3MBQV9LU6"));
+        Book book = emptyLibrary.getAllBooks().get("KU7K3MBQV9LU6");
+        assertBookMatches(book, "Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU6");
     }
 
     /**
