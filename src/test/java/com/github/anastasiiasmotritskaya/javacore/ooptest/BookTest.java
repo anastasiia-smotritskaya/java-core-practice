@@ -1,7 +1,6 @@
 package com.github.anastasiiasmotritskaya.javacore.ooptest;
 
-import com.github.anastasiiasmotritskaya.javacore.oop.Book;
-import com.github.anastasiiasmotritskaya.javacore.oop.BookStatus;
+import com.github.anastasiiasmotritskaya.javacore.oop.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,7 +21,9 @@ public class BookTest {
                 () -> assertEquals("Rage", book.getTitle()),
                 () -> assertEquals("Richard Bachman", book.getAuthor()),
                 () -> assertEquals(1977, book.getYear()),
-                () -> assertEquals("KU7K3MBQV9LU9", book.getIsbn())
+                () -> assertEquals("KU7K3MBQV9LU9", book.getIsbn()),
+                () -> assertEquals(BookStatus.AVAILABLE, book.getStatus()),
+                () -> assertNull(book.getCurrentBorrower())
         );
     }
 
@@ -225,14 +226,14 @@ public class BookTest {
 
     @Test
     @DisplayName("A new book has default status AVAILABLE")
-    public void bookDefaultStatusTest(){
+    public void bookDefaultStatusTest() {
         Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
         assertEquals(BookStatus.AVAILABLE, book.getStatus());
     }
 
     @Test
     @DisplayName("setBookStatus changes a book status")
-    public void bookSetStatusTest(){
+    public void bookSetStatusTest() {
         Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
         assertEquals(BookStatus.AVAILABLE, book.getStatus());
 
@@ -315,7 +316,7 @@ public class BookTest {
         assertEquals(isAvailable, book.isAvailable());
     }
 
-    static Stream<Arguments> isAvailableDataProvider(){
+    static Stream<Arguments> isAvailableDataProvider() {
         return Stream.of(
                 Arguments.of(BookStatus.AVAILABLE, true),
                 Arguments.of(BookStatus.BORROWED, false),
@@ -324,7 +325,7 @@ public class BookTest {
     }
 
     @Test
-    @DisplayName("getCurrentBorrower return null if there is no borrower anf the name of borrower if there is a borrower")
+    @DisplayName("getCurrentBorrower return null if there is no borrower and the name of borrower if there is a borrower")
     public void getCurrentBorrowerTest() {
         Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
         assertNull(book.getCurrentBorrower());
@@ -332,5 +333,150 @@ public class BookTest {
         assertEquals("Jane Doe", book.getCurrentBorrower());
         book.returnBook();
         assertNull(book.getCurrentBorrower());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("setGenre should throw IllegalArgumentException if genre field is null or empty")
+    public void fictionBookSetGenreNullOrEmptyTest_IllegalArgumentException(String genre) {
+        FictionBook book = new FictionBook("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9", "Drama");
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> book.setGenre(genre));
+        String expectedMessage = "The genre field must not be null or empty. Enter the genre.";
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("FictionBook constructor should throw IllegalArgumentException if genre field is null or empty")
+    public void fictionBookConstructorGenreNullOrEmptyTest_IllegalArgumentException(String genre) {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new FictionBook("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9", genre));
+        String expectedMessage = "The genre field must not be null or empty. Enter the genre.";
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @ParameterizedTest(name = "[{index}] {1}")
+    @DisplayName("FictionBook constructor should save and getGenre should return the genre properly " +
+            "even if it has spaces in the end or in the beginning")
+    @CsvSource({
+            "'Drama', 'Plain positive test'",
+            "' Drama', 'One space in the beginning'",
+            "'Drama ', 'One space in the end'",
+            "'   Drama', 'Few spaces in the beginning'",
+            "'Drama   ', 'Few spaces in the end'",
+    })
+    public void fictionBookGetGenreTest(String genre, String description) {
+        FictionBook book = new FictionBook("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9", genre);
+        assertEquals(genre.trim(), book.getGenre());
+    }
+
+    @ParameterizedTest(name = "[{index}] {1}")
+    @DisplayName("setGenre should save and getGenre should return the genre properly " +
+            "even if it has spaces in the end or in the beginning")
+    @CsvSource({
+            "'Young adult', 'Plain positive test'",
+            "' Young adult', 'One space in the beginning'",
+            "'Young adult ', 'One space in the end'",
+            "'   Young adult', 'Few spaces in the beginning'",
+            "'Young adult   ', 'Few spaces in the end'",
+    })
+    public void fictionBookSetGenreTest(String genre, String description) {
+        FictionBook book = new FictionBook("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9", "Drama");
+        book.setGenre(genre);
+        assertEquals(genre.trim(), book.getGenre());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("TechnicalBook constructor should throw IllegalArgumentException if the subject field is null or empty")
+    public void technicalBookConstructorSubjectNullOrEmptyTest_IllegalArgumentException(String subject) {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new TechnicalBook("Physics for beginners", "John Smith", 2001,
+                        "TB7K3MBQV9LU9", subject, DifficultyLevel.BEGINNER));
+        String expectedMessage = "Subject field should not be null or empty. Enter the subject.";
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @ParameterizedTest(name = "[{index}] {1}")
+    @DisplayName("TechnicalBook constructor should save and getSubject should return the subject properly " +
+            "even if it has spaces in the end or in the beginning")
+    @CsvSource({
+            "'physics', 'Plain positive test'",
+            "' physics', 'One space in the beginning'",
+            "'physics ', 'One space in the end'",
+            "'   physics', 'Few spaces in the beginning'",
+            "'physics   ', 'Few spaces in the end'",
+    })
+    public void TechnicalBookConstructorSubjectTest(String subject, String description) {
+        TechnicalBook book = new TechnicalBook("Physics for beginners", "John Smith", 2001,
+                "TB7K3MBQV9LU9", subject, DifficultyLevel.BEGINNER);
+        assertEquals(subject.trim(), book.getSubject());
+    }
+
+    @ParameterizedTest(name = "[{index}] {1}")
+    @DisplayName("setSubject should save and getSubject should return the subject properly " +
+            "even if it has spaces in the end or in the beginning")
+    @CsvSource({
+            "'physics', 'Plain positive test'",
+            "' physics', 'One space in the beginning'",
+            "'physics ', 'One space in the end'",
+            "'   physics', 'Few spaces in the beginning'",
+            "'physics   ', 'Few spaces in the end'",
+    })
+    public void setSubjectTest(String subject, String description) {
+        TechnicalBook book = new TechnicalBook("Physics for beginners", "John Smith", 2001,
+                "TB7K3MBQV9LU9", "maths", DifficultyLevel.BEGINNER);
+        book.setSubject(subject);
+        assertEquals(subject.trim(), book.getSubject());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("setSubject should throw IllegalArgumentException if the subject field is null or empty")
+    public void setSubjectNullOrEmptyTest_IllegalArgumentException(String subject) {
+        TechnicalBook book = new TechnicalBook("Physics for beginners", "John Smith", 2001,
+                "TB7K3MBQV9LU9", "physics", DifficultyLevel.BEGINNER);
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> book.setSubject(subject));
+        String expectedMessage = "Subject field should not be null or empty. Enter the subject.";
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("difficultyLevel field must accept null as valid value")
+    public void difficultyLevelIsNullTest() {
+        TechnicalBook book = new TechnicalBook("Physics for beginners", "John Smith", 2001,
+                "TB7K3MBQV9LU9", "physics", null);
+        assertNull(book.getDifficultyLevel());
+    }
+
+    @ParameterizedTest
+    @EnumSource(names = {"BEGINNER", "INTERMEDIATE", "ADVANCED"})
+    @DisplayName("difficultyLevel field must accept \"BEGINNER\", \"INTERMEDIATE\",\"ADVANCED\" as valid value")
+    public void difficultyLevelTest(DifficultyLevel level) {
+        TechnicalBook book = new TechnicalBook("Physics for beginners", "John Smith", 2001,
+                "TB7K3MBQV9LU9", "physics", level);
+        assertEquals(level, book.getDifficultyLevel());
+    }
+
+    @Test
+    @DisplayName("toString should return correct information about FictionBook")
+    public void fictionBookToStringTest() {
+        FictionBook book = new FictionBook("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9", "drama");
+        String expected = "FictionBook{title='Rage', author='Richard Bachman', year=1977, " +
+                "isbn='KU7K3MBQV9LU9', status=AVAILABLE, currentBorrower='null', genre='drama'}";
+        assertEquals(expected, book.toString());
+    }
+
+    @Test
+    @DisplayName("toString should return correct information about TechnicalBook")
+    public void technicalBookToStringTest() {
+        TechnicalBook book = new TechnicalBook("Physics for beginners", "John Smith", 2001,
+                "TB7K3MBQV9LU9", "physics", DifficultyLevel.BEGINNER);
+        System.out.println(book);
+        String expected = "TechnicalBook{title='Physics for beginners', author='John Smith', year=2001, " +
+                "isbn='TB7K3MBQV9LU9', status=AVAILABLE, currentBorrower='null', subject='physics', " +
+                "difficultyLevel='BEGINNER'}";
+        assertEquals(expected, book.toString());
     }
 }
