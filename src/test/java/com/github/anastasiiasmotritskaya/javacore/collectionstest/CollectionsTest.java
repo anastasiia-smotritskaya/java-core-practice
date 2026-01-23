@@ -1,8 +1,10 @@
 package com.github.anastasiiasmotritskaya.javacore.collectionstest;
 
 import com.github.anastasiiasmotritskaya.javacore.oop.Book;
+import com.github.anastasiiasmotritskaya.javacore.oop.BookStatus;
 import com.github.anastasiiasmotritskaya.javacore.oop.Library;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,8 +25,8 @@ public class CollectionsTest {
     private static Library oneBookLibrary;
     private static Library threeBooksLibrary;
 
-    @BeforeAll
-    static void setUp() {
+    @BeforeEach
+    void setUp() {
         emptyLibrary = new Library(new HashMap<>());
 
         Book book_1 = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU6");
@@ -155,5 +157,40 @@ public class CollectionsTest {
                 Arguments.of(oneBookLibrary, 1, "There is one author in the library with one book"),
                 Arguments.of(threeBooksLibrary, 2, "There are two authors in library with three books")
         );
+    }
+
+    @Test
+    @DisplayName("countBooksByStatus should return a map with null values if the library is empty")
+    public void countBooksByStatusEmptyLibraryTest() {
+        Map<BookStatus, Integer> statusMap = emptyLibrary.countBooksByStatus();
+        assertEquals(0, statusMap.size());
+    }
+
+    @ParameterizedTest(name = "[{index}] {1}")
+    @DisplayName("countBooksByStatus should return a map with proper values if the library has one book")
+    @MethodSource("countBooksByStatusDataProvider")
+    public void countBooksByStatusOneBookLibraryTest(BookStatus status, String description) {
+        oneBookLibrary.findBookByISBN("KU7K3MBQV9LU6").setStatus(status);
+        Map<BookStatus, Integer> statusMap = oneBookLibrary.countBooksByStatus();
+        assertEquals(1, statusMap.size());
+        assertEquals(1, statusMap.get(status));
+    }
+
+    static Stream<Arguments> countBooksByStatusDataProvider() {
+        return Stream.of(
+                Arguments.of(BookStatus.AVAILABLE, "One book: status AVAILABLE"),
+                Arguments.of(BookStatus.RESERVED, "One book: status RESERVED"),
+                Arguments.of(BookStatus.BORROWED, "One book: status BORROWED")
+        );
+    }
+
+    @Test
+    @DisplayName("countBooksByStatus should return a map with proper values if the library has several books")
+    public void countBooksByStatusThreeBooksLibraryTest() {
+        threeBooksLibrary.findBookByISBN("KU7K3MBQV9LU7").setStatus(BookStatus.RESERVED);
+        Map<BookStatus, Integer> statusMap = threeBooksLibrary.countBooksByStatus();
+        assertEquals(2, statusMap.size());
+        assertEquals(2, statusMap.get(BookStatus.AVAILABLE));
+        assertEquals(1, statusMap.get(BookStatus.RESERVED));
     }
 }

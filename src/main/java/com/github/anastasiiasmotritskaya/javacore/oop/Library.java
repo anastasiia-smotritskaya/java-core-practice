@@ -282,4 +282,20 @@ public class Library {
         }
         return authors;
     }
+
+    /**
+     * Подсчитывает количество книг по каждому статусу
+     *
+     * @return Map ({статус=количество)}
+     */
+    public Map<BookStatus, Integer> countBooksByStatus() {
+        Map<BookStatus, Integer> statusMap = new HashMap<>();
+
+        for (Book book : books.values()) {
+            BookStatus status = book.getStatus();
+            statusMap.put(status, statusMap.getOrDefault(status, 0) + 1);
+        }
+
+        return statusMap;
+    }
 }
