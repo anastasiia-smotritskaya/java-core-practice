@@ -4,15 +4,13 @@ import com.github.anastasiiasmotritskaya.javacore.oop.Book;
 import com.github.anastasiiasmotritskaya.javacore.oop.Library;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -129,6 +127,33 @@ public class CollectionsTest {
                         "One book found in the library with three books"),
                 Arguments.of(threeBooksLibrary, 1950, 2000,
                         "Two books found in the library with three books")
+        );
+    }
+
+    @Test
+    @DisplayName("getAllUniqueAuthors should return an empty set if the library is empty")
+    public void getAllUniqueAuthorsEmptyLibraryTest() {
+        Set<String> actual = emptyLibrary.getAllUniqueAuthors();
+        assertTrue(actual.isEmpty());
+    }
+
+    @ParameterizedTest(name = "[{index}] {2}")
+    @DisplayName("getAllUniqueAuthors should return a set of authors if there are any authors")
+    @MethodSource("getAllUniqueAuthorsDataProvider")
+    public void getAllUniqueAuthorsTest(Library library, int expectedSize, String description) {
+        Set<String> actual = library.getAllUniqueAuthors();
+
+        assertEquals(expectedSize, actual.size());
+
+        for (Book book : library.getAllBooks().values()) {
+            assertTrue(actual.contains(book.getAuthor()));
+        }
+    }
+
+    static Stream<Arguments> getAllUniqueAuthorsDataProvider() {
+        return Stream.of(
+                Arguments.of(oneBookLibrary, 1, "There is one author in the library with one book"),
+                Arguments.of(threeBooksLibrary, 2, "There are two authors in library with three books")
         );
     }
 }

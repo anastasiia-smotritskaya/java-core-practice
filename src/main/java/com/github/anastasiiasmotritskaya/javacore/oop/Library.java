@@ -13,10 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Представляет библиотеку книг с возможностью поиска, добавления, удаления,
@@ -271,5 +268,18 @@ public class Library {
             }
         }
         return booksByYearRange;
+    }
+
+    /**
+     * Возвращает множество уникальных авторов в библиотеке
+     *
+     * @return Set уникальные имена авторов
+     */
+    public Set<String> getAllUniqueAuthors() {
+        Set<String> authors = new HashSet<>();
+        for (Book book : books.values()) {
+            authors.add(book.getAuthor());
+        }
+        return authors;
     }
 }
