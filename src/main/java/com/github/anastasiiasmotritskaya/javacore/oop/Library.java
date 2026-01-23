@@ -5,11 +5,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.github.anastasiiasmotritskaya.javacore.util.BookValidator;
+import com.github.anastasiiasmotritskaya.javacore.util.LibraryValidator;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +72,7 @@ public class Library {
      * @throws IllegalArgumentException если книги с таким ISBN в библиотеке нет
      */
     public void deleteBook(String isbn) {
-        validateIsbn(isbn);
+        BookValidator.validateIsbn(isbn);
         if (!books.containsKey(isbn)) {
             throw new IllegalArgumentException(String.format("There is no book with this number (%s). Please check the number.", isbn));
         }
@@ -84,7 +87,7 @@ public class Library {
      * @throws IllegalArgumentException если книги с таким ISBN в библиотеке нет
      */
     public Book findBookByISBN(String isbn) {
-        validateIsbn(isbn);
+        BookValidator.validateIsbn(isbn);
         if (!books.containsKey(isbn)) {
             throw new IllegalArgumentException(String.format("There is no book with this number (%s). Please check the number.", isbn));
         }
@@ -99,7 +102,7 @@ public class Library {
      * Если книг этого автора в библиотеке нет, возвращает пустой список
      */
     public List<Book> findBookByAuthor(String author) {
-        validateAuthor(author);
+        BookValidator.validateAuthor(author);
         List<Book> thisAuthorWrittenBooks = new ArrayList<>();
         for (Map.Entry<String, Book> book : books.entrySet()) {
             if (book.getValue().getAuthor().equalsIgnoreCase(author)) {
@@ -117,7 +120,7 @@ public class Library {
      * Если книг с таким названием в библиотеке нет, возвращает пустой список
      */
     public List<Book> findBookByTitle(String title) {
-        validateTitle(title);
+        BookValidator.validateTitle(title);
         List<Book> thisTitleBooks = new ArrayList<>();
         for (Map.Entry<String, Book> book : books.entrySet()) {
             if (book.getValue().getTitle().equalsIgnoreCase(title)) {
@@ -226,51 +229,6 @@ public class Library {
     }
 
     /**
-     * Валидация ISBN - The International Standard Book Number.
-     *
-     * @throws IllegalArgumentException если isbn null, empty, длине не равна 13 символам
-     *                                  или содержит специальные символы
-     */
-    private void validateIsbn(String isbn) {
-        if (isbn == null || isbn.trim().isEmpty()) {
-            throw new IllegalArgumentException("The International Standard Book Number field must not be empty. " +
-                    "Enter the International Standard Book Number.");
-        }
-
-        if (isbn.trim().length() != 13) {
-            throw new IllegalArgumentException(String.format("The International Standard Book Number was entered incorrectly (ISBN-13). " +
-                    "You entered: %s. Please enter the correct International Standard Book Number (13 symbols).", isbn));
-        }
-
-        if (!isbn.trim().matches("[A-Za-z0-9]{13}")) {
-            throw new IllegalArgumentException(
-                    "ISBN must contain only letters and digits. Got: " + isbn.trim());
-        }
-    }
-
-    /**
-     * Валидация имени автора.
-     *
-     * @throws IllegalArgumentException если название имя автора null или empty
-     */
-    private void validateAuthor(String author) {
-        if (author == null || author.trim().isEmpty()) {
-            throw new IllegalArgumentException("The author field must not be empty. Enter the author's name.");
-        }
-    }
-
-    /**
-     * Валидация название книги.
-     *
-     * @throws IllegalArgumentException если название книги null или empty
-     */
-    private void validateTitle(String title) {
-        if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("Title field should not be null or empty. Enter the title.");
-        }
-    }
-
-    /**
      * Возвращает основную информацию о книгах из разных категорий (Book, TechnicalBook, FictionBook)
      */
     public String getAllBooksBasicInfo() {
@@ -289,5 +247,29 @@ public class Library {
             }
         }
         return String.valueOf(booksInfo);
+    }
+
+    /**
+     * Ищет книги, изданные в указанный период
+     *
+     * @param fromYear начальный год (включительно)
+     * @param toYear   конечный год (включительно)
+     * @return List книги, удовлетворяющие условию
+     * @throws IllegalArgumentException если введенные годы издания меньше 1457 или больше текущего
+     *                                  или если конечный год меньше начального года
+     */
+    public List<Book> findBooksByYearRange(int fromYear, int toYear) {
+        BookValidator.validateYear(fromYear);
+        BookValidator.validateYear(toYear);
+        LibraryValidator.validateYearRange(fromYear, toYear);
+
+        List<Book> booksByYearRange = new ArrayList<>();
+
+        for (Book book : books.values()) {
+            if (book.getYear() >= fromYear && book.getYear() <= toYear) {
+                booksByYearRange.add(book);
+            }
+        }
+        return booksByYearRange;
     }
 }
