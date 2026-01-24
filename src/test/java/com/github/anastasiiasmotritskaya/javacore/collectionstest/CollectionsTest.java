@@ -3,13 +3,14 @@ package com.github.anastasiiasmotritskaya.javacore.collectionstest;
 import com.github.anastasiiasmotritskaya.javacore.oop.Book;
 import com.github.anastasiiasmotritskaya.javacore.oop.BookStatus;
 import com.github.anastasiiasmotritskaya.javacore.oop.Library;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -192,5 +193,73 @@ public class CollectionsTest {
         assertEquals(2, statusMap.size());
         assertEquals(2, statusMap.get(BookStatus.AVAILABLE));
         assertEquals(1, statusMap.get(BookStatus.RESERVED));
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("removeBooksByAuthor should throw IllegalArgumentException if the author field are null or empty")
+    public void removeBooksByAuthorEmptyStringTest_IllegalArgumentException(String author) {
+        String expectedMessage = "The author field must not be empty. Enter the author's name.";
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> threeBooksLibrary.removeBooksByAuthor(author));
+        assertEquals(expectedMessage, exception.getMessage());
+        assertEquals(3, threeBooksLibrary.getAllBooks().size());
+    }
+
+    @Test
+    @DisplayName("removeBooksByAuthor should return null if the library is empty")
+    public void removeBooksByAuthorEmptyLibraryTest() {
+        String author = "Donna Louise Tartt";
+        int actualCount = emptyLibrary.removeBooksByAuthor(author);
+        assertEquals(0, actualCount);
+    }
+
+    @Test
+    @DisplayName("removeBooksByAuthor should return 0 if there are no books written by this author")
+    public void removeBooksByAuthorNoBooksByThisAuthorTest() {
+        String author = "Donna Louise Tartt";
+        int actualCount = threeBooksLibrary.removeBooksByAuthor(author);
+        assertEquals(0, actualCount);
+        assertEquals(3, threeBooksLibrary.getAllBooks().size());
+    }
+
+    @ParameterizedTest(name = "[{index}] {1}")
+    @DisplayName("removeBooksByAuthor should return 1 if there is one book of this author in the one book library")
+    @CsvSource(value = {
+            "'Richard Bachman', 'Plain positive test'",
+            "' Richard Bachman', 'One space in the beginning'",
+            "'Richard Bachman ', 'One space in the end'",
+            "'   Richard Bachman', 'Few spaces in the beginning'",
+            "'Richard Bachman   ', 'Few spaces in the end'",
+            "'RICHARD BACHMAN', 'Upper case'",
+            "'richard bachman', 'Lower case'"
+    })
+    public void removeBooksByAuthorOneBookLibraryTest(String author, String description) {
+        int actualCount = oneBookLibrary.removeBooksByAuthor(author);
+        assertEquals(1, actualCount);
+        assertEquals(0, oneBookLibrary.getAllBooks().size());
+    }
+
+    @Test
+    @DisplayName("removeBooksByAuthor should return 2 if there is 2 books of this author in the three books library")
+    public void removeBooksByAuthorthreeBooksLibraryTest() {
+        String author = "Richard Bachman";
+        int actualCount = threeBooksLibrary.removeBooksByAuthor(author);
+        assertEquals(2, actualCount);
+        assertEquals(1, threeBooksLibrary.getAllBooks().size());
+    }
+
+    @Test
+    @DisplayName("removeBooksByAuthor should return 0 if you remove all books written by all authors")
+    public void removeBooksByAuthorRemoveAllBooksTest() {
+        String author_1 = "Richard Bachman";
+        int actualCount_1 = threeBooksLibrary.removeBooksByAuthor(author_1);
+        assertEquals(2, actualCount_1);
+        assertEquals(1, threeBooksLibrary.getAllBooks().size());
+
+        String author_2 = "Emily Brontë";
+        int actualCount_2 = threeBooksLibrary.removeBooksByAuthor(author_2);
+        assertEquals(1, actualCount_2);
+        assertEquals(0, threeBooksLibrary.getAllBooks().size());
     }
 }

@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -297,5 +296,30 @@ public class Library {
         }
 
         return statusMap;
+    }
+
+    /**
+     * Удаляет все книги указанного автора.
+     * Использует итератор для безопасного удаления во время обхода коллекции.
+     *
+     * @param author автор, книги которого нужно удалить (не может быть null или пустым)
+     * @return количество удаленных книг
+     * @throws IllegalArgumentException если author равен null или пустой строке
+     */
+    public int removeBooksByAuthor(String author) {
+        BookValidator.validateAuthor(author);
+
+        int count = 0;
+
+        Iterator<Book> iterator = books.values().iterator();
+
+        while(iterator.hasNext()) {
+            Book book = iterator.next();
+            if (book.getAuthor().equalsIgnoreCase(author.trim())) {
+                iterator.remove();
+                count++;
+            }
+        }
+        return count;
     }
 }
