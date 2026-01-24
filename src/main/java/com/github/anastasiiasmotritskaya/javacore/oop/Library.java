@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.github.anastasiiasmotritskaya.javacore.util.BookValidator;
+import com.github.anastasiiasmotritskaya.javacore.util.BookYearComparator;
 import com.github.anastasiiasmotritskaya.javacore.util.LibraryValidator;
 
 import java.io.File;
@@ -321,5 +322,15 @@ public class Library {
             }
         }
         return count;
+    }
+
+    /**
+     * Возвращает книги, отсортированные по году издания (от старых к новым)
+     * @return List отсортированный список
+     */
+    public List<Book> getBooksSortedByYear() {
+        List<Book> bookList = new ArrayList<>(books.values());
+        bookList.sort(new BookYearComparator());
+        return bookList;
     }
 }

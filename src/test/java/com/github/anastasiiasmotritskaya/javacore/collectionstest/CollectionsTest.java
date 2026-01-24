@@ -262,4 +262,53 @@ public class CollectionsTest {
         assertEquals(1, actualCount_2);
         assertEquals(0, threeBooksLibrary.getAllBooks().size());
     }
+
+    @Test
+    @DisplayName("getBooksSortedByYear should return an empty list if the library is empty")
+    public void getBooksSortedByYearEmptyLibraryTest() {
+        assertEquals(new ArrayList<Book>(), emptyLibrary.getBooksSortedByYear());
+    }
+
+    @Test
+    @DisplayName("getBooksSortedByYear should return one book if the library has only one book")
+    public void getBooksSortedByYearOneBookLibraryTest() {
+        Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU6");
+        assertEquals(List.of(book), oneBookLibrary.getBooksSortedByYear());
+    }
+
+    @Test
+    @DisplayName("getBooksSortedByYear should return three books sorted by year " +
+            "if the library has three books with different years of publishing")
+    public void getBooksSortedByYearAllYearsAreDifferentTest() {
+        Book book_1 = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU6");
+        Book book_2 = new Book("The Running Man", "Richard Bachman", 1982, "KU7K3MBQV9LU7");
+        Book book_3 = new Book("Wuthering Heights", "Emily Brontë", 1847, "KU7K3MBQV9LU8");
+
+        List<Book> actual = threeBooksLibrary.getBooksSortedByYear();
+
+        assertEquals(book_3, actual.get(0));
+        assertEquals(book_1, actual.get(1));
+        assertEquals(book_2, actual.get(2));
+    }
+
+    @Test
+    @DisplayName("getBooksSortedByYear should return three books sorted by year " +
+            "if the library has three books with same years of publishing")
+    public void getBooksSortedByYearSameYearTest() {
+        Book book_1 = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU6");
+        Book book_2 = new Book("The Running Man", "Richard Bachman", 1977, "KU7K3MBQV9LU7");
+        Book book_3 = new Book("Wuthering Heights", "Emily Brontë", 1847, "KU7K3MBQV9LU8");
+
+        Map<String, Book> books = new HashMap<>();
+        books.put(book_1.getIsbn(), book_1);
+        books.put(book_2.getIsbn(), book_2);
+        books.put(book_3.getIsbn(), book_3);
+
+        Library library = new Library(books);
+        List<Book> actual = library.getBooksSortedByYear();
+
+        assertEquals(book_3, actual.get(0));
+        assertEquals(1977, actual.get(1).getYear());
+        assertEquals(1977, actual.get(2).getYear());
+    }
 }
