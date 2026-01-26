@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.anastasiiasmotritskaya.javacore.testutil.BookAndLibraryTestUtil.assertBookMatches;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LibrarySavingTest {
@@ -248,18 +249,5 @@ public class LibrarySavingTest {
         assertTrue(emptyLibrary.getAllBooks().containsKey("KU7K3MBQV9LU6"));
         Book book = emptyLibrary.getAllBooks().get("KU7K3MBQV9LU6");
         assertBookMatches(book, "Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU6");
-    }
-
-    /**
-     * Проверяет что книга соответствует ожидаемым значениям всех полей.
-     * Используется в тестах для избежания дублирования кода проверок.
-     */
-    private void assertBookMatches(Book book, String title, String author, int year, String isbn) {
-        assertAll(
-                () -> assertEquals(title, book.getTitle()),
-                () -> assertEquals(author, book.getAuthor()),
-                () -> assertEquals(year, book.getYear()),
-                () -> assertEquals(isbn, book.getIsbn())
-        );
     }
 }

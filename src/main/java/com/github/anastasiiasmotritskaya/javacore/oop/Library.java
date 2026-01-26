@@ -5,9 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import com.github.anastasiiasmotritskaya.javacore.util.BookValidator;
-import com.github.anastasiiasmotritskaya.javacore.util.BookYearComparator;
-import com.github.anastasiiasmotritskaya.javacore.util.LibraryValidator;
+import com.github.anastasiiasmotritskaya.javacore.util.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -314,7 +312,7 @@ public class Library {
 
         Iterator<Book> iterator = books.values().iterator();
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             Book book = iterator.next();
             if (book.getAuthor().equalsIgnoreCase(author.trim())) {
                 iterator.remove();
@@ -326,11 +324,47 @@ public class Library {
 
     /**
      * Возвращает книги, отсортированные по году издания (от старых к новым)
+     *
      * @return List отсортированный список
      */
     public List<Book> getBooksSortedByYear() {
         List<Book> bookList = new ArrayList<>(books.values());
         bookList.sort(new BookYearComparator());
+        return bookList;
+    }
+
+    /**
+     * Возвращает книги, отсортированные по имени автора
+     *
+     * @return List отсортированный список
+     */
+    public List<Book> getBooksSortedByAuthor() {
+        List<Book> bookList = new ArrayList<>(books.values());
+        bookList.sort(new BookAuthorComparator());
+        return bookList;
+    }
+
+    /**
+     * Возвращает книги, отсортированные по названию книги
+     *
+     * @return List отсортированный список
+     */
+    public List<Book> getBooksSortedByTitle() {
+        List<Book> bookList = new ArrayList<>(books.values());
+        bookList.sort(new BookTitleComparator());
+        return bookList;
+    }
+
+    /**
+     * Возвращает книги, отсортированные по названию книги, потом по имени автора, потом по году издания
+     *
+     * @return List отсортированный список
+     */
+    public List<Book> getBooksSortedByTitleThenAuthorThenYear() {
+        List<Book> bookList = new ArrayList<>(books.values());
+        Comparator<Book> complexComparator = Comparator.comparing(Book::getTitle).
+                thenComparing(Book::getAuthor).thenComparingInt(Book::getYear);
+        bookList.sort(complexComparator);
         return bookList;
     }
 }

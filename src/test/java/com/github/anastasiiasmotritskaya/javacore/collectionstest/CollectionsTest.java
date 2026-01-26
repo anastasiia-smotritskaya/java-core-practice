@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static com.github.anastasiiasmotritskaya.javacore.testutil.BookAndLibraryTestUtil.assertBookMatches;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CollectionsTest {
@@ -310,5 +311,64 @@ public class CollectionsTest {
         assertEquals(book_3, actual.get(0));
         assertEquals(1977, actual.get(1).getYear());
         assertEquals(1977, actual.get(2).getYear());
+    }
+
+    @Test
+    @DisplayName("getBooksSortedByAuthor should return empty list if the library is empty")
+    public void getBooksSortedByAuthorEmptyLibraryTest() {
+        assertEquals(new ArrayList<>(), emptyLibrary.getBooksSortedByAuthor());
+    }
+
+    @Test
+    @DisplayName("getBooksSortedByAuthor should return books sorted by authors's names")
+    public void getBooksSortedByAuthorTest() {
+        List<Book> sorted = threeBooksLibrary.getBooksSortedByAuthor();
+        assertEquals("Emily Brontë", sorted.getFirst().getAuthor());
+        assertEquals("Richard Bachman", sorted.get(1).getAuthor());
+        assertEquals("Richard Bachman", sorted.get(2).getAuthor());
+    }
+
+    @Test
+    @DisplayName("getBooksSortedByTitle should return empty list if the library is empty")
+    public void getBooksSortedByTitleEmptyLibraryTest() {
+        assertEquals(new ArrayList<>(), emptyLibrary.getBooksSortedByTitle());
+    }
+
+    @Test
+    @DisplayName("getBooksSortedByTitle should return books sorted by titles")
+    public void getBooksSortedByTitleTest() {
+        List<Book> sorted = threeBooksLibrary.getBooksSortedByTitle();
+        assertEquals("Rage", sorted.getFirst().getTitle());
+        assertEquals("The Running Man", sorted.get(1).getTitle());
+        assertEquals("Wuthering Heights", sorted.get(2).getTitle());
+    }
+
+    @Test
+    @DisplayName("getSortedByTitleThenAuthorThenYear should return the sorted list of books")
+    public void getSortedByTitleThenAuthorThenYearTest() {
+        Map<String, Book> books = new HashMap<>();
+        Book book_1 = new Book("Title A", "Author D", 1986, "KU7K3MBQV9LU6");
+        Book book_2 = new Book("Title B", "Author F", 1945, "KU7K3MBQV9LU7");
+        Book book_3 = new Book("Title C", "Author A", 2001, "KU7K3MBQV9LU8");
+        Book book_4 = new Book("Title A", "Author E", 1944, "KU7K3MBQV9LU9");
+        Book book_5 = new Book("Title B", "Author F", 1977, "KU7K3MBQV9LU1");
+        Book book_6 = new Book("Title C", "Author G", 1950, "KU7K3MBQV9LU2");
+
+        books.put(book_1.getIsbn(), book_1);
+        books.put(book_2.getIsbn(), book_2);
+        books.put(book_3.getIsbn(), book_3);
+        books.put(book_4.getIsbn(), book_4);
+        books.put(book_5.getIsbn(), book_5);
+        books.put(book_6.getIsbn(), book_6);
+
+        Library library = new Library(books);
+
+        List<Book> sorted = library.getBooksSortedByTitleThenAuthorThenYear();
+        assertEquals(book_1, sorted.getFirst());
+        assertEquals(book_4, sorted.get(1));
+        assertEquals(book_2, sorted.get(2));
+        assertEquals(book_5, sorted.get(3));
+        assertEquals(book_3, sorted.get(4));
+        assertEquals(book_6, sorted.get(5));
     }
 }
