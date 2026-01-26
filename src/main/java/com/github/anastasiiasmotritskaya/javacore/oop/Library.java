@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.github.anastasiiasmotritskaya.javacore.exceptions.BookAlreadyExistsException;
+import com.github.anastasiiasmotritskaya.javacore.exceptions.BookNotFoundException;
 import com.github.anastasiiasmotritskaya.javacore.util.*;
 
 import java.io.File;
@@ -50,12 +52,11 @@ public class Library {
      * Добавляет книгу в библиотеку.
      *
      * @param book книга для добавления (не может быть null)
-     * @throws IllegalArgumentException если книга с таким ISBN уже существует в библиотеке
+     * @throws BookAlreadyExistsException если книга с таким ISBN уже существует в библиотеке
      */
     public void addBook(Book book) {
         if (books.containsKey(book.getIsbn())) {
-            throw new IllegalArgumentException(String.format("Key '%s' already exists with value: %s", book.getIsbn(),
-                    books.get(book.getIsbn()).toString()));
+            throw new BookAlreadyExistsException(book.getIsbn());
         }
         books.put(book.getIsbn(), book);
     }
@@ -64,12 +65,12 @@ public class Library {
      * Удаляет книгу из бибилиотеки.
      *
      * @param isbn книга для удаления (проходит валидацию)
-     * @throws IllegalArgumentException если книги с таким ISBN в библиотеке нет
+     * @throws BookNotFoundException если книги с таким ISBN в библиотеке нет
      */
     public void deleteBook(String isbn) {
         BookValidator.validateIsbn(isbn);
         if (!books.containsKey(isbn)) {
-            throw new IllegalArgumentException(String.format("There is no book with this number (%s). Please check the number.", isbn));
+            throw new BookNotFoundException(isbn);
         }
         books.remove(isbn);
     }
@@ -79,12 +80,12 @@ public class Library {
      *
      * @param isbn книга для поиска (проходит валидацию)
      * @return Book - книгу с введенным ISBN
-     * @throws IllegalArgumentException если книги с таким ISBN в библиотеке нет
+     * @throws BookNotFoundException если книги с таким ISBN в библиотеке нет
      */
     public Book findBookByISBN(String isbn) {
         BookValidator.validateIsbn(isbn);
         if (!books.containsKey(isbn)) {
-            throw new IllegalArgumentException(String.format("There is no book with this number (%s). Please check the number.", isbn));
+            throw new BookNotFoundException(isbn);
         }
         return books.get(isbn);
     }
