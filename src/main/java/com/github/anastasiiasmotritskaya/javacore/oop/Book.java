@@ -1,6 +1,7 @@
 package com.github.anastasiiasmotritskaya.javacore.oop;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.anastasiiasmotritskaya.javacore.util.BookValidator;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -36,10 +37,10 @@ public class Book extends LibraryItem implements Borrowable {
      * @throws IllegalArgumentException если какой-либо параметр невалиден
      */
     public Book(String title, String author, int year, String isbn) {
-        validateTitle(title);
-        validateAuthor(author);
-        validateYear(year);
-        validateIsbn(isbn);
+        BookValidator.validateTitle(title);
+        BookValidator.validateAuthor(author);
+        BookValidator.validateYear(year);
+        BookValidator.validateIsbn(isbn);
 
         this.title = title.trim();
         this.author = author.trim();
@@ -53,73 +54,16 @@ public class Book extends LibraryItem implements Borrowable {
         return title;
     }
 
-    /**
-     * Валидация название книги.
-     *
-     * @throws IllegalArgumentException если название книги null или empty
-     */
-    private void validateTitle(String title) {
-        if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("Title field should not be null or empty. Enter the title.");
-        }
-    }
-
     public String getAuthor() {
         return author;
-    }
-
-    /**
-     * Валидация имени автора.
-     *
-     * @throws IllegalArgumentException если название имя автора null или empty
-     */
-    private void validateAuthor(String author) {
-        if (author == null || author.trim().isEmpty()) {
-            throw new IllegalArgumentException("The author field must not be empty. Enter the author's name.");
-        }
     }
 
     public int getYear() {
         return year;
     }
 
-    /**
-     * Валидация года издания.
-     *
-     * @throws IllegalArgumentException если название год издания меньше 1457 или больше текущего года
-     */
-    private void validateYear(int year) {
-        if (year < 1457 || year > LocalDate.now().getYear()) {
-            throw new IllegalArgumentException(String.format("The year of publication was entered incorrectly. " +
-                    "You entered: %d. Please enter the correct year of publication.", year));
-        }
-    }
-
     public String getIsbn() {
         return isbn;
-    }
-
-    /**
-     * Валидация ISBN - The International Standard Book Number.
-     *
-     * @throws IllegalArgumentException если isbn null, empty, длине не равна 13 символам
-     *                                  или содержит специальные символы
-     */
-    private void validateIsbn(String isbn) {
-        if (isbn == null || isbn.trim().isEmpty()) {
-            throw new IllegalArgumentException("The International Standard Book Number field must not be empty. " +
-                    "Enter the International Standard Book Number.");
-        }
-
-        if (isbn.trim().length() != 13) {
-            throw new IllegalArgumentException(String.format("The International Standard Book Number was entered incorrectly (ISBN-13). " +
-                    "You entered: %s. Please enter the correct International Standard Book Number (13 symbols).", isbn));
-        }
-
-        if (!isbn.trim().matches("[A-Za-z0-9]{13}")) {
-            throw new IllegalArgumentException(
-                    "ISBN must contain only letters and digits. Got: " + isbn.trim());
-        }
     }
 
     public BookStatus getStatus() {
