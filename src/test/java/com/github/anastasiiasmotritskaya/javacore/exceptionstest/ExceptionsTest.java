@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
+import java.io.IOException;
+
 import static com.github.anastasiiasmotritskaya.javacore.oop.BookStatus.RESERVED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -108,6 +110,31 @@ public class ExceptionsTest {
         String expectedMessage = "This book was not borrowed.";
 
         BookNotBorrowedException exception = new BookNotBorrowedException(expectedMessage, cause);
+
+        assertTrue(exception instanceof LibraryException);
+        assertEquals(cause, exception.getCause());
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("LibraryFileException(String filePath) constructor test")
+    public void LibraryFileExceptionTest() {
+        String filePath = "/nonexistent/file.json";
+        String expectedMessage = String.format("File does not exist: '%s'", filePath);
+
+        LibraryFileException exception = new LibraryFileException(String.format("File does not exist: '%s'", filePath));
+
+        assertTrue(exception instanceof LibraryException);
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("LibraryFileException(String message, Throwable cause) constructor test")
+    public void LibraryFileExceptionCauseTest() {
+        IOException cause = new IOException("Invalid argument.");
+        String expectedMessage = "This file doesn't exist.";
+
+        LibraryFileException exception = new LibraryFileException(expectedMessage, cause);
 
         assertTrue(exception instanceof LibraryException);
         assertEquals(cause, exception.getCause());

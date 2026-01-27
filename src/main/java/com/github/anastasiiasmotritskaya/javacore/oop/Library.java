@@ -5,8 +5,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.github.anastasiiasmotritskaya.javacore.exceptions.BookAlreadyExistsException;
 import com.github.anastasiiasmotritskaya.javacore.exceptions.BookNotFoundException;
+import com.github.anastasiiasmotritskaya.javacore.exceptions.LibraryFileException;
 import com.github.anastasiiasmotritskaya.javacore.util.*;
 
 import java.io.File;
@@ -136,7 +138,14 @@ public class Library {
         return Map.copyOf(books);
     }
 
-    public void saveToExistingJsonFile(String filePath) throws IOException {
+    /**
+     * Сохраняет библиотеку в существующий файл в формате json
+     *
+     * @param filePath путь, по которому находится файл, в котором нужно сохранить библиотеку
+     * @throws IllegalArgumentException если filePath null или empty
+     * @throws LibraryFileException     если файл по данному пути не существует
+     */
+    public void saveToExistingJsonFile(String filePath) {
         if (filePath == null || filePath.trim().isEmpty()) {
             throw new IllegalArgumentException("File path must not be null or empty.");
         }
@@ -144,10 +153,14 @@ public class Library {
         File file = new File(filePath.trim());
 
         if (!file.exists()) {
-            throw new IOException(String.format("File does not exist: '%s'", filePath));
+            throw new LibraryFileException("File doesn't exist. File path: " + filePath);
         }
 
-        mapper.writeValue(file, books);
+        try {
+            mapper.writeValue(file, books);
+        } catch (IOException e) {
+            throw new LibraryFileException("Failed to write to file: " + filePath, e);
+        }
     }
 
     /**
@@ -155,9 +168,9 @@ public class Library {
      *
      * @param filePath путь, по которому следует создать новый файл, в котором следует сохранить библиотеку
      * @throws IllegalArgumentException если filePath null или empty
-     * @throws IOException              если файл по данному пути уже существует
+     * @throws LibraryFileException     если файл по данному пути уже существует
      */
-    public void saveToNewJsonFile(String filePath) throws IOException {
+    public void saveToNewJsonFile(String filePath) {
         if (filePath == null || filePath.trim().isEmpty()) {
             throw new IllegalArgumentException("File path must not be null or empty.");
         }
@@ -165,14 +178,17 @@ public class Library {
         File file = new File(filePath.trim());
 
         if (file.exists()) {
-            throw new IOException(String.format("File already exists: '%s'. " +
-                    "Use saveToExistingJsonFile() or choose different name.", filePath));
+            throw new LibraryFileException("File already exists. File path: " + filePath);
         }
 
         Path path = file.toPath();
-        Files.createDirectories(path.getParent());
 
-        mapper.writeValue(file, books);
+        try {
+            Files.createDirectories(path.getParent());
+            mapper.writeValue(file, books);
+        } catch (IOException e) {
+            throw new LibraryFileException("Failed to write to file: " + filePath, e);
+        }
     }
 
     /**
@@ -180,12 +196,13 @@ public class Library {
      *
      * @param filePath путь, по которому которому находится файл в формате json, откуда следует загрузить бибилиотеку
      * @throws IllegalArgumentException если filePath null или empty
-     * @throws IOException              если файла по данному пути не существует, проблема в структуре json
-     *                                  или возникла проблема при чтении
-     * @throws JsonParseException       если проблема с синтаксисом json
-     * @throws MismatchedInputException если поля не совпадают (title, author, year, isbn)
+     * @throws LibraryFileException     если файла по данному пути не существует,
+     *                                  проблема в структуре json,
+     *                                  возникла проблема при чтении,
+     *                                  проблема с синтаксисом json,
+     *                                  поля не совпадают (title, author, year, isbn)
      */
-    public void loadFromJsonFile(String filePath) throws IOException {
+    public void loadFromJsonFile(String filePath) {
         if (filePath == null || filePath.trim().isEmpty()) {
             throw new IllegalArgumentException("File path must not be null or empty.");
         }
@@ -193,7 +210,7 @@ public class Library {
         File file = new File(filePath.trim());
 
         if (!file.exists()) {
-            throw new IOException(String.format("File does not exist: '%s'", filePath));
+            throw new LibraryFileException("File doesn't exist. File path: " + filePath);
         }
 
         if (file.length() == 0) {
@@ -204,23 +221,11 @@ public class Library {
             this.books = mapper.readValue(file, new TypeReference<>() {
             });
         } catch (JsonParseException e) {
-            throw new IOException(String.format("Invalid JSON syntax in file '%s': %s", filePath, e.getMessage()), e);
+            throw new LibraryFileException("Invalid JSON syntax: " + filePath, e);
         } catch (MismatchedInputException e) {
-            if (e.getMessage().contains("Cannot construct instance of 'Book'")) {
-                throw new IOException(
-                        String.format(
-                                "Missing required fields in book data in file '%s'." +
-                                        "Ensure all books have 'title', 'author', 'year' and 'isbn'.",
-                                filePath),
-                        e
-                );
-            }
-            throw new IOException(
-                    String.format("Unexpected JSON structure in file '%s': %s", filePath, e.getMessage()),
-                    e
-            );
+            throw new LibraryFileException("Invalid book data: " + filePath, e);
         } catch (IOException e) {
-            throw new IOException(String.format("Error reading file '%s': %s", filePath, e.getMessage()), e);
+            throw new LibraryFileException("Error reading file: " + filePath, e);
         }
     }
 

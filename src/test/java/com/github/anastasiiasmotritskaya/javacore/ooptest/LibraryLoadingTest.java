@@ -1,5 +1,8 @@
 package com.github.anastasiiasmotritskaya.javacore.ooptest;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.github.anastasiiasmotritskaya.javacore.exceptions.LibraryFileException;
 import com.github.anastasiiasmotritskaya.javacore.oop.Book;
 import com.github.anastasiiasmotritskaya.javacore.oop.Library;
 import org.junit.jupiter.api.DisplayName;
@@ -37,11 +40,11 @@ public class LibraryLoadingTest {
     }
 
     @Test
-    @DisplayName("loadFromJsonFile should throw IOException if file doesn't exist")
-    public void loadFromJsonFileFileDoesNotExistTest_IOException() {
-        IOException exception = assertThrows(IOException.class,
+    @DisplayName("loadFromJsonFile should throw LibraryFileException if file doesn't exist")
+    public void loadFromJsonFileFileDoesNotExistTest_LibraryFileException() {
+        LibraryFileException exception = assertThrows(LibraryFileException.class,
                 () -> emptyLibrary.loadFromJsonFile("/nonexistent/file.json"));
-        String expectedMessage = "File does not exist: '/nonexistent/file.json'";
+        String expectedMessage = "File doesn't exist. File path: /nonexistent/file.json";
         assertEquals(expectedMessage, exception.getMessage());
     }
 
@@ -145,17 +148,22 @@ public class LibraryLoadingTest {
     }
 
     @ParameterizedTest(name = "[{index}] {1}")
-    @DisplayName("loadFromJsonFile should throw JsonParseException when JSON is invalid")
+    @DisplayName("loadFromJsonFile should throw LibraryFileException when JSON is invalid")
     @MethodSource("jsonParseExceptionDataProvider")
     public void loadFromJsonFileTest_jsonParseException(String jsonContent, String description) throws IOException {
         Path tempPath = tempDir.resolve("loadFromJsonFileJsonParseException.json");
         Files.writeString(tempPath, jsonContent, StandardCharsets.UTF_8);
 
-        IOException exception = assertThrows(IOException.class,
+        LibraryFileException exception = assertThrows(LibraryFileException.class,
                 () -> emptyLibrary.loadFromJsonFile(String.valueOf(tempPath)));
 
-        String expectedMessage = "Invalid JSON syntax in file";
+        String expectedMessage = "Invalid JSON syntax: ";
+
         assertTrue(exception.getMessage().startsWith(expectedMessage));
+        assertTrue(exception.getMessage().contains(tempPath.toString()));
+
+        assertNotNull(exception.getCause());
+        assertTrue(exception.getCause() instanceof JsonParseException);
     }
 
     static Stream<Arguments> jsonParseExceptionDataProvider() {
@@ -207,27 +215,7 @@ public class LibraryLoadingTest {
                                      </book>
                                  </library>
                                 """, "There is the xml file, not json"
-                )
-        );
-    }
-
-    @ParameterizedTest(name = "[{index}] {1}")
-    @DisplayName("loadFromJsonFile should throw MismatchedInputException when JSON has no required fields, " +
-            "extra fields or JSON has different values as key and as isbn")
-    @MethodSource("mismatchedInputExceptionDataProvider")
-    public void loadFromJsonFileTest_mismatchedInputException(String jsonContent, String description) throws IOException {
-        Path tempPath = tempDir.resolve("loadFromJsonFileMismatchedInputException.json");
-        Files.writeString(tempPath, jsonContent, StandardCharsets.UTF_8);
-
-        IOException exception = assertThrows(IOException.class,
-                () -> emptyLibrary.loadFromJsonFile(String.valueOf(tempPath)));
-
-        String expectedMessage = "Invalid JSON syntax in file";
-        assertTrue(exception.getMessage().startsWith(expectedMessage));
-    }
-
-    static Stream<Arguments> mismatchedInputExceptionDataProvider() {
-        return Stream.of(
+                ),
                 Arguments.of(
                         """
                                 {
@@ -337,20 +325,25 @@ public class LibraryLoadingTest {
     }
 
     @ParameterizedTest(name = "[{index}] {1}")
-    @DisplayName("loadFromJsonFile should throw IOException when JSON has extra field or there is an array in json file")
-    @MethodSource("IOExceptionDataProvider")
-    public void loadFromJsonFileTest_IOException(String jsonContent, String description) throws IOException {
+    @DisplayName("loadFromJsonFile should throw LibraryFileException when JSON has extra field or there is an array in json file")
+    @MethodSource("mismatchedInputExceptionDataProvider")
+    public void loadFromJsonFileTest_MismatchedInputException(String jsonContent, String description) throws IOException {
         Path tempPath = tempDir.resolve("loadFromJsonFileIOException.json");
         Files.writeString(tempPath, jsonContent, StandardCharsets.UTF_8);
 
-        IOException exception = assertThrows(IOException.class,
+        LibraryFileException exception = assertThrows(LibraryFileException.class,
                 () -> emptyLibrary.loadFromJsonFile(String.valueOf(tempPath)));
 
-        String expectedMessage = "Unexpected JSON structure in file";
+        String expectedMessage = "Invalid book data: ";
+
         assertTrue(exception.getMessage().startsWith(expectedMessage));
+        assertTrue(exception.getMessage().contains(tempPath.toString()));
+
+        assertNotNull(exception.getCause());
+        assertTrue(exception.getCause() instanceof MismatchedInputException);
     }
 
-    static Stream<Arguments> IOExceptionDataProvider() {
+    static Stream<Arguments> mismatchedInputExceptionDataProvider() {
         return Stream.of(
                 Arguments.of(
                         """

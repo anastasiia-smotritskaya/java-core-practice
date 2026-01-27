@@ -1,5 +1,6 @@
 package com.github.anastasiiasmotritskaya.javacore.ooptest;
 
+import com.github.anastasiiasmotritskaya.javacore.exceptions.LibraryFileException;
 import com.github.anastasiiasmotritskaya.javacore.oop.Book;
 import com.github.anastasiiasmotritskaya.javacore.oop.Library;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,23 +72,25 @@ public class LibrarySavingTest {
     }
 
     @Test
-    @DisplayName("saveToExistingJsonFile should throw IOException if file doesn't exist")
-    public void saveToExistingJsonFileFileDoesNotExistTest_IOException() {
-        IOException exception = assertThrows(IOException.class,
-                () -> threeBooksLibrary.saveToExistingJsonFile("/nonexistent/file.json"));
-        String expectedMessage = "File does not exist: '/nonexistent/file.json'";
+    @DisplayName("saveToExistingJsonFile should throw LibraryFileException if file doesn't exist")
+    public void saveToExistingJsonFileFileDoesNotExistTest_LibraryFileException() {
+        String noFileFilePath = "/nonexistent/file.json";
+        String expectedMessage = "File doesn't exist. File path: " + noFileFilePath;
+
+        LibraryFileException exception = assertThrows(LibraryFileException.class,
+                () -> threeBooksLibrary.saveToExistingJsonFile(noFileFilePath));
+
         assertEquals(expectedMessage, exception.getMessage());
     }
 
     @Test
-    @DisplayName("saveNewJsonFile should throw IOException if file already exists")
-    public void saveToNewJsonFileFileExistsTest_IOException() throws IOException {
+    @DisplayName("saveNewJsonFile should throw LibraryFileException if file already exists")
+    public void saveToNewJsonFileFileExistsTest_LibraryFileException() throws IOException {
         Path existingFile = tempDir.resolve("existing.json");
         Files.createFile(existingFile);
-        IOException exception = assertThrows(IOException.class,
+        LibraryFileException exception = assertThrows(LibraryFileException.class,
                 () -> threeBooksLibrary.saveToNewJsonFile(existingFile.toString()));
-        String expectedMessage = String.format("File already exists: '%s'. " +
-                "Use saveToExistingJsonFile() or choose different name.", existingFile);
+        String expectedMessage = String.format("File already exists. File path: %s", existingFile);
         assertEquals(expectedMessage, exception.getMessage());
     }
 
