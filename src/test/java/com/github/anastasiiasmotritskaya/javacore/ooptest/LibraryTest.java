@@ -1,5 +1,7 @@
 package com.github.anastasiiasmotritskaya.javacore.ooptest;
 
+import com.github.anastasiiasmotritskaya.javacore.exceptions.BookAlreadyExistsException;
+import com.github.anastasiiasmotritskaya.javacore.exceptions.BookNotFoundException;
 import com.github.anastasiiasmotritskaya.javacore.oop.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -50,13 +52,12 @@ public class LibraryTest {
     }
 
     @Test
-    @DisplayName("addBook should throw IllegalArgumentException if a book with the same isbn is already in the library")
-    public void addBookISBNAlreadyExistsTest_IllegalArgumentException() {
+    @DisplayName("addBook should throw BookAlreadyExistsException if a book with the same isbn is already in the library")
+    public void addBookISBNAlreadyExistsTest_BookAlreadyExistsException() {
         Book newBook = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU6");
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        BookAlreadyExistsException exception = assertThrows(BookAlreadyExistsException.class,
                 () -> library.addBook(newBook));
-        String message = String.format("Key '%s' already exists with value: %s", newBook.getIsbn(),
-                books.get(newBook.getIsbn()).toString());
+        String message = String.format("Book with ISBN '%s' already exists.", newBook.getIsbn());
         assertEquals(message, exception.getMessage());
     }
 
@@ -69,31 +70,35 @@ public class LibraryTest {
     }
 
     @Test
-    @DisplayName("deleteBook should throw IllegalArgumentException if there is no book with such isbn in the library")
-    public void deleteBookNoISBNTest_IllegalArgumentException() {
+    @DisplayName("deleteBook should throw BookNotFoundException if there is no book with such isbn in the library")
+    public void deleteBookNoISBNTest_BookNotFoundException() {
         String isbn = "KU7K3MBQV9LU0";
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+
+        BookNotFoundException exception = assertThrows(BookNotFoundException.class,
                 () -> library.deleteBook(isbn));
-        String message = String.format("There is no book with this number (%s). Please check the number.", isbn);
-        assertEquals(message, exception.getMessage());
+
+        assertEquals(new BookNotFoundException(isbn).getMessage(), exception.getMessage());
     }
 
     @Test
     @DisplayName("deleteBook should delete books from the library if there is book with such isbn")
     public void deleteBookPositiveTest() {
         String isbn = "KU7K3MBQV9LU7";
+
         library.deleteBook(isbn);
-        assertThrows(IllegalArgumentException.class, () -> library.findBookByISBN(isbn));
+
+        assertThrows(BookNotFoundException.class, () -> library.findBookByISBN(isbn));
     }
 
     @Test
-    @DisplayName("findBookByISBN should throw IllegalArgumentException if there is no book with such isbn in the library")
-    public void findBookByISBNNoISBNTest_IllegalArgumentException() {
+    @DisplayName("findBookByISBN should throw BookNotFoundException if there is no book with such isbn in the library")
+    public void findBookByISBNNoISBNTest_BookNotFoundException() {
         String isbn = "KU7K3MBQV9LU0";
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+
+        BookNotFoundException exception = assertThrows(BookNotFoundException.class,
                 () -> library.findBookByISBN(isbn));
-        String message = String.format("There is no book with this number (%s). Please check the number.", isbn);
-        assertEquals(message, exception.getMessage());
+
+        assertEquals(new BookNotFoundException(isbn).getMessage(), exception.getMessage());
     }
 
     @Test

@@ -1,6 +1,8 @@
 package com.github.anastasiiasmotritskaya.javacore.oop;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.anastasiiasmotritskaya.javacore.exceptions.BookNotAvailableException;
+import com.github.anastasiiasmotritskaya.javacore.exceptions.BookNotBorrowedException;
 import com.github.anastasiiasmotritskaya.javacore.util.BookValidator;
 
 import java.time.LocalDate;
@@ -78,8 +80,8 @@ public class Book extends LibraryItem implements Borrowable {
      * Выдаёт объект читателю.
      *
      * @param borrowerName имя читателя
-     * @throws IllegalStateException если объект уже выдан или забронирован
-     * @throws IllegalStateException если книга уже в статусе BORROWED или RESERVED
+     * @throws IllegalStateException     если объект уже выдан или забронирован
+     * @throws BookNotAvailableException если книга уже в статусе BORROWED или RESERVED
      */
     @Override
     public void borrow(String borrowerName) {
@@ -87,7 +89,7 @@ public class Book extends LibraryItem implements Borrowable {
             throw new IllegalArgumentException("Borrower name must not be null or empty. Enter the borrower's name.");
         }
         if (!isAvailable()) {
-            throw new IllegalStateException("This book status: " + this.status);
+            throw new BookNotAvailableException(isbn, status);
         }
         this.status = BookStatus.BORROWED;
         this.currentBorrower = borrowerName.trim();
@@ -96,12 +98,12 @@ public class Book extends LibraryItem implements Borrowable {
     /**
      * Возвращает объект в библиотеку.
      *
-     * @throws IllegalStateException если объект не был выдан
+     * @throws BookNotBorrowedException если объект не был выдан
      */
     @Override
     public void returnBook() {
         if (status != BookStatus.BORROWED) {
-            throw new IllegalStateException("This book has not been issued. Current status: " + status);
+            throw new BookNotBorrowedException(isbn, status);
         }
         this.status = BookStatus.AVAILABLE;
         this.currentBorrower = null;

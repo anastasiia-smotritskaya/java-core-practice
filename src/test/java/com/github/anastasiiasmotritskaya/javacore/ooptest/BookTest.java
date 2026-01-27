@@ -1,5 +1,7 @@
 package com.github.anastasiiasmotritskaya.javacore.ooptest;
 
+import com.github.anastasiiasmotritskaya.javacore.exceptions.BookNotAvailableException;
+import com.github.anastasiiasmotritskaya.javacore.exceptions.BookNotBorrowedException;
 import com.github.anastasiiasmotritskaya.javacore.oop.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -259,15 +261,16 @@ public class BookTest {
     }
 
     @ParameterizedTest
-    @DisplayName("borrow should throw IllegalStateException if the book is borrowed or reserved")
+    @DisplayName("borrow should throw BookNotAvailableException if the book is borrowed or reserved")
     @EnumSource(names = {"BORROWED", "RESERVED"})
-    public void borrowStatusNegativeTest_IllegalStateException(BookStatus status) {
+    public void borrowStatusNegativeTest_BookNotAvailableException(BookStatus status) {
         Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
         book.setStatus(status);
-        IllegalStateException exception = assertThrows(IllegalStateException.class,
+
+        BookNotAvailableException exception = assertThrows(BookNotAvailableException.class,
                 () -> book.borrow("Jane Doe"));
-        String expectedMessage = String.format("This book status: %s", book.getStatus());
-        assertEquals(expectedMessage, exception.getMessage());
+
+        assertEquals(new BookNotAvailableException(book.getIsbn(), status).getMessage(), exception.getMessage());
     }
 
     @ParameterizedTest(name = "[{index}] {1}")
@@ -287,14 +290,16 @@ public class BookTest {
     }
 
     @ParameterizedTest
-    @DisplayName("return should throw IllegalStateException if the book is borrowed or reserved if thw book is AVAILABLE or RESERVED")
+    @DisplayName("return should throw BookNotBorrowedException if the book is borrowed or reserved if thw book is AVAILABLE or RESERVED")
     @EnumSource(names = {"AVAILABLE", "RESERVED"})
-    public void returnStatusNegativeTest_IllegalStateException(BookStatus status) {
+    public void returnStatusNegativeTest_BookNotBorrowedException(BookStatus status) {
         Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU9");
         book.setStatus(status);
-        IllegalStateException exception = assertThrows(IllegalStateException.class, book::returnBook);
-        String expectedMessage = String.format("This book has not been issued. Current status: %s", status);
-        assertEquals(expectedMessage, exception.getMessage());
+
+        BookNotBorrowedException exception = assertThrows(BookNotBorrowedException.class,
+                book::returnBook);
+
+        assertEquals(new BookNotBorrowedException(book.getIsbn(), book.getStatus()).getMessage(), exception.getMessage());
     }
 
     @Test
