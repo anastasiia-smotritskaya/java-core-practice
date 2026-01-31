@@ -121,6 +121,36 @@ public class NumberUtils {
     }
 
     /**
+     * Возвращает сумму чисел из списка (используется цикл for)
+     *
+     * @param numbers список чисел для суммирования
+     * @return сумму чисел из списка
+     * {@code sumNumbers_for(List.of(1, 2, 3))} вернёт {@code 6}
+     * @throws IllegalArgumentException если numbers null
+     */
+    public static int sumNumbers_for(List<Integer> numbers) {
+        validateNumbers(numbers);
+        int sum = 0;
+        for (Integer number : numbers) {
+            sum += number;
+        }
+        return sum;
+    }
+
+    /**
+     * Возвращает сумму чисел из списка (используется лямбда-выражение)
+     *
+     * @param numbers список чисел для суммирования
+     * @return сумму чисел из списка
+     * {@code sumNumbers_lambda(List.of(1, 2, 3))} вернёт {@code 6}
+     * @throws IllegalArgumentException если numbers null
+     */
+    public static int sumNumbers_lambda(List<Integer> numbers) {
+        validateNumbers(numbers);
+        return numbers.stream().reduce(0, Integer::sum);
+    }
+
+    /**
      * Умножает число на 2
      * Вспомогательный метод для doubleNumbers_mr
      */
