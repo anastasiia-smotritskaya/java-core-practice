@@ -1,4 +1,4 @@
-package com.github.anastasiiasmotritskaya.javacore.fptest.filtertest;
+package com.github.anastasiiasmotritskaya.javacore.fptest.numbers;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ public abstract class FilterEvenNumbersAbstractTest {
     protected abstract List<Integer> filterEvenNumbers(List<Integer> numbers);
 
     @Test
-    @DisplayName("filterEvenNumbers should throw IllegalArgumentException if the list is null")
+    @DisplayName("filterEvenNumbers should throw IllegalArgumentException if the list of numbers is null")
     public void filterEvenNumbers_NullSourceTest() {
         String expected = "List of numbers must not be null.";
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
@@ -38,7 +38,7 @@ public abstract class FilterEvenNumbersAbstractTest {
     }
 
     @ParameterizedTest(name = "[{index}] {1}")
-    @DisplayName("filterEvenNumbers should return an empty list if the")
+    @DisplayName("filterEvenNumbers should return an empty list if the list of numbers is empty")
     @MethodSource("noEvenNumbersDataProvider")
     public void filterEvenNumbers_noEvenNumbersTest(List<Integer> numbers, String description) {
         assertEquals(new ArrayList<>(), filterEvenNumbers(numbers));

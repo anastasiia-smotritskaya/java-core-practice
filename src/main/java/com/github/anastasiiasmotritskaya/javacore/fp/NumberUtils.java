@@ -74,6 +74,61 @@ public class NumberUtils {
     }
 
     /**
+     * Увеличивает каждое число в списке в 2 раза (используется цикл for)
+     *
+     * @param numbers список чисел для изменения
+     * @return список чисел, в котором каждое число исходного списка увеличено в 2 раза
+     * {@code List result = doubleNumbers_for(1, 2, 3, 4, 5);} // {2, 4, 6, 8, 10}
+     * @throws IllegalArgumentException если numbers null
+     */
+    public static List<Integer> doubleNumbers_for(List<Integer> numbers) {
+        validateNumbers(numbers);
+        List<Integer> result = new ArrayList<>(numbers.size());
+        for (Integer number : numbers) {
+            result.add(number * 2);
+        }
+        return result;
+    }
+
+    /**
+     * Увеличивает каждое число в списке в 2 раза (используется лямбда-выражение)
+     *
+     * @param numbers список чисел для изменения
+     * @return список чисел, в котором каждое число исходного списка увеличено в 2 раза
+     * {@code List result = doubleNumbers_lambda(1, 2, 3, 4, 5);} // {2, 4, 6, 8, 10}
+     * @throws IllegalArgumentException если numbers null
+     */
+    public static List<Integer> doubleNumbers_lambda(List<Integer> numbers) {
+        validateNumbers(numbers);
+        return numbers.stream()
+                .map(number -> number * 2)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Увеличивает каждое число в списке в 2 раза (используется method references)
+     *
+     * @param numbers список чисел для изменения
+     * @return список чисел, в котором каждое число исходного списка увеличено в 2 раза
+     * {@code List result = doubleNumbers_mr(1, 2, 3, 4, 5);} // {2, 4, 6, 8, 10}
+     * @throws IllegalArgumentException если numbers null
+     */
+    public static List<Integer> doubleNumbers_mr(List<Integer> numbers) {
+        validateNumbers(numbers);
+        return numbers.stream()
+                .map(NumberUtils::doubleNumber)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Умножает число на 2
+     * Вспомогательный метод для doubleNumbers_mr
+     */
+    private static Integer doubleNumber(Integer number) {
+        return number * 2;
+    }
+
+    /**
      * Проверяет, не является ли список чисел null
      * Вспомогательный метод
      */

@@ -1,4 +1,4 @@
-package com.github.anastasiiasmotritskaya.javacore.fptest.filtertest;
+package com.github.anastasiiasmotritskaya.javacore.fptest.numbers;
 
 import com.github.anastasiiasmotritskaya.javacore.fp.NumberUtils;
 
