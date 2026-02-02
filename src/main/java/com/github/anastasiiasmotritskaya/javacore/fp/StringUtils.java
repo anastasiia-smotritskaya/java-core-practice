@@ -19,8 +19,8 @@ public class StringUtils {
      * @param strings   список строк
      * @param minLength строки данной длины и меньше не должны попадать в итоговый список
      * @return список строк, длина которых больше minLength
-     * {@code List result = filterLongStrings_for("one", "two", "three", 4);} // {"three"}
-     * @throws IllegalArgumentException если strings null или empty
+     * {@code List result = filterLongStrings_for("one", "two", "three");} // {"three"}
+     * @throws IllegalArgumentException если strings null
      */
     public static List<String> filterLongStrings_for(List<String> strings, int minLength) {
         validateStrings(strings);
@@ -40,8 +40,8 @@ public class StringUtils {
      * @param strings   список строк
      * @param minLength строки данной длины и меньше не должны попадать в итоговый список
      * @return список строк, длина которых больше minLength
-     * {@code List result = filterLongStrings_lambda("one", "two", "three", 4);} // {"three"}
-     * @throws IllegalArgumentException если strings null или empty
+     * {@code List result = filterLongStrings_lambda("one", "two", "three");} // {"three"}
+     * @throws IllegalArgumentException если strings null
      */
     public static List<String> filterLongStrings_lambda(List<String> strings, int minLength) {
         validateStrings(strings);
@@ -54,8 +54,8 @@ public class StringUtils {
      * @param strings   список строк
      * @param minLength строки данной длины и меньше не должны попадать в итоговый список
      * @return список строк, длина которых больше minLength
-     * {@code List result = filterLongStrings_mr("one", "two", "three", 4);} // {"three"}
-     * @throws IllegalArgumentException если strings null или empty
+     * {@code List result = filterLongStrings_mr("one", "two", "three");} // {"three"}
+     * @throws IllegalArgumentException если strings null
      */
     public static List<String> filterLongStrings_mr(List<String> strings, int minLength) {
         validateStrings(strings);
@@ -66,7 +66,38 @@ public class StringUtils {
     }
 
     /**
-     * Проверяет, не является ли список строк null или empty
+     * Приводит все строки в списке к верхнему регистру (используется цикл for)
+     *
+     * @param strings список строк
+     * @return все строки из списка, приведенные к верхнему регистру
+     * {@code toUpperCaseTrimmed_for(List.of("one", "two", "three"))} вернёт {@code {"ONE", "TWO", "THREE"}}
+     * @throws IllegalArgumentException если strings null
+     */
+    public static List<String> toUpperCaseTrimmed_for(List<String> strings) {
+        validateStrings(strings);
+        List<String> result = new ArrayList<>();
+        for (String s : strings) {
+            String trimmed = s.trim();
+            result.add(trimmed.toUpperCase());
+        }
+        return result;
+    }
+
+    /**
+     * Приводит все строки в списке к верхнему регистру (используется stream api)
+     *
+     * @param strings список строк
+     * @return все строки из списка, приведенные к верхнему регистру
+     * {@code toUpperCaseTrimmed_stream(List.of("one", "two", "three"))} вернёт {@code {"ONE", "TWO", "THREE"}}
+     * @throws IllegalArgumentException если strings null
+     */
+    public static List<String> toUpperCaseTrimmed_stream(List<String> strings) {
+        validateStrings(strings);
+        return strings.stream().map(String::trim).map(String::toUpperCase).collect(Collectors.toList());
+    }
+
+    /**
+     * Проверяет, не является ли список строк null
      * Вспомогательный метод
      */
     private static void validateStrings(List<String> strings) {
