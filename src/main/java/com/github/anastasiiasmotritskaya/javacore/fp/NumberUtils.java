@@ -1,7 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.fp;
 
+import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -148,6 +150,39 @@ public class NumberUtils {
     public static int sumNumbers_lambda(List<Integer> numbers) {
         validateNumbers(numbers);
         return numbers.stream().reduce(0, Integer::sum);
+    }
+
+    /**
+     * Возвращает максимальное число из списка (реализовано через цикл for)
+     *
+     * @param numbers список чисел для поиска максимального
+     * @return максимальное число из списка
+     * {@code findMax_for(List.of(1, 2, 3))} вернёт {@code 3}
+     * @throws IllegalArgumentException если numbers null
+     */
+    public static Optional<Integer> findMax_for(List<Integer> numbers) {
+        validateNumbers(numbers);
+
+        if (numbers.isEmpty()) return Optional.empty();
+
+        Integer max = numbers.getFirst();
+        for (Integer i : numbers) {
+            if (i > max) max = i;
+        }
+        return Optional.of(max);
+    }
+
+    /**
+     * Возвращает максимальное число из списка (реализовано через stream api)
+     *
+     * @param numbers список чисел для поиска максимального
+     * @return максимальное число из списка
+     * {@code findMax_stream(List.of(1, 2, 3))} вернёт {@code 3}
+     * @throws IllegalArgumentException если numbers null
+     */
+    public static Optional<Integer> findMax_stream(List<Integer> numbers) {
+        validateNumbers(numbers);
+        return numbers.stream().max(Integer::compareTo);
     }
 
     /**
