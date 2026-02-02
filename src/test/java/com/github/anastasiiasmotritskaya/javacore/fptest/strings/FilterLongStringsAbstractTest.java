@@ -29,8 +29,8 @@ public abstract class FilterLongStringsAbstractTest {
 
     @ParameterizedTest
     @NullSource
-    @DisplayName("filterLongStrings should throw IllegalArgumentException if the list of strings is null or empty")
-    public void filterLongStrings_NullAndEmptySourceTest(List<String> strings) {
+    @DisplayName("filterLongStrings should throw IllegalArgumentException if the list of strings is null")
+    public void filterLongStrings_NullSourceTest(List<String> strings) {
         String expected = "List of strings must not be null.";
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> filterLongStrings(strings, 5));

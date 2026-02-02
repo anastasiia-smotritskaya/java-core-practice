@@ -1,8 +1,6 @@
 package com.github.anastasiiasmotritskaya.javacore.fptest.strings;
 
-import com.github.anastasiiasmotritskaya.javacore.fp.NumberUtils;
 import com.github.anastasiiasmotritskaya.javacore.fp.StringUtils;
-import com.github.anastasiiasmotritskaya.javacore.fptest.numbers.FilterEvenNumbersAbstractTest;
 
 import java.util.List;
 

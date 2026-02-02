@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 /**
  * Класс для работы с коллекциями строк
- * Методы: фильтрация строк бьльше определенной длины, преобразование всех строк в верхний регистр,
+ * Методы: фильтрация строк больше определенной длины, преобразование всех строк в верхний регистр,
  * объединение строк через разделитель
  *
  * @author Анастасия Смотрицкая
@@ -94,6 +94,43 @@ public class StringUtils {
     public static List<String> toUpperCaseTrimmed_stream(List<String> strings) {
         validateStrings(strings);
         return strings.stream().map(String::trim).map(String::toUpperCase).collect(Collectors.toList());
+    }
+
+    /**
+     * Объединяет строки через разделитель (используется цикл for)
+     *
+     * @param strings   список строк
+     * @param delimiter разделитель
+     * @return String строку, составленную из всех строк в списке, разделенных разделителем
+     * {@code joinStrings_for(List.of("one", "two", "three"), "@")} вернёт {@code "one@two@three"}
+     * @throws IllegalArgumentException если strings null
+     */
+    public static String joinStrings_for(List<String> strings, String delimiter) {
+        validateStrings(strings);
+        StringBuilder joinedString = new StringBuilder();
+        for (int i = 0; i < strings.size(); i++) {
+            String trimmed = strings.get(i).trim();
+            if (i < strings.size() - 1) {
+                joinedString.append(trimmed).append(delimiter);
+            } else if (i == strings.size() - 1) {
+                joinedString.append(trimmed);
+            }
+        }
+        return joinedString.toString();
+    }
+
+    /**
+     * Объединяет строки через разделитель (используется stream api)
+     *
+     * @param strings   список строк
+     * @param delimiter разделитель
+     * @return String строку, составленную из всех строк в списке, разделенных разделителем
+     * {@code joinStrings_stream(List.of("one", "two", "three"), "@")} вернёт {@code "one@two@three"}
+     * @throws IllegalArgumentException если strings null
+     */
+    public static String joinStrings_stream(List<String> strings, String delimiter) {
+        validateStrings(strings);
+        return strings.stream().map(String::trim).collect(Collectors.joining(delimiter));
     }
 
     /**
