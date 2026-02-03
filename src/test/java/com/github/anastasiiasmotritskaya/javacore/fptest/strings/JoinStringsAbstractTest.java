@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -28,7 +29,7 @@ public abstract class JoinStringsAbstractTest {
     @Test
     @DisplayName("joinStrings should throw IllegalArgumentException if the list is null")
     public void joinStrings_NullSourceTest() {
-        String expected = "List of strings must not be null.";
+        String expected = "List of strings should not be null.";
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> joinStrings(null, "@"));
         assertEquals(expected, exception.getMessage());
@@ -37,15 +38,23 @@ public abstract class JoinStringsAbstractTest {
     @Test
     @DisplayName("joinStrings should throw NullPointerException if one of the strings is null")
     public void joinStrings_NullStringTest() {
-        assertThrows(NullPointerException.class,
-                () -> joinStrings(List.of("one", null, "three"), "@"));
+        String expected = String.format("Element at index %d must not be null", 1);
+
+        List<String> strings = new ArrayList<>();
+        strings.add("one");
+        strings.add(null);
+        strings.add("three");
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> joinStrings(strings, "@"));
+        assertEquals(expected, exception.getMessage());
     }
 
     @ParameterizedTest()
-    @DisplayName("joinStrings should retern the proper string if there are various parameters in the method")
+    @DisplayName("joinStrings should return the proper string if there are various parameters in the method")
     @MethodSource("joinStringsDataProvider")
-    public void joinStringsTest(List<String> strings, String delimeter, String expected, String description) {
-        assertEquals(expected, joinStrings(strings, delimeter));
+    public void joinStringsTest(List<String> strings, String delimiter, String expected, String description) {
+        assertEquals(expected, joinStrings(strings, delimiter));
     }
 
     private static Stream<Arguments> joinStringsDataProvider() {

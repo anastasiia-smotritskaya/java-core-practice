@@ -2,11 +2,13 @@ package com.github.anastasiiasmotritskaya.javacore.fptest.strings;
 
 import com.github.anastasiiasmotritskaya.javacore.fp.StringUtils;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -31,7 +33,22 @@ public abstract class FilterLongStringsAbstractTest {
     @NullSource
     @DisplayName("filterLongStrings should throw IllegalArgumentException if the list of strings is null")
     public void filterLongStrings_NullSourceTest(List<String> strings) {
-        String expected = "List of strings must not be null.";
+        String expected = "List of strings should not be null.";
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> filterLongStrings(strings, 5));
+        assertEquals(expected, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("filterLongStrings should throw IllegalArgumentException if one of the strings in the list is null")
+    public void filterLongStrings_NullStringTest() {
+        String expected = String.format("Element at index %d must not be null", 1);
+
+        List<String> strings = new ArrayList<>();
+        strings.add("one");
+        strings.add(null);
+        strings.add("seventeen");
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> filterLongStrings(strings, 5));
         assertEquals(expected, exception.getMessage());

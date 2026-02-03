@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -30,7 +31,22 @@ public abstract class ToUpperCaseTrimmedAbstractTest {
     @NullSource
     @DisplayName("toUpperCaseTrimmed should throw IllegalArgumentException if the list is null")
     public void toUpperCaseTrimmed_NullSourceTest(List<String> strings) {
-        String expected = "List of strings must not be null.";
+        String expected = "List of strings should not be null.";
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> toUpperCaseTrimmed(strings));
+        assertEquals(expected, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("toUpperCaseTrimmed should throw NullPointerException if one of the strings is null")
+    public void toUpperCaseTrimmed_NullStringTest() {
+        String expected = String.format("Element at index %d must not be null", 1);
+
+        List<String> strings = new ArrayList<>();
+        strings.add("one");
+        strings.add(null);
+        strings.add("seventeen");
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> toUpperCaseTrimmed(strings));
         assertEquals(expected, exception.getMessage());
@@ -59,12 +75,5 @@ public abstract class ToUpperCaseTrimmedAbstractTest {
                 Arguments.of(List.of("  one   "), List.of("ONE"),
                         "Spaces in the beginning and in the end")
         );
-    }
-
-    @Test
-    @DisplayName("toUpperCaseTrimmed should throw NullPointerException if one of the strings is null")
-    public void toUpperCaseTrimmed_NullStringTest() {
-        assertThrows(NullPointerException.class,
-                () -> toUpperCaseTrimmed(List.of("one", null, "three")));
     }
 }
