@@ -184,6 +184,54 @@ public class StringUtils {
     }
 
     /**
+     * Проверяет, есть ли строка, содержащая подстроку (используется цикл for)
+     *
+     * @param strings   список строк для поиска подстроки
+     * @param substring сподстрока для поиска в списке строк
+     * @return boolean true - если подстрока есть в списке
+     * boolean false - если подстроки нет в списке
+     * {@code containsSubstring_for(List.of("cat", "hamster", "dog", "guinea pig")}  //true
+     * @throws IllegalArgumentException если список строк, отдельная строка или подстрока null
+     */
+    public static boolean containsSubstring_for(List<String> strings, String substring) {
+        validateStrings(strings);
+
+        if (substring == null || substring.isEmpty()) {
+            throw new IllegalArgumentException("Substring should not be null or empty.");
+        }
+
+        String substringLowerCase = substring.toLowerCase();
+
+        for (String s : strings) {
+            String sLowerCase = s.toLowerCase();
+            if (sLowerCase.contains(substringLowerCase)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Проверяет, есть ли строка, содержащая подстроку (используется stream api)
+     *
+     * @param strings   список строк для поиска подстроки
+     * @param substring сподстрока для поиска в списке строк
+     * @return boolean true - если подстрока есть в списке
+     * boolean false - если подстроки нет в списке
+     * {@code containsSubstring_stream(List.of("cat", "hamster", "dog", "guinea pig")}  //true
+     * @throws IllegalArgumentException если список строк, отдельная строка или подстрока null
+     */
+    public static boolean containsSubstring_stream(List<String> strings, String substring) {
+        validateStrings(strings);
+
+        if (substring == null || substring.isEmpty()) {
+            throw new IllegalArgumentException("Substring should not be null or empty.");
+        }
+
+        return strings.stream()
+                .map(String::toLowerCase)
+                .anyMatch(s -> s.contains(substring.toLowerCase()));
+    }
+
+    /**
      * Проверяет, не является ли список строк или отдельная строка в списке null
      * Вспомогательный метод
      *
