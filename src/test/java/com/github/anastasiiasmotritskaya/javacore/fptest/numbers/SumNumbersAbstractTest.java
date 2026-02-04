@@ -32,8 +32,10 @@ public abstract class SumNumbersAbstractTest {
     @DisplayName("sumNumbers should throw IllegalArgumentException if the list is null")
     public void sumNumbers_NullSourceTest(List<Integer> numbers) {
         String expected = "List of numbers must not be null.";
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> sumNumbers(numbers));
+
         assertEquals(expected, exception.getMessage());
     }
 

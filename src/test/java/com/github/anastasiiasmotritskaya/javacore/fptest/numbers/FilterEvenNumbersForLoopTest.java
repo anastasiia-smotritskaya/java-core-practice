@@ -12,7 +12,6 @@ import java.util.List;
  * @see FilterEvenNumbersAbstractTest
  */
 public class FilterEvenNumbersForLoopTest extends FilterEvenNumbersAbstractTest {
-
     @Override
     protected List<Integer> filterEvenNumbers(List<Integer> numbers) {
         return NumberUtils.filterEvenNumbers_for(numbers);

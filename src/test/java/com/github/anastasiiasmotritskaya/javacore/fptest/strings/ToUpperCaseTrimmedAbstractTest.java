@@ -32,8 +32,10 @@ public abstract class ToUpperCaseTrimmedAbstractTest {
     @DisplayName("toUpperCaseTrimmed should throw IllegalArgumentException if the list is null")
     public void toUpperCaseTrimmed_NullSourceTest(List<String> strings) {
         String expected = "List of strings should not be null.";
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> toUpperCaseTrimmed(strings));
+
         assertEquals(expected, exception.getMessage());
     }
 
@@ -49,6 +51,7 @@ public abstract class ToUpperCaseTrimmedAbstractTest {
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> toUpperCaseTrimmed(strings));
+
         assertEquals(expected, exception.getMessage());
     }
 

@@ -59,8 +59,10 @@ public class TextFileAnalyzerTest {
     @DisplayName("countLines should throw IOException, when file doesn't exist")
     void countLinesTest_IOException() {
         assertAll(
-                () -> assertThrows(IOException.class, () -> TextFileAnalyzer.countLines_br("/nonexistent/file.txt")),
-                () -> assertThrows(IOException.class, () -> TextFileAnalyzer.countLines_files("/nonexistent/file.txt"))
+                () -> assertThrows(IOException.class,
+                        () -> TextFileAnalyzer.countLines_br("/nonexistent/file.txt")),
+                () -> assertThrows(IOException.class,
+                        () -> TextFileAnalyzer.countLines_files("/nonexistent/file.txt"))
         );
     }
 
@@ -70,11 +72,15 @@ public class TextFileAnalyzerTest {
     void countLinesTest_IllegalArgumentException(String filePath) {
         assertAll(
                 () -> {
-                    Exception exception_countLines_br = assertThrows(IllegalArgumentException.class, () -> TextFileAnalyzer.countLines_br(filePath));
+                    Exception exception_countLines_br = assertThrows(IllegalArgumentException.class,
+                            () -> TextFileAnalyzer.countLines_br(filePath));
+
                     assertEquals("File path must not be null or empty.", exception_countLines_br.getMessage());
                 },
                 () -> {
-                    Exception exception_countLines_files = assertThrows(IllegalArgumentException.class, () -> TextFileAnalyzer.countLines_files(filePath));
+                    Exception exception_countLines_files = assertThrows(IllegalArgumentException.class,
+                            () -> TextFileAnalyzer.countLines_files(filePath));
+
                     assertEquals("File path must not be null or empty.", exception_countLines_files.getMessage());
                 }
         );
@@ -84,7 +90,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("countLines_files should count lines in file with text")
     void countLines_files_Test() throws IOException {
         Path threeLinesFile = Files.createTempFile("three-lines-file-countLines", ".txt");
+
         Files.write(threeLinesFile, Arrays.asList("line 1", "line 2", "line 3"));
+
         try {
             assertEquals(3, TextFileAnalyzer.countLines_files(threeLinesFile.toString()));
         } finally {
@@ -96,7 +104,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("countLines_files should count 0 line in the file without any text")
     void countLines_files_EmptyFileTest() throws IOException {
         Path zeroBytesFile = Files.createTempFile("zero-bytes-file-countLines", ".txt");
+
         Files.write(zeroBytesFile, new byte[0]);
+
         try {
             assertEquals(0, TextFileAnalyzer.countLines_files(zeroBytesFile.toString()));
         } finally {
@@ -108,7 +118,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("countLines_files should count 1 line in the file with one empty line")
     void countLines_files_oneEmptyLineTest() throws IOException {
         Path emptyLineFile = Files.createTempFile("empty-line-file-countLines", ".txt");
+
         Files.write(emptyLineFile, List.of(""));
+
         try {
             assertEquals(1, TextFileAnalyzer.countLines_files(emptyLineFile.toString()));
         } finally {
@@ -120,7 +132,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("countLines_files should count empty lines in the beginning of the file")
     void countLines_files_EmptyBeginningFileTest() throws IOException {
         Path emptyBeginningFile = Files.createTempFile("empty-beginning-file-countLines", ".txt");
+
         Files.write(emptyBeginningFile, Arrays.asList("", "line 2", "line 3"));
+
         try {
             assertEquals(3, TextFileAnalyzer.countLines_files(emptyBeginningFile.toString()));
         } finally {
@@ -132,7 +146,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("countLines_files should count empty lines in the middle of the file")
     void countLines_files_EmptyMiddleFileTest() throws IOException {
         Path emptyMiddleFile = Files.createTempFile("empty-middle-file-countLines", ".txt");
+
         Files.write(emptyMiddleFile, Arrays.asList("line 1", "", "line 3"));
+
         try {
             assertEquals(3, TextFileAnalyzer.countLines_files(emptyMiddleFile.toString()));
         } finally {
@@ -144,7 +160,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("countLines_files сounts empty line in the end of the file")
     void countLines_files_EmptyEndFileTest() throws IOException {
         Path emptyEndFile = Files.createTempFile("empty-end-file-countLines", ".txt");
+
         Files.write(emptyEndFile, Arrays.asList("line 1", "line 2", ""));
+
         try {
             assertEquals(3, TextFileAnalyzer.countLines_files(emptyEndFile.toString()));
         } finally {
@@ -158,11 +176,15 @@ public class TextFileAnalyzerTest {
     void findLongestWordTest_IllegalArgumentException(String filePath) {
         assertAll(
                 () -> {
-                    Exception exception = assertThrows(IllegalArgumentException.class, () -> TextFileAnalyzer.findLongestWord_br(filePath));
+                    Exception exception = assertThrows(IllegalArgumentException.class,
+                            () -> TextFileAnalyzer.findLongestWord_br(filePath));
+
                     assertEquals("File path must not be null or empty.", exception.getMessage());
                 },
                 () -> {
-                    Exception exception = assertThrows(IllegalArgumentException.class, () -> TextFileAnalyzer.findLongestWord_files(filePath));
+                    Exception exception = assertThrows(IllegalArgumentException.class,
+                            () -> TextFileAnalyzer.findLongestWord_files(filePath));
+
                     assertEquals("File path must not be null or empty.", exception.getMessage());
                 }
         );
@@ -172,8 +194,11 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord should throw IOException, when file doesn't exist")
     void findLongestWordTest_IOException() {
         assertAll(
-                () -> assertThrows(IOException.class, () -> TextFileAnalyzer.findLongestWord_br("/nonexistent/file.txt")),
-                () -> assertThrows(IOException.class, () -> TextFileAnalyzer.findLongestWord_files("/nonexistent/file.txt"))
+                () -> assertThrows(IOException.class,
+                        () -> TextFileAnalyzer.findLongestWord_br("/nonexistent/file.txt")),
+
+                () -> assertThrows(IOException.class,
+                        () -> TextFileAnalyzer.findLongestWord_files("/nonexistent/file.txt"))
         );
     }
 
@@ -181,7 +206,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br should return empty string when it reads from the file without any text (0 byte)")
     void findLongestWord_br_EmptyFileTest() throws IOException {
         Path zeroBytesFile = Files.createTempFile("zero-bytes-file-findLongestWord_br", ".txt");
+
         Files.write(zeroBytesFile, new byte[0]);
+
         try {
             assertEquals("", TextFileAnalyzer.findLongestWord_br(zeroBytesFile.toString()));
         } finally {
@@ -193,7 +220,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files should return empty string when it reads from the file without any text (0 byte)")
     void findLongestWord_files_EmptyFileTest() throws IOException {
         Path zeroBytesFile = tempDir.resolve("zero-bytes-file-findLongestWord_files.txt");
+
         Files.write(zeroBytesFile, new byte[0]);
+
         assertEquals("", TextFileAnalyzer.findLongestWord_files(zeroBytesFile.toString()));
     }
 
@@ -201,7 +230,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br should return empty string when it reads from the file with one empty line")
     void findLongestWord_br_oneEmptyLineTest() throws IOException {
         Path emptyLineFile = Files.createTempFile("empty-line-file-findLongestWord_br", ".txt");
+
         Files.write(emptyLineFile, List.of(""));
+
         try {
             assertEquals("", TextFileAnalyzer.findLongestWord_br(emptyLineFile.toString()));
         } finally {
@@ -213,7 +244,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files should return empty string when it reads from the file with one empty line")
     void findLongestWord_files_oneEmptyLineTest() throws IOException {
         Path emptyLineFile = tempDir.resolve("empty-line-file-findLongestWord_files.txt");
+
         Files.write(emptyLineFile, List.of(""));
+
         assertEquals("", TextFileAnalyzer.findLongestWord_files(emptyLineFile.toString()));
     }
 
@@ -221,7 +254,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br should return empty string for file with only numbers")
     void findLongestWord_br_onlyNumbersTest() throws IOException {
         Path onlyNumbersFile = Files.createTempFile("only-numbers-file-findLongestWord_br", ".txt");
+
         Files.write(onlyNumbersFile, List.of("1 22 333 4444 333 22 1"));
+
         try {
             assertEquals("", TextFileAnalyzer.findLongestWord_br(onlyNumbersFile.toString()));
         } finally {
@@ -233,15 +268,20 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files should return empty string for file with only numbers")
     void findLongestWord_files_onlyNumbersTest() throws IOException {
         Path onlyNumbersFile = tempDir.resolve("only-number-file-findLongestWord_files.txt");
+
         Files.write(onlyNumbersFile, List.of("1 22 333 4444 333 22 1"));
+
         assertEquals("", TextFileAnalyzer.findLongestWord_files(onlyNumbersFile.toString()));
     }
 
     @Test
     @DisplayName("findLongestWord_br should return empty string when it reads from the file only with special characters")
     void findLongestWord_br_onlySpecialCharactersTest() throws IOException {
-        Path onlySpecialCharactersFile = Files.createTempFile("only-special-characters-file-findLongestWord_br", ".txt");
+        Path onlySpecialCharactersFile = Files
+                .createTempFile("only-special-characters-file-findLongestWord_br", ".txt");
+
         Files.write(onlySpecialCharactersFile, List.of("! @@ #### $$$$$ #### @@ !!"));
+
         try {
             assertEquals("", TextFileAnalyzer.findLongestWord_br(onlySpecialCharactersFile.toString()));
         } finally {
@@ -253,7 +293,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files should return empty string when it reads from the file only with special characters")
     void findLongestWord_files_onlySpecialCharactersTest() throws IOException {
         Path onlySpecialCharactersFile = tempDir.resolve("only-special-character-file-findLongestWord_files.txt");
+
         Files.write(onlySpecialCharactersFile, List.of("! @@ #### $$$$$ #### @@ !!"));
+
         assertEquals("", TextFileAnalyzer.findLongestWord_files(onlySpecialCharactersFile.toString()));
     }
 
@@ -261,7 +303,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br should fins the longest word in text with three lines")
     void findLongestWord_br_ThreeLinesTest() throws IOException {
         Path threeLinesFile = Files.createTempFile("three-lines-file-findLongestWord_br", ".txt");
+
         Files.write(threeLinesFile, Arrays.asList("cat", "chicken", "lama"));
+
         try {
             assertEquals("chicken", TextFileAnalyzer.findLongestWord_br(threeLinesFile.toString()));
         } finally {
@@ -273,7 +317,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files should fins the longest word in text with three lines")
     void findLongestWord_files_ThreeLinesTest() throws IOException {
         Path threeLinesFile = tempDir.resolve("three-lines-file-findLongestWord_files.txt");
+
         Files.write(threeLinesFile, Arrays.asList("cat", "chicken", "lama"));
+
         assertEquals("chicken", TextFileAnalyzer.findLongestWord_files(threeLinesFile.toString()));
     }
 
@@ -281,7 +327,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br should find the longest word in text with one line")
     void findLongestWord_br_oneLineTest() throws IOException {
         Path oneLineFile = Files.createTempFile("one-line-file-findLongestWord_br", ".txt");
+
         Files.write(oneLineFile, List.of("cat chicken lama"));
+
         try {
             assertEquals("chicken", TextFileAnalyzer.findLongestWord_br(oneLineFile.toString()));
         } finally {
@@ -293,7 +341,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files should find the longest word in text with one line")
     void findLongestWord_files_oneLineTest() throws IOException {
         Path oneLineFile = tempDir.resolve("one-line-file-findLongestWord_files.txt");
+
         Files.write(oneLineFile, List.of("cat chicken lama"));
+
         assertEquals("chicken", TextFileAnalyzer.findLongestWord_files(oneLineFile.toString()));
     }
 
@@ -301,7 +351,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br should find the longest word in text with words and numbers (word is longer)")
     void findLongestWord_br_textWithNumbers_wordIsLonger_Test() throws IOException {
         Path wordIsLongerFile = Files.createTempFile("word-is-longer-file-findLongestWord_br", ".txt");
+
         Files.write(wordIsLongerFile, List.of("123 chicken 4567"));
+
         try {
             assertEquals("chicken", TextFileAnalyzer.findLongestWord_br(wordIsLongerFile.toString()));
         } finally {
@@ -313,7 +365,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files should find the longest word in text with words and numbers (word is longer)")
     void findLongestWord_files_textWithNumbers_wordIsLonger_Test() throws IOException {
         Path wordIsLongerFile = tempDir.resolve("words-is-longer-file-findLongestWord_files.txt");
+
         Files.write(wordIsLongerFile, List.of("123 chicken 4567"));
+
         assertEquals("chicken", TextFileAnalyzer.findLongestWord_files(wordIsLongerFile.toString()));
     }
 
@@ -321,7 +375,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br should find the longest word in text with words and numbers (number is longer)")
     void findLongestWord_br_textWithNumbers_numberIsLonger_Test() throws IOException {
         Path numberIsLongerFile = Files.createTempFile("number-is-longer-file-findLongestWord_br", ".txt");
+
         Files.write(numberIsLongerFile, List.of("cat 1234567 lama"));
+
         try {
             assertEquals("lama", TextFileAnalyzer.findLongestWord_br(numberIsLongerFile.toString()));
         } finally {
@@ -333,7 +389,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files should find the longest word in text with words and numbers (number is longer)")
     void findLongestWord_files_textWithNumbers_numberIsLonger_Test() throws IOException {
         Path numberIsLongerFile = tempDir.resolve("number-is-longer-file-findLongestWord_files.txt");
+
         Files.write(numberIsLongerFile, List.of("cat 1234567 lama"));
+
         assertEquals("lama", TextFileAnalyzer.findLongestWord_files(numberIsLongerFile.toString()));
     }
 
@@ -341,7 +399,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br should find the longest word in text with words and characters")
     void findLongestWord_br_textWithCharacters_Test() throws IOException {
         Path textWithCharactersFile = Files.createTempFile("word-longest-file-findLongestWord_br", ".txt");
+
         Files.write(textWithCharactersFile, List.of("@@@ chicken $$$$$$$$$$$"));
+
         try {
             assertEquals("chicken", TextFileAnalyzer.findLongestWord_br(textWithCharactersFile.toString()));
         } finally {
@@ -353,7 +413,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files should find the longest word in text with words and characters")
     void findLongestWord_files_textWithCharacters_Test() throws IOException {
         Path textWithCharactersFile = tempDir.resolve("text-with-characters-file-findLongestWord_files.txt");
+
         Files.write(textWithCharactersFile, List.of("@@@ chicken $$$$$$$$$$$"));
+
         assertEquals("chicken", TextFileAnalyzer.findLongestWord_files(textWithCharactersFile.toString()));
     }
 
@@ -361,7 +423,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br should find the longest word when it has hyphen")
     void findLongestWord_br_wordWithHyphen_Test() throws IOException {
         Path wordWithHyphenFile = Files.createTempFile("hyphen-file-findLongestWord_br", ".txt");
+
         Files.write(wordWithHyphenFile, List.of("mom mother-in-law dad granny"));
+
         try {
             assertEquals("mother-in-law", TextFileAnalyzer.findLongestWord_br(wordWithHyphenFile.toString()));
         } finally {
@@ -373,7 +437,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files should find the longest word when it has hyphen")
     void findLongestWord_files_wordWithHyphen_Test() throws IOException {
         Path wordWithHyphenFile = tempDir.resolve("word-with-hyphen-file.txt");
+
         Files.write(wordWithHyphenFile, List.of("mom mother-in-law dad granny"));
+
         assertEquals("mother-in-law", TextFileAnalyzer.findLongestWord_files(wordWithHyphenFile.toString()));
     }
 
@@ -381,7 +447,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br should find the longest word when it has apostrophe")
     void findLongestWord_br_wordWithApostrophe_Test() throws IOException {
         Path wordWithApostropheFile = Files.createTempFile("apostrophe-file-findLongestWord_br", ".txt");
+
         Files.write(wordWithApostropheFile, List.of("Smith O'Connor Potter"));
+
         try {
             assertEquals("O'Connor", TextFileAnalyzer.findLongestWord_br(wordWithApostropheFile.toString()));
         } finally {
@@ -393,7 +461,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files should find the longest word when it has apostrophe")
     void findLongestWord_files_wordWithApostrophe_Test() throws IOException {
         Path wordWithApostropheFile = tempDir.resolve("word-with-apostrophe-file-findLongestWord_files.txt");
+
         Files.write(wordWithApostropheFile, List.of("Smith O'Connor Potter"));
+
         assertEquals("O'Connor", TextFileAnalyzer.findLongestWord_files(wordWithApostropheFile.toString()));
     }
 
@@ -401,7 +471,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br should find the longest word when it consist only of one letter")
     void findLongestWord_br_oneLetter_Test() throws IOException {
         Path oneLetterFile = Files.createTempFile("one-letter-file-findLongestWord_br", ".txt");
+
         Files.write(oneLetterFile, List.of("a"));
+
         try {
             assertEquals("a", TextFileAnalyzer.findLongestWord_br(oneLetterFile.toString()));
         } finally {
@@ -413,7 +485,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files should find the longest word when it consist only of one letter")
     void findLongestWord_files_oneLetter_Test() throws IOException {
         Path oneLetterFile = tempDir.resolve("one-letter-file-findLongestWord_files.txt");
+
         Files.write(oneLetterFile, List.of("a"));
+
         assertEquals("a", TextFileAnalyzer.findLongestWord_files(oneLetterFile.toString()));
     }
 
@@ -421,7 +495,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br should return first longest word when multiple words have same length")
     void findLongestWord_br_sameLengthWords_Test() throws IOException {
         Path sameLengthWordsFile = Files.createTempFile("same-length-words-findLongestWord_br", ".txt");
+
         Files.write(sameLengthWordsFile, List.of("cat dog elephant giraffe"));
+
         try {
             assertEquals("elephant", TextFileAnalyzer.findLongestWord_br(sameLengthWordsFile.toString()));
         } finally {
@@ -433,15 +509,20 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files should return first longest word when multiple words have same length")
     void findLongestWord_files_sameLengthWords_Test() throws IOException {
         Path sameLengthWordsFile = tempDir.resolve("same-length-words-file-findLongestWord_files.txt");
+
         Files.write(sameLengthWordsFile, List.of("cat dog elephant giraffe"));
+
         assertEquals("elephant", TextFileAnalyzer.findLongestWord_files(sameLengthWordsFile.toString()));
     }
 
     @Test
     @DisplayName("findLongestWord_br considers that a word can have a hyphen at the beginning")
     void findLongestWord_br_hyphenInTheBeginning_Test() throws IOException {
-        Path hyphenInTheBeginningFile = Files.createTempFile("hyphen-in-the-beginning-file-findLongestWord_br", ".txt");
+        Path hyphenInTheBeginningFile = Files
+                .createTempFile("hyphen-in-the-beginning-file-findLongestWord_br", ".txt");
+
         Files.write(hyphenInTheBeginningFile, List.of("cat -dog pig"));
+
         try {
             assertEquals("-dog", TextFileAnalyzer.findLongestWord_br(hyphenInTheBeginningFile.toString()));
         } finally {
@@ -453,7 +534,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files considers that a word can have a hyphen at the beginning")
     void findLongestWord_files_hyphenInTheBeginning_Test() throws IOException {
         Path hyphenInTheBeginningFile = tempDir.resolve("hyphen-int-the-beginning-file-findLongestWord_files.txt");
+
         Files.write(hyphenInTheBeginningFile, List.of("cat -dog pig"));
+
         assertEquals("-dog", TextFileAnalyzer.findLongestWord_files(hyphenInTheBeginningFile.toString()));
     }
 
@@ -461,7 +544,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br considers that a word can have a hyphen at the end")
     void findLongestWord_br_hyphenInEnd_Test() throws IOException {
         Path hyphenInTheEndFile = Files.createTempFile("hyphen-in-the-end-file-findLongestWord_br", ".txt");
+
         Files.write(hyphenInTheEndFile, List.of("cat dog- pig"));
+
         try {
             assertEquals("dog-", TextFileAnalyzer.findLongestWord_br(hyphenInTheEndFile.toString()));
         } finally {
@@ -473,7 +558,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files considers that a word can have a hyphen at the end")
     void findLongestWord_files_hyphenInEnd_Test() throws IOException {
         Path hyphenInTheEndFile = tempDir.resolve("hyphen-in-the-end-file-findLongestWord_files.txt");
+
         Files.write(hyphenInTheEndFile, List.of("cat dog- pig"));
+
         assertEquals("dog-", TextFileAnalyzer.findLongestWord_files(hyphenInTheEndFile.toString()));
     }
 
@@ -481,7 +568,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br considers that a word can have two hyphens")
     void findLongestWord_br_twoHyphens_Test() throws IOException {
         Path twoHyphensFile = Files.createTempFile("two-hyphens-file-findLongestWord_br", ".txt");
+
         Files.write(twoHyphensFile, List.of("doggy-dog kitty--cat"));
+
         try {
             assertEquals("kitty--cat", TextFileAnalyzer.findLongestWord_br(twoHyphensFile.toString()));
         } finally {
@@ -493,15 +582,20 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files considers that a word can have two hyphens")
     void findLongestWord_files_twoHyphens_Test() throws IOException {
         Path twoHyphensFile = tempDir.resolve("two-hyphens-file-findLongestWord_files.txt");
+
         Files.write(twoHyphensFile, List.of("doggy-dog kitty--cat"));
+
         assertEquals("kitty--cat", TextFileAnalyzer.findLongestWord_files(twoHyphensFile.toString()));
     }
 
     @Test
     @DisplayName("findLongestWord_br considers that a word can have an apostrophe at the beginning")
     void findLongestWord_br_apostropheInTheBeginning_Test() throws IOException {
-        Path apostropheInTheBeginningFile = Files.createTempFile("apostrophe-in-the-beginning-file-findLongestWord_br", ".txt");
+        Path apostropheInTheBeginningFile = Files
+                .createTempFile("apostrophe-in-the-beginning-file-findLongestWord_br", ".txt");
+
         Files.write(apostropheInTheBeginningFile, List.of("cat 'dog pig"));
+
         try {
             assertEquals("'dog", TextFileAnalyzer.findLongestWord_br(apostropheInTheBeginningFile.toString()));
         } finally {
@@ -512,16 +606,22 @@ public class TextFileAnalyzerTest {
     @Test
     @DisplayName("findLongestWord_files considers that a word can have an apostrophe at the beginning")
     void findLongestWord_files_apostropheInTheBeginning_Test() throws IOException {
-        Path apostropheInTheBeginningFile = tempDir.resolve("apostrophe-in-the-beginning-file-findLongestWord_files.txt");
+        Path apostropheInTheBeginningFile = tempDir
+                .resolve("apostrophe-in-the-beginning-file-findLongestWord_files.txt");
+
         Files.write(apostropheInTheBeginningFile, List.of("cat 'dog pig"));
+
         assertEquals("'dog", TextFileAnalyzer.findLongestWord_files(apostropheInTheBeginningFile.toString()));
     }
 
     @Test
     @DisplayName("findLongestWord_br considers that a word can have an apostrophe at the end")
     void findLongestWord_br_apostropheInTheEnd_Test() throws IOException {
-        Path apostropheInTheEndFile = Files.createTempFile("apostrophe-in-the-end-file-findLongestWord_br", ".txt");
+        Path apostropheInTheEndFile = Files
+                .createTempFile("apostrophe-in-the-end-file-findLongestWord_br", ".txt");
+
         Files.write(apostropheInTheEndFile, List.of("cat dog' pig"));
+
         try {
             assertEquals("dog'", TextFileAnalyzer.findLongestWord_br(apostropheInTheEndFile.toString()));
         } finally {
@@ -533,7 +633,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files considers that a word can have an apostrophe at the end")
     void findLongestWord_files_apostropheInTheEnd_Test() throws IOException {
         Path apostropheInTheEndFile = tempDir.resolve("apostrophe-in-the-end-file-findLongestWord_files.txt");
+
         Files.write(apostropheInTheEndFile, List.of("cat dog' pig"));
+
         assertEquals("dog'", TextFileAnalyzer.findLongestWord_files(apostropheInTheEndFile.toString()));
     }
 
@@ -541,7 +643,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_br considers that a word can have two apostrophes")
     void findLongestWord_br_twoApostrophes_Test() throws IOException {
         Path twoApostrophesFile = Files.createTempFile("two-apostrophes-file-findLongestWord_br", ".txt");
+
         Files.write(twoApostrophesFile, List.of("doggy'dog kitty''cat"));
+
         try {
             assertEquals("kitty''cat", TextFileAnalyzer.findLongestWord_br(twoApostrophesFile.toString()));
         } finally {
@@ -553,7 +657,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("findLongestWord_files considers that a word can have two apostrophes")
     void findLongestWord_files_twoApostrophes_Test() throws IOException {
         Path twoApostrophesFile = tempDir.resolve("two-apostrophes-file-findLongestWord_files.txt");
+
         Files.write(twoApostrophesFile, List.of("doggy'dog kitty''cat"));
+
         assertEquals("kitty''cat", TextFileAnalyzer.findLongestWord_files(twoApostrophesFile.toString()));
     }
 
@@ -561,7 +667,9 @@ public class TextFileAnalyzerTest {
     @NullAndEmptySource
     @DisplayName("countWordFrequency should throw IllegalArgumentException when the file path is null or empty")
     void countWordFrequencyTest_IllegalArgumentException(String filePath) {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> TextFileAnalyzer.countWordFrequency(filePath));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> TextFileAnalyzer.countWordFrequency(filePath));
+
         assertEquals("File path must not be null or empty.", exception.getMessage());
     }
 
@@ -569,7 +677,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("countWordFrequency should return an empty map if the file is without any text")
     void countWordFrequency_emptyFileTest() throws IOException {
         Path zeroBytesFile = tempDir.resolve("zero-bytes-file-countWordFrequency.txt");
+
         Files.write(zeroBytesFile, new byte[0]);
+
         assertEquals(new HashMap<>(), TextFileAnalyzer.countWordFrequency(zeroBytesFile.toString()));
     }
 
@@ -577,7 +687,9 @@ public class TextFileAnalyzerTest {
     @DisplayName("countWordFrequency should return empty map for file with empty line")
     void countWordFrequency_oneEmptyLineTest() throws IOException {
         Path emptyLineFile = tempDir.resolve("empty-line-file-countWordFrequency.txt");
+
         Files.write(emptyLineFile, List.of(""));
+
         assertEquals(Map.of(), TextFileAnalyzer.countWordFrequency(emptyLineFile.toString()));
     }
 
@@ -595,6 +707,7 @@ public class TextFileAnalyzerTest {
                 "second", 1,
                 "third", 1,
                 "line", 3);
+
         assertEquals(expected, TextFileAnalyzer.countWordFrequency(filePath));
     }
 
@@ -603,13 +716,13 @@ public class TextFileAnalyzerTest {
     void countWordFrequency_hyphenTest() throws IOException {
         Path hyphenWordsFile = tempDir.resolve("hyphen-words-file-countWordFrequency.txt");
         String content = "mother-in-law test test father-in-law";
-        Files.write(hyphenWordsFile, List.of(content));
-
         Map<String, Integer> expected = Map.of(
                 "mother-in-law", 1,
                 "father-in-law", 1,
                 "test", 2
         );
+
+        Files.write(hyphenWordsFile, List.of(content));
 
         assertEquals(expected, TextFileAnalyzer.countWordFrequency(hyphenWordsFile.toString()));
     }
@@ -619,13 +732,13 @@ public class TextFileAnalyzerTest {
     void countWordFrequency_apostropheTest() throws IOException {
         Path apostropheWordsFile = tempDir.resolve("apostrophe-words-file-countWordFrequency.txt");
         String content = "O'Brian O'Connor test test";
-        Files.write(apostropheWordsFile, List.of(content));
-
         Map<String, Integer> expected = Map.of(
                 "o'brian", 1,
                 "o'connor", 1,
                 "test", 2
         );
+
+        Files.write(apostropheWordsFile, List.of(content));
 
         assertEquals(expected, TextFileAnalyzer.countWordFrequency(apostropheWordsFile.toString()));
     }
@@ -635,9 +748,9 @@ public class TextFileAnalyzerTest {
     void countWordFrequency_numbersTest() throws IOException {
         Path numbersFile = tempDir.resolve("numbers-file-countWordFrequency.txt");
         String content = "word1 987 word2 123 word1";
-        Files.write(numbersFile, List.of(content));
-
         Map<String, Integer> expected = Map.of("word", 3);
+
+        Files.write(numbersFile, List.of(content));
 
         assertEquals(expected, TextFileAnalyzer.countWordFrequency(numbersFile.toString()));
     }
@@ -647,9 +760,9 @@ public class TextFileAnalyzerTest {
     void countWordFrequency_specialCharactersTest() throws IOException {
         Path file = tempDir.resolve("non-words.txt");
         String content = "word! !@# word? %^# word*";
-        Files.write(file, List.of(content));
-
         Map<String, Integer> expected = Map.of("word", 3);
+
+        Files.write(file, List.of(content));
 
         assertEquals(expected, TextFileAnalyzer.countWordFrequency(file.toString()));
     }
@@ -659,9 +772,9 @@ public class TextFileAnalyzerTest {
     void countWordFrequency_caseInsensitiveTest() throws IOException {
         Path caseTestFile = tempDir.resolve("case-test-countWordFrequency.txt");
         String content = "Hello HELLO hello HeLlO";
-        Files.write(caseTestFile, List.of(content));
-
         Map<String, Integer> expected = Map.of("hello", 4);
+
+        Files.write(caseTestFile, List.of(content));
 
         assertEquals(expected, TextFileAnalyzer.countWordFrequency(caseTestFile.toString()));
     }

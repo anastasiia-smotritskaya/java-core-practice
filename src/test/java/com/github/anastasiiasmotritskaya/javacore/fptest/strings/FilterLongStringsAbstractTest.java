@@ -34,8 +34,10 @@ public abstract class FilterLongStringsAbstractTest {
     @DisplayName("filterLongStrings should throw IllegalArgumentException if the list of strings is null")
     public void filterLongStrings_NullSourceTest(List<String> strings) {
         String expected = "List of strings should not be null.";
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> filterLongStrings(strings, 5));
+
         assertEquals(expected, exception.getMessage());
     }
 
@@ -51,6 +53,7 @@ public abstract class FilterLongStringsAbstractTest {
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> filterLongStrings(strings, 5));
+
         assertEquals(expected, exception.getMessage());
     }
 

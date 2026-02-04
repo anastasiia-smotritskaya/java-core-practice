@@ -1,8 +1,8 @@
 package com.github.anastasiiasmotritskaya.javacore.fp;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import com.fasterxml.jackson.databind.introspect.AnnotationCollector;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -26,13 +26,16 @@ public class StringUtils {
      */
     public static List<String> filterLongStrings_for(List<String> strings, int minLength) {
         validateStrings(strings);
+
         List<String> result = new ArrayList<>();
+
         for (String s : strings) {
             String trimmed = s.trim();
             if (trimmed.length() > minLength) {
                 result.add(trimmed);
             }
         }
+
         return result;
     }
 
@@ -47,6 +50,7 @@ public class StringUtils {
      */
     public static List<String> filterLongStrings_lambda(List<String> strings, int minLength) {
         validateStrings(strings);
+
         return strings.stream()
                 .map(String::trim)
                 .filter(trim -> trim.length() > minLength)
@@ -64,6 +68,7 @@ public class StringUtils {
      */
     public static List<String> filterLongStrings_mr(List<String> strings, int minLength) {
         validateStrings(strings);
+
         return strings.stream()
                 .map(String::trim)
                 .filter(trim -> isLengthBigger(trim, minLength))
@@ -80,11 +85,14 @@ public class StringUtils {
      */
     public static List<String> toUpperCaseTrimmed_for(List<String> strings) {
         validateStrings(strings);
+
         List<String> result = new ArrayList<>();
+
         for (String s : strings) {
             String trimmed = s.trim();
             result.add(trimmed.toUpperCase());
         }
+
         return result;
     }
 
@@ -98,6 +106,7 @@ public class StringUtils {
      */
     public static List<String> toUpperCaseTrimmed_stream(List<String> strings) {
         validateStrings(strings);
+
         return strings.stream()
                 .map(String::trim)
                 .map(String::toUpperCase)
@@ -115,7 +124,9 @@ public class StringUtils {
      */
     public static String joinStrings_for(List<String> strings, String delimiter) {
         validateStrings(strings);
+
         StringBuilder joinedString = new StringBuilder();
+
         for (int i = 0; i < strings.size(); i++) {
             String trimmed = strings.get(i).trim();
             if (i < strings.size() - 1) {
@@ -124,6 +135,7 @@ public class StringUtils {
                 joinedString.append(trimmed);
             }
         }
+
         return joinedString.toString();
     }
 
@@ -138,6 +150,7 @@ public class StringUtils {
      */
     public static String joinStrings_stream(List<String> strings, String delimiter) {
         validateStrings(strings);
+
         return strings.stream()
                 .map(String::trim)
                 .collect(Collectors.joining(delimiter));
@@ -154,7 +167,9 @@ public class StringUtils {
      */
     public static List<String> sortByLength_for(List<String> strings) {
         validateStrings(strings);
+
         List<String> result = new ArrayList<>(strings);
+
         for (int i = 0; i < result.size() - 1; i++) {
             for (int j = 0; j < result.size() - i - 1; j++) {
                 if (result.get(j).length() > result.get(j + 1).length()) {
@@ -164,6 +179,7 @@ public class StringUtils {
                 }
             }
         }
+
         return result;
     }
 
@@ -178,6 +194,7 @@ public class StringUtils {
      */
     public static List<String> sortByLength_stream(List<String> strings) {
         validateStrings(strings);
+
         return strings.stream()
                 .sorted(Comparator.comparingInt(String::length))
                 .toList();
@@ -206,6 +223,7 @@ public class StringUtils {
             String sLowerCase = s.toLowerCase();
             if (sLowerCase.contains(substringLowerCase)) return true;
         }
+
         return false;
     }
 
@@ -232,6 +250,55 @@ public class StringUtils {
     }
 
     /**
+     * Группирует строки из списка по первой букве (используется цикл for)
+     *
+     * @param strings список строк для группирования по первой букве
+     * @return Map, состоящий из ключа (Character) - буквы, с которой начинается строка
+     * и значения (List) - списка строк, которые начинаются с этой буквы
+     * {@code groupByFirstLetter_for(List.of("cat", "dog", "cow")}
+     * вернёт {@code Map.of('c', List.of("cat", "cow), 'd', List.of("dog"))}
+     * @throws IllegalArgumentException если список строк или отдельная строка null
+     */
+    public static Map<Character, List<String>> groupByFirstLetter_for(List<String> strings) {
+        validateStrings(strings);
+
+        Map<Character, List<String>> result = new HashMap<>();
+
+        for (String s : strings) {
+            if (s.isEmpty()) {
+                continue;
+            }
+            char firstLetter = s.toLowerCase().charAt(0);
+
+            if (!result.containsKey(firstLetter)) {
+                result.put(firstLetter, new ArrayList<>());
+
+            }
+            result.get(firstLetter).add(s);
+        }
+
+        return result;
+    }
+
+    /**
+     * Группирует строки из списка по первой букве (используется stream api)
+     *
+     * @param strings список строк для группирования по первой букве
+     * @return Map, состоящий из ключа (Character) - буквы, с которой начинается строка
+     * и значения (List) - списка строк, которые начинаются с этой буквы
+     * {@code groupByFirstLetter_stream(List.of("cat", "dog", "cow")}
+     * вернёт {@code Map.of('c', List.of("cat", "cow), 'd', List.of("dog"))}
+     * @throws IllegalArgumentException если список строк или отдельная строка null
+     */
+    public static Map<Character, List<String>> groupByFirstLetter_stream(List<String> strings) {
+        validateStrings(strings);
+
+        return strings.stream()
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.groupingBy(s -> s.toLowerCase().charAt(0)));
+    }
+
+    /**
      * Проверяет, не является ли список строк или отдельная строка в списке null
      * Вспомогательный метод
      *
@@ -241,6 +308,7 @@ public class StringUtils {
         if (strings == null) {
             throw new IllegalArgumentException("List of strings should not be null.");
         }
+
         for (int i = 0; i < strings.size(); i++) {
             if (strings.get(i) == null) {
                 throw new IllegalArgumentException(String.format("Element at index %d must not be null", i));

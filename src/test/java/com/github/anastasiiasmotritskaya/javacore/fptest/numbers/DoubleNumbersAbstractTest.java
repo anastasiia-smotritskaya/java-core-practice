@@ -31,8 +31,10 @@ public abstract class DoubleNumbersAbstractTest {
     @DisplayName("doubleNumbers should throw IllegalArgumentException if the list of numbers is null")
     public void doubleNumbers_NullSourceTest() {
         String expected = "List of numbers must not be null.";
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> doubleNumbers(null));
+
         assertEquals(expected, exception.getMessage());
     }
 
@@ -41,6 +43,7 @@ public abstract class DoubleNumbersAbstractTest {
     @MethodSource("doubleNumbersDataProvider")
     public void doubleNumbersTest(List<Integer> numbers, List<Integer> expected, String description) {
         List<Integer> actual = doubleNumbers(numbers);
+
         assertEquals(expected, actual);
     }
 

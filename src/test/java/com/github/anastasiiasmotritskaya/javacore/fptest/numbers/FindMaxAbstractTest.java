@@ -30,8 +30,10 @@ public abstract class FindMaxAbstractTest {
     @DisplayName("findMax should throw IllegalArgumentException if the list is null")
     public void findMax_NullSourceTest() {
         String expected = "List of numbers must not be null.";
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> findMax(null));
+
         assertEquals(expected, exception.getMessage());
     }
 

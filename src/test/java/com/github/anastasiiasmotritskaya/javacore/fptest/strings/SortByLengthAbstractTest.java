@@ -30,8 +30,10 @@ public abstract class SortByLengthAbstractTest {
     @DisplayName("sortByLength should throw IllegalArgumentException if strings is null")
     public void sortByLength_NullSourceTest() {
         String expected = "List of strings should not be null.";
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> sortByLength(null));
+
         assertEquals(expected, exception.getMessage());
     }
 
@@ -45,8 +47,10 @@ public abstract class SortByLengthAbstractTest {
         strings.add("dog");
 
         String expected = String.format("Element at index %d must not be null", 1);
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> sortByLength(strings));
+
         assertEquals(expected, exception.getMessage());
     }
 

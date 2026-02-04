@@ -57,6 +57,7 @@ public class CollectionsTest {
     public void findBooksByYearTest_IllegalArgumentException(int fromYear, int toYear, String expectedMessage, String description) {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> emptyLibrary.findBooksByYearRange(fromYear, toYear));
+
         assertEquals(expectedMessage, exception.getMessage());
     }
 
@@ -116,6 +117,7 @@ public class CollectionsTest {
     @MethodSource("findBooksByYearReturnsCorrectBooksDataProvider")
     public void findBooksByYearReturnsCorrectBooksTest(Library library, int fromYear, int toYear, String description) {
         List<Book> books = library.findBooksByYearRange(fromYear, toYear);
+
         for (Book book : books) {
             assertTrue(book.getYear() >= fromYear && book.getYear() <= toYear);
         }
@@ -138,6 +140,7 @@ public class CollectionsTest {
     @DisplayName("getAllUniqueAuthors should return an empty set if the library is empty")
     public void getAllUniqueAuthorsEmptyLibraryTest() {
         Set<String> actual = emptyLibrary.getAllUniqueAuthors();
+
         assertTrue(actual.isEmpty());
     }
 
@@ -165,6 +168,7 @@ public class CollectionsTest {
     @DisplayName("countBooksByStatus should return a map with null values if the library is empty")
     public void countBooksByStatusEmptyLibraryTest() {
         Map<BookStatus, Integer> statusMap = emptyLibrary.countBooksByStatus();
+
         assertEquals(0, statusMap.size());
     }
 
@@ -173,7 +177,9 @@ public class CollectionsTest {
     @MethodSource("countBooksByStatusDataProvider")
     public void countBooksByStatusOneBookLibraryTest(BookStatus status, String description) {
         oneBookLibrary.findBookByISBN("KU7K3MBQV9LU6").setStatus(status);
+
         Map<BookStatus, Integer> statusMap = oneBookLibrary.countBooksByStatus();
+
         assertEquals(1, statusMap.size());
         assertEquals(1, statusMap.get(status));
     }
@@ -190,7 +196,9 @@ public class CollectionsTest {
     @DisplayName("countBooksByStatus should return a map with proper values if the library has several books")
     public void countBooksByStatusThreeBooksLibraryTest() {
         threeBooksLibrary.findBookByISBN("KU7K3MBQV9LU7").setStatus(BookStatus.RESERVED);
+
         Map<BookStatus, Integer> statusMap = threeBooksLibrary.countBooksByStatus();
+
         assertEquals(2, statusMap.size());
         assertEquals(2, statusMap.get(BookStatus.AVAILABLE));
         assertEquals(1, statusMap.get(BookStatus.RESERVED));
@@ -201,8 +209,10 @@ public class CollectionsTest {
     @DisplayName("removeBooksByAuthor should throw IllegalArgumentException if the author field are null or empty")
     public void removeBooksByAuthorEmptyStringTest_IllegalArgumentException(String author) {
         String expectedMessage = "The author field must not be empty. Enter the author's name.";
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> threeBooksLibrary.removeBooksByAuthor(author));
+
         assertEquals(expectedMessage, exception.getMessage());
         assertEquals(3, threeBooksLibrary.getAllBooks().size());
     }
@@ -211,7 +221,9 @@ public class CollectionsTest {
     @DisplayName("removeBooksByAuthor should return null if the library is empty")
     public void removeBooksByAuthorEmptyLibraryTest() {
         String author = "Donna Louise Tartt";
+
         int actualCount = emptyLibrary.removeBooksByAuthor(author);
+
         assertEquals(0, actualCount);
     }
 
@@ -219,7 +231,9 @@ public class CollectionsTest {
     @DisplayName("removeBooksByAuthor should return 0 if there are no books written by this author")
     public void removeBooksByAuthorNoBooksByThisAuthorTest() {
         String author = "Donna Louise Tartt";
+
         int actualCount = threeBooksLibrary.removeBooksByAuthor(author);
+
         assertEquals(0, actualCount);
         assertEquals(3, threeBooksLibrary.getAllBooks().size());
     }
@@ -237,6 +251,7 @@ public class CollectionsTest {
     })
     public void removeBooksByAuthorOneBookLibraryTest(String author, String description) {
         int actualCount = oneBookLibrary.removeBooksByAuthor(author);
+
         assertEquals(1, actualCount);
         assertEquals(0, oneBookLibrary.getAllBooks().size());
     }
@@ -245,7 +260,9 @@ public class CollectionsTest {
     @DisplayName("removeBooksByAuthor should return 2 if there is 2 books of this author in the three books library")
     public void removeBooksByAuthorthreeBooksLibraryTest() {
         String author = "Richard Bachman";
+
         int actualCount = threeBooksLibrary.removeBooksByAuthor(author);
+
         assertEquals(2, actualCount);
         assertEquals(1, threeBooksLibrary.getAllBooks().size());
     }
@@ -254,12 +271,16 @@ public class CollectionsTest {
     @DisplayName("removeBooksByAuthor should return 0 if you remove all books written by all authors")
     public void removeBooksByAuthorRemoveAllBooksTest() {
         String author_1 = "Richard Bachman";
+
         int actualCount_1 = threeBooksLibrary.removeBooksByAuthor(author_1);
+
         assertEquals(2, actualCount_1);
         assertEquals(1, threeBooksLibrary.getAllBooks().size());
 
         String author_2 = "Emily Brontë";
+
         int actualCount_2 = threeBooksLibrary.removeBooksByAuthor(author_2);
+
         assertEquals(1, actualCount_2);
         assertEquals(0, threeBooksLibrary.getAllBooks().size());
     }
@@ -274,6 +295,7 @@ public class CollectionsTest {
     @DisplayName("getBooksSortedByYear should return one book if the library has only one book")
     public void getBooksSortedByYearOneBookLibraryTest() {
         Book book = new Book("Rage", "Richard Bachman", 1977, "KU7K3MBQV9LU6");
+
         assertEquals(List.of(book), oneBookLibrary.getBooksSortedByYear());
     }
 
@@ -323,6 +345,7 @@ public class CollectionsTest {
     @DisplayName("getBooksSortedByAuthor should return books sorted by authors's names")
     public void getBooksSortedByAuthorTest() {
         List<Book> sorted = threeBooksLibrary.getBooksSortedByAuthor();
+
         assertEquals("Emily Brontë", sorted.getFirst().getAuthor());
         assertEquals("Richard Bachman", sorted.get(1).getAuthor());
         assertEquals("Richard Bachman", sorted.get(2).getAuthor());
@@ -338,6 +361,7 @@ public class CollectionsTest {
     @DisplayName("getBooksSortedByTitle should return books sorted by titles")
     public void getBooksSortedByTitleTest() {
         List<Book> sorted = threeBooksLibrary.getBooksSortedByTitle();
+
         assertEquals("Rage", sorted.getFirst().getTitle());
         assertEquals("The Running Man", sorted.get(1).getTitle());
         assertEquals("Wuthering Heights", sorted.get(2).getTitle());

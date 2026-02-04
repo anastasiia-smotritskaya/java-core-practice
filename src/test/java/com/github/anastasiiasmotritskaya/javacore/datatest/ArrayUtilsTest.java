@@ -45,28 +45,36 @@ public class ArrayUtilsTest {
     @Test
     @DisplayName("findMinMax should throw IllegalArgumentException for null array")
     public void findMinMaxTest_nullArray_throwsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.findMinMax(null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ArrayUtils.findMinMax(null));
+
         assertEquals("The array must not be null.", exception.getMessage());
     }
 
     @Test
     @DisplayName("findMinMax should throw IllegalArgumentException for empty array")
     public void findMinMaxTest_emptyArray_throwsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.findMinMax(new int[]{}));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ArrayUtils.findMinMax(new int[]{}));
+
         assertEquals("The array must not be empty.", exception.getMessage());
     }
 
     @Test
     @DisplayName("bubbleSort should throw IllegalArgumentException for null array")
     public void bubbleSortTest_nullArray_throwsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.bubbleSort(null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ArrayUtils.bubbleSort(null));
+
         assertEquals("The array must not be null.", exception.getMessage());
     }
 
     @Test
     @DisplayName("bubbleSort should throw IllegalArgumentException for empty array")
     public void bubbleSortTest_emptyArray_throwsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.bubbleSort(new int[]{}));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ArrayUtils.bubbleSort(new int[]{}));
+
         assertEquals("The array must not be empty.", exception.getMessage());
     }
 
@@ -98,14 +106,18 @@ public class ArrayUtilsTest {
     @Test
     @DisplayName("findInMatrix should throw IllegalArgumentException for null matrix")
     public void findInMatrixTest_nullArray_throwsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.findInMatrix(null, 6));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ArrayUtils.findInMatrix(null, 6));
+
         assertEquals("Matrix cannot be null.", exception.getMessage());
     }
 
     @Test
     @DisplayName("findInMatrix should throw IllegalArgumentException for empty (0 rows) matrix")
     public void findInMatrixTest_emptyArray_throwsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.findInMatrix(new int[0][0], 6));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ArrayUtils.findInMatrix(new int[0][0], 6));
+
         assertEquals("Matrix cannot be empty (0 rows).", exception.getMessage());
     }
 
@@ -187,28 +199,36 @@ public class ArrayUtilsTest {
     @Test
     @DisplayName("transposeMatrix should throw IllegalArgumentException for null matrix")
     public void transposeMatrixTest_nullMatrix_throwsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.transposeMatrix(null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ArrayUtils.transposeMatrix(null));
+
         assertEquals("Matrix cannot be null.", exception.getMessage());
     }
 
     @Test
     @DisplayName("transposeMatrix should throw IllegalArgumentException for empty matrix")
     public void transposeMatrixTest_emptyMatrix_throwsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.transposeMatrix(new int[][]{}));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ArrayUtils.transposeMatrix(new int[][]{}));
+
         assertEquals("Matrix cannot be empty (0 rows).", exception.getMessage());
     }
 
     @Test
     @DisplayName("transposeMatrix should throw IllegalArgumentException for not rectangular matrix")
     public void transposeMatrixTest_notRectangularMatrix_throwsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.transposeMatrix(new int[][]{{1, 2, 3}, {5, 6}, {7, 8, 9}}));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ArrayUtils.transposeMatrix(new int[][]{{1, 2, 3}, {5, 6}, {7, 8, 9}}));
+
         assertEquals("The matrix must be rectangular.", exception.getMessage());
     }
 
     @Test
     @DisplayName("transposeMatrix should throw IllegalArgumentException for matrix with empty rows")
     public void transposeMatrixTest_emptyRowsMatrix_throwsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.transposeMatrix(new int[][]{{}, {}, {}}));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ArrayUtils.transposeMatrix(new int[][]{{}, {}, {}}));
+
         assertEquals("The matrix cannot have empty rows.", exception.getMessage());
     }
 
@@ -241,7 +261,9 @@ public class ArrayUtilsTest {
     @ParameterizedTest(name = "[{index}] {2}")
     @MethodSource("mergeSortedArraysTest_nullArray_DataProvider")
     public void mergeSortedArraysTest_nullArray_throwsIllegalArgumentException(int[] arr1, int[] arr2, String description) {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.mergeSortedArrays(arr1, arr2));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ArrayUtils.mergeSortedArrays(arr1, arr2));
+
         assertEquals("Array cannot be null.", exception.getMessage());
     }
 
@@ -256,7 +278,9 @@ public class ArrayUtilsTest {
     @ParameterizedTest(name = "[{index}] {2}")
     @MethodSource("mergeSortedArraysTest_emptyArray_DataProvider")
     public void mergeSortedArraysTest_emptyArray_throwsIllegalArgumentException(int[] arr1, int[] arr2, String description) {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.mergeSortedArrays(arr1, arr2));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ArrayUtils.mergeSortedArrays(arr1, arr2));
+
         assertEquals("Array cannot be empty.", exception.getMessage());
     }
 
@@ -271,7 +295,9 @@ public class ArrayUtilsTest {
     @ParameterizedTest(name = "[{index}] {2}")
     @MethodSource("mergeSortedArrays_notSortedArray_DataProvider")
     public void mergeSortedArraysTest_notSortedArray_throwsIllegalArgumentException(int[] arr1, int[] arr2, String description) {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ArrayUtils.mergeSortedArrays(arr1, arr2));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ArrayUtils.mergeSortedArrays(arr1, arr2));
+
         assertEquals("At least one array is unsorted.", exception.getMessage());
     }
 

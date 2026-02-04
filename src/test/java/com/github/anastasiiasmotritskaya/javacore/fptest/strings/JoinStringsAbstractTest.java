@@ -30,8 +30,10 @@ public abstract class JoinStringsAbstractTest {
     @DisplayName("joinStrings should throw IllegalArgumentException if the list is null")
     public void joinStrings_NullSourceTest() {
         String expected = "List of strings should not be null.";
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> joinStrings(null, "@"));
+
         assertEquals(expected, exception.getMessage());
     }
 
@@ -47,6 +49,7 @@ public abstract class JoinStringsAbstractTest {
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> joinStrings(strings, "@"));
+
         assertEquals(expected, exception.getMessage());
     }
 

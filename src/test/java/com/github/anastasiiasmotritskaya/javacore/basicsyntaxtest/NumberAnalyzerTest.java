@@ -9,16 +9,22 @@ public class NumberAnalyzerTest {
 
     @Test
     public void isPrimeNullTest() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> NumberAnalyzer.isPrime(0));
-        assertEquals("The number 1 is neither prime nor composite, and numbers less than 1 are not prime numbers.",
-                exception.getMessage());
+        String expected = "The number 1 is neither prime nor composite, and numbers less than 1 are not prime numbers.";
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> NumberAnalyzer.isPrime(0));
+
+        assertEquals(expected, exception.getMessage());
     }
 
     @Test
     public void isPrimeOneTest() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> NumberAnalyzer.isPrime(1));
-        assertEquals("The number 1 is neither prime nor composite, and numbers less than 1 are not prime numbers.",
-                exception.getMessage());
+        String expected = "The number 1 is neither prime nor composite, and numbers less than 1 are not prime numbers.";
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> NumberAnalyzer.isPrime(1));
+
+        assertEquals(expected, exception.getMessage());
     }
 
     @Test

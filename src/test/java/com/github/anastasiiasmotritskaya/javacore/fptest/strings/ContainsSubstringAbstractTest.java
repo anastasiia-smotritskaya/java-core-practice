@@ -31,8 +31,10 @@ public abstract class ContainsSubstringAbstractTest {
     @DisplayName("containsSubstring should throw IllegalArgumentException if list of strings is null")
     public void containsSubstring_NullSourceTest() {
         String expected = "List of strings should not be null.";
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> containsSubstring(null, "pig"));
+
         assertEquals(expected, exception.getMessage());
     }
 
@@ -40,9 +42,11 @@ public abstract class ContainsSubstringAbstractTest {
     @DisplayName("containsSubstring should throw IllegalArgumentException if one of the strings in the list is null")
     public void containsSubstring_NullStringTest() {
         String expected = String.format("Element at index %d must not be null", 1);
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> containsSubstring(Stream.of("cat", null, "dog", "guinea pig")
                         .collect(Collectors.toList()), "pig"));
+
         assertEquals(expected, exception.getMessage());
     }
 
@@ -51,9 +55,11 @@ public abstract class ContainsSubstringAbstractTest {
     @DisplayName("containsSubstring should throw IllegalArgumentException if the substring is null")
     public void containsSubstring_NullSubstringTest(String substring) {
         String expected = "Substring should not be null or empty.";
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> containsSubstring(Stream.of("cat", "dog", "guinea pig")
                         .collect(Collectors.toList()), substring));
+
         assertEquals(expected, exception.getMessage());
     }
 

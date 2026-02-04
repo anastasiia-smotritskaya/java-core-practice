@@ -32,8 +32,10 @@ public abstract class FilterEvenNumbersAbstractTest {
     @DisplayName("filterEvenNumbers should throw IllegalArgumentException if the list of numbers is null")
     public void filterEvenNumbers_NullSourceTest() {
         String expected = "List of numbers must not be null.";
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> filterEvenNumbers(null));
+
         assertEquals(expected, exception.getMessage());
     }
 
