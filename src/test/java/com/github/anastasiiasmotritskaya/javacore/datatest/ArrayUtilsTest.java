@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.datatest;
 
 import com.github.anastasiiasmotritskaya.javacore.data.ArrayUtils;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +15,9 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("Working with data")
+@Story("Arrays")
 public class ArrayUtilsTest {
 
     @ParameterizedTest(name = "[{index}] {2}")

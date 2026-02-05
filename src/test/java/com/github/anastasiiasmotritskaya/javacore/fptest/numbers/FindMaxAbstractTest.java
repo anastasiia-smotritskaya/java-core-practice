@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.fptest.numbers;
 
 import com.github.anastasiiasmotritskaya.javacore.fp.NumberUtils;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,6 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @see FindMaxForTest
  * @see FindMaxStreamTest
  */
+@Epic("Java Core")
+@Feature("Functional programming")
+@Story("Finding max number")
 public abstract class FindMaxAbstractTest {
     protected abstract Optional<Integer> findMax(List<Integer> numbers);
 

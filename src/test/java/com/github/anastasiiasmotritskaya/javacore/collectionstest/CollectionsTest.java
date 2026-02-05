@@ -3,6 +3,9 @@ package com.github.anastasiiasmotritskaya.javacore.collectionstest;
 import com.github.anastasiiasmotritskaya.javacore.oop.Book;
 import com.github.anastasiiasmotritskaya.javacore.oop.BookStatus;
 import com.github.anastasiiasmotritskaya.javacore.oop.Library;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +22,8 @@ import java.util.stream.Stream;
 import static com.github.anastasiiasmotritskaya.javacore.testutil.BookAndLibraryTestUtil.assertBookMatches;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("Collections and Map")
 public class CollectionsTest {
     private static final int gutenbergBibleYear = 1457;
     private static final int averageYear = 2001;

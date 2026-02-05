@@ -3,6 +3,9 @@ package com.github.anastasiiasmotritskaya.javacore.ooptest;
 import com.github.anastasiiasmotritskaya.javacore.exceptions.BookAlreadyExistsException;
 import com.github.anastasiiasmotritskaya.javacore.exceptions.BookNotFoundException;
 import com.github.anastasiiasmotritskaya.javacore.oop.*;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +29,9 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("OOP")
+@Story("Class Library testing")
 public class LibraryTest {
     private Library library;
     private Map<String, Book> books;

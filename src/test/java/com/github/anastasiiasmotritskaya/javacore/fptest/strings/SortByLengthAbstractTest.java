@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.fptest.strings;
 
 import com.github.anastasiiasmotritskaya.javacore.fp.StringUtils;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,6 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @see SortByLengthForTest
  * @see SortByLengthStreamTest
  */
+@Epic("Java Core")
+@Feature("Functional programming")
+@Story("Sorting by length")
 public abstract class SortByLengthAbstractTest {
     protected abstract List<String> sortByLength(List<String> strings);
 

@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.datatest;
 
 import com.github.anastasiiasmotritskaya.javacore.data.TextFileAnalyzer;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -14,6 +17,9 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("Working with data")
+@Story("Text file analyser")
 public class TextFileAnalyzerTest {
 
     @TempDir

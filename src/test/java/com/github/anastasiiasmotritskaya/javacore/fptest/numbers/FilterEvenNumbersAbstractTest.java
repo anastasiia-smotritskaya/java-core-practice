@@ -1,5 +1,8 @@
 package com.github.anastasiiasmotritskaya.javacore.fptest.numbers;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,7 +26,9 @@ import static org.junit.jupiter.api.Assertions.*;
  * @see FilterEvenNumbersLambdaTest
  * @see FilterEvenNumbersMRTest
  */
-@DisplayName("Тестирование filterEvenNumbers (все реализации)")
+@Epic("Java Core")
+@Feature("Functional programming")
+@Story("Filtering numbers")
 public abstract class FilterEvenNumbersAbstractTest {
 
     protected abstract List<Integer> filterEvenNumbers(List<Integer> numbers);

@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.fptest.numbers;
 
 import com.github.anastasiiasmotritskaya.javacore.fp.NumberUtils;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -23,6 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @see SumNumbersForLoopTest
  * @see SumNumbersLambdaTest
  */
+@Epic("Java Core")
+@Feature("Functional programming")
+@Story("Summation of numbers")
 public abstract class SumNumbersAbstractTest {
 
     protected abstract int sumNumbers(List<Integer> numbers);

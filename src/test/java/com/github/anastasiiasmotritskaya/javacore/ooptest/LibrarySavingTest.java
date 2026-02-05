@@ -3,6 +3,9 @@ package com.github.anastasiiasmotritskaya.javacore.ooptest;
 import com.github.anastasiiasmotritskaya.javacore.exceptions.LibraryFileException;
 import com.github.anastasiiasmotritskaya.javacore.oop.Book;
 import com.github.anastasiiasmotritskaya.javacore.oop.Library;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +23,9 @@ import java.util.Map;
 import static com.github.anastasiiasmotritskaya.javacore.testutil.BookAndLibraryTestUtil.assertBookMatches;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("OOP")
+@Story("Library saving testing")
 public class LibrarySavingTest {
     private Library emptyLibrary;
     private Library oneBookLibrary;

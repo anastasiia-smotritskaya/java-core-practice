@@ -3,6 +3,9 @@ package com.github.anastasiiasmotritskaya.javacore.ooptest;
 import com.github.anastasiiasmotritskaya.javacore.exceptions.BookNotAvailableException;
 import com.github.anastasiiasmotritskaya.javacore.exceptions.BookNotBorrowedException;
 import com.github.anastasiiasmotritskaya.javacore.oop.*;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,6 +16,9 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("OOP")
+@Story("Class Book testing")
 public class BookTest {
 
     @Test

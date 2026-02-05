@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.fptest.strings;
 
 import com.github.anastasiiasmotritskaya.javacore.fp.StringUtils;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,6 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @see JoinStringsForTest
  * @see JoinStringsStreamTest
  */
+@Epic("Java Core")
+@Feature("Functional programming")
+@Story("Joining strings")
 public abstract class JoinStringsAbstractTest {
     protected abstract String joinStrings(List<String> strings, String delimiter);
 

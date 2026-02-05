@@ -1,10 +1,16 @@
 package com.github.anastasiiasmotritskaya.javacore.basicsyntaxtest;
 
 import com.github.anastasiiasmotritskaya.javacore.basicsyntax.NumberAnalyzer;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("Basic syntax")
+@Story("Number Analyzer")
 public class NumberAnalyzerTest {
 
     @Test

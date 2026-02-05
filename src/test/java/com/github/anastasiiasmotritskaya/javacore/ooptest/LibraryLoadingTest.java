@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.github.anastasiiasmotritskaya.javacore.exceptions.LibraryFileException;
 import com.github.anastasiiasmotritskaya.javacore.oop.Book;
 import com.github.anastasiiasmotritskaya.javacore.oop.Library;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -23,6 +26,9 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("OOP")
+@Story("Library loading testing")
 public class LibraryLoadingTest {
     private final Library emptyLibrary = new Library(new HashMap<>());
 

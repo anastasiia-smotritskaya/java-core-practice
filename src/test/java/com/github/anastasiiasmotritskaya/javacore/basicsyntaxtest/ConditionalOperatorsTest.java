@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.basicsyntaxtest;
 
 import com.github.anastasiiasmotritskaya.javacore.basicsyntax.ConditionalOperators;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -8,6 +11,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("Basic syntax")
+@Story("Conditional operators")
 public class ConditionalOperatorsTest {
 
     @ParameterizedTest(name = "Score {0} should be grade {1}")

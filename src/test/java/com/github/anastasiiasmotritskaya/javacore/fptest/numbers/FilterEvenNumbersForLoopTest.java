@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.fptest.numbers;
 
 import com.github.anastasiiasmotritskaya.javacore.fp.NumberUtils;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 
 import java.util.List;
 
@@ -11,6 +14,9 @@ import java.util.List;
  * @see NumberUtils#filterEvenNumbers_for(List)
  * @see FilterEvenNumbersAbstractTest
  */
+@Epic("Java Core")
+@Feature("Functional programming")
+@Story("Filtering numbers via for-loop")
 public class FilterEvenNumbersForLoopTest extends FilterEvenNumbersAbstractTest {
     @Override
     protected List<Integer> filterEvenNumbers(List<Integer> numbers) {

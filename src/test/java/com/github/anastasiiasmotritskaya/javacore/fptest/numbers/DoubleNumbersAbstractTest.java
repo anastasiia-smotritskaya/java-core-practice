@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.fptest.numbers;
 
 import com.github.anastasiiasmotritskaya.javacore.fp.NumberUtils;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,6 +27,9 @@ import static org.junit.jupiter.api.Assertions.*;
  * @see DoubleNumbersLambdaTest
  * @see DoubleNumbersMRTest
  */
+@Epic("Java Core")
+@Feature("Functional programming")
+@Story("Doubling numbers")
 public abstract class DoubleNumbersAbstractTest {
     protected abstract List<Integer> doubleNumbers(List<Integer> numbers);
 
