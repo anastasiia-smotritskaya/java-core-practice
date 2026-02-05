@@ -18,6 +18,10 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      #  даём права на gradlew для Linux
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
       # 3. Кэшировать Gradle зависимости
       - name: Cache Gradle packages
         uses: actions/cache@v3
