@@ -1,6 +1,10 @@
 name: Java Tests with Allure
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   test:
@@ -43,11 +47,10 @@ jobs:
         run: ./gradlew allureReport
 
       # 6. Загрузить отчёт как артефакт
-      - name: Upload test report
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: test-report
-          path: |
-            build/reports/tests/test/
-            build/reports/allure-report/
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/reports/allure-report
+          destination_dir: .
