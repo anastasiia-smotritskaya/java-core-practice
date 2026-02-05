@@ -1,0 +1,61 @@
+name: Java Tests with Allure
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Получить код
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Установить Java 21
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      #  даём права на gradlew для Linux
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      # 3. Кэшировать Gradle зависимости
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # 4. Запустить тесты
+      - name: Run tests
+        run: ./gradlew test --no-daemon
+
+      # 5. Сгенерировать Allure отчёт через Gradle
+      - name: Generate Allure Report
+        if: always()
+        run: ./gradlew allureReport
+
+      # 6. Упрощённый деплой: всегда при push (в любую ветку)
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push'  # ← ПРОЩЕ!
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/reports/allure-report
+          destination_dir: .
