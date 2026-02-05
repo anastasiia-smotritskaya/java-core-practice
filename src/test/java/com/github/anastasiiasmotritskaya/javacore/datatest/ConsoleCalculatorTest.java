@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.datatest;
 
 import com.github.anastasiiasmotritskaya.javacore.data.ConsoleCalculator;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,6 +13,9 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("Working with data")
+@Story("Console calculator")
 public class ConsoleCalculatorTest {
     @ParameterizedTest(name = "[{index}] {4}")
     @DisplayName("calculate positive tests with different arguments")
@@ -31,34 +37,35 @@ public class ConsoleCalculatorTest {
             "2, 10, '/', 5.0, 'Division: numbers are in double and integer format with integer result'"
     })
     void calculatePositiveTest(double expected, double a, String operation, double b, String description) {
-        assertAll(
-                () -> assertEquals(expected, ConsoleCalculator.calculate(a, operation, b))
-        );
+        assertEquals(expected, ConsoleCalculator.calculate(a, operation, b));
     }
 
     @Test
     @DisplayName("calculate should throw IllegalArgumentException for division by zero")
-    void calculate_divisionByZeroTest_IllegalArgumentException(){
+    void calculate_divisionByZeroTest_IllegalArgumentException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> ConsoleCalculator.calculate(10, "/", 0));
+
         assertEquals("You can't divide by zero.", exception.getMessage());
     }
 
     @ParameterizedTest
     @DisplayName("calculate should throw IllegalArgumentException for division by zero")
-    @ValueSource(strings = {"%", "++","@", "&"})
-    void calculate_unknownOperationTest_IllegalArgumentException(String operation){
+    @ValueSource(strings = {"%", "++", "@", "&"})
+    void calculate_unknownOperationTest_IllegalArgumentException(String operation) {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> ConsoleCalculator.calculate(10, operation, 0));
+
         assertEquals("Unknown operation. Use +, -, *, or /.", exception.getMessage());
     }
 
     @ParameterizedTest
     @NullAndEmptySource
     @DisplayName("parseInput should throw IllegalArgumentException when input are null or empty")
-    void parseInput_NullOrEmptyInputTest_IllegalArgumentException(String input){
+    void parseInput_NullOrEmptyInputTest_IllegalArgumentException(String input) {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> ConsoleCalculator.parseInput(input));
+
         assertEquals("Input cannot be null or empty.", exception.getMessage());
     }
 
@@ -75,8 +82,9 @@ public class ConsoleCalculatorTest {
             "'5 +  ', 'Space instead the second argument'"
     })
     void parseInput_incorrectFormatTest_IllegalArgumentException(String input) {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-                ConsoleCalculator.parseInput(input));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ConsoleCalculator.parseInput(input));
+
         assertEquals("Incorrect format. Use: NUMBER OPERATION NUMBER.", exception.getMessage());
     }
 
@@ -85,6 +93,7 @@ public class ConsoleCalculatorTest {
     @MethodSource("parseInputDataProvider")
     void parseInputPositiveTest(Object[] expected, String input, String description) {
         Object[] actual = ConsoleCalculator.parseInput(input);
+
         assertAll(
                 () -> assertEquals(expected[0], actual[0]),
                 () -> assertEquals(expected[1], actual[1]),
@@ -115,6 +124,7 @@ public class ConsoleCalculatorTest {
     void parseInput_incorrectFormatTest_NumberFormatException(String input) {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                 ConsoleCalculator.parseInput(input));
+
         assertEquals("Incorrect number format. Use numbers like 5.5 or 10.", exception.getMessage());
     }
 }

@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.datatest;
 
 import com.github.anastasiiasmotritskaya.javacore.data.StringProcessor;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,6 +18,9 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("Working with data")
+@Story("String processor")
 public class StringProcessorTest {
 
     @Test
@@ -62,7 +68,6 @@ public class StringProcessorTest {
                             () -> StringProcessor.isPalindrome(null));
                     assertEquals("Input string cannot be null.", exception.getMessage());
                 },
-
                 () -> {
                     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                             () -> StringProcessor.isPalindrome_char(null));
@@ -233,7 +238,9 @@ public class StringProcessorTest {
     @Test
     @DisplayName("countCharacters should throws IllegalArgumentException, when the string is null")
     void countCharactersTest_nullString_throwsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.countCharacters(null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> StringProcessor.countCharacters(null));
+
         assertEquals("Input string cannot be null.", exception.getMessage());
     }
 
@@ -252,18 +259,27 @@ public class StringProcessorTest {
 
     static Stream<Arguments> countCharactersDataProvider() {
         return Stream.of(
-                Arguments.of(Map.of('h', 1, 'e', 1, 'L', 2, 'o', 1), "heLLo", "String has duplicates in upper case"),
-                Arguments.of(Map.of('a', 2, 'd', 1, 'm', 2), "madam", "String has several duplicates in lower case"),
-                Arguments.of(Map.of('a', 2, 'd', 1, 'm', 1, 'M', 1), "Madam", "Mixed case letters"),
-                Arguments.of(Map.of('a', 1, 'c', 1, 't', 1), "cat", "String has no duplicates"),
+                Arguments.of(Map.of('h', 1, 'e', 1, 'L', 2, 'o', 1),
+                        "heLLo", "String has duplicates in upper case"),
+                Arguments.of(Map.of('a', 2, 'd', 1, 'm', 2), "madam",
+                        "String has several duplicates in lower case"),
+                Arguments.of(Map.of('a', 2, 'd', 1, 'm', 1, 'M', 1),
+                        "Madam", "Mixed case letters"),
+                Arguments.of(Map.of('a', 1, 'c', 1, 't', 1), "cat",
+                        "String has no duplicates"),
                 Arguments.of(Map.of(' ', 2, 'a', 1, 'b', 1, 'B', 1, 'c', 1,
                                 't', 2, 'e', 1, 'h', 1, 'o', 1),
                         "Bob the cat", "Complicated string with several spaces in the middle and duplicates"),
-                Arguments.of(Map.of('2', 1, '5', 1, '6', 1, '8', 1), "6825", "Numbers without duplicates"),
-                Arguments.of(Map.of('2', 1, '5', 1, '6', 2, '8', 2), "868625", "Numbers without duplicates"),
-                Arguments.of(Map.of('%', 1, '№', 1, '*', 1, '?', 1), "№%?*", "Special characters without duplicates"),
-                Arguments.of(Map.of(' ', 3, 'a', 1, 'c', 1, 't', 1), "   cat", "Several spaces in the beginning"),
-                Arguments.of(Map.of(' ', 3, 'a', 1, 'c', 1, 't', 1), "cat   ", "Several spaces in the end"),
+                Arguments.of(Map.of('2', 1, '5', 1, '6', 1, '8', 1), "6825",
+                        "Numbers without duplicates"),
+                Arguments.of(Map.of('2', 1, '5', 1, '6', 2, '8', 2), "868625",
+                        "Numbers without duplicates"),
+                Arguments.of(Map.of('%', 1, '№', 1, '*', 1, '?', 1), "№%?*",
+                        "Special characters without duplicates"),
+                Arguments.of(Map.of(' ', 3, 'a', 1, 'c', 1, 't', 1), "   cat",
+                        "Several spaces in the beginning"),
+                Arguments.of(Map.of(' ', 3, 'a', 1, 'c', 1, 't', 1), "cat   ",
+                        "Several spaces in the end"),
                 Arguments.of(Map.of(' ', 1), " ", "Only one space as a string"),
                 Arguments.of(Map.of('a', 1), "a", "Only one letter as a string"),
                 Arguments.of(Map.of('2', 1), "2", "Only one number as a string"),
@@ -275,7 +291,9 @@ public class StringProcessorTest {
     @Test
     @DisplayName("findLongestWord should throw IllegalArgumentException, when the string is null")
     void findLongestWordTest_nullString_throwsIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.findLongestWord(null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> StringProcessor.findLongestWord(null));
+
         assertEquals("Input string cannot be null.", exception.getMessage());
     }
 
@@ -318,11 +336,15 @@ public class StringProcessorTest {
     void formatPhoneNumber_nullString_throwsIllegalArgumentException() {
         assertAll(
                 () -> {
-                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.formatPhoneNumber_replace(null));
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                            () -> StringProcessor.formatPhoneNumber_replace(null));
+
                     assertEquals("Input string cannot be null.", exception.getMessage());
                 },
                 () -> {
-                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.formatPhoneNumber_append(null));
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                            () -> StringProcessor.formatPhoneNumber_append(null));
+
                     assertEquals("Input string cannot be null.", exception.getMessage());
                 }
         );
@@ -341,11 +363,15 @@ public class StringProcessorTest {
     void formatPhoneNumber_shortNumber_throwsIllegalArgumentException(String str, String description) {
         assertAll(
                 () -> {
-                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.formatPhoneNumber_replace(str));
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                            () -> StringProcessor.formatPhoneNumber_replace(str));
+
                     assertEquals("The phone number must be 11 digits long.", exception.getMessage());
                 },
                 () -> {
-                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.formatPhoneNumber_append(str));
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                            () -> StringProcessor.formatPhoneNumber_append(str));
+
                     assertEquals("The phone number must be 11 digits long.", exception.getMessage());
                 }
         );
@@ -360,12 +386,18 @@ public class StringProcessorTest {
     void formatPhoneNumber_wrongBeginning_throwsIllegalArgumentException(String str, String description) {
         assertAll(
                 () -> {
-                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.formatPhoneNumber_replace(str));
-                    assertEquals("Please check that your phone number is entered correctly. Russian numbers must begin with 7 or 8.", exception.getMessage());
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                            () -> StringProcessor.formatPhoneNumber_replace(str));
+
+                    assertEquals("Please check that your phone number is entered correctly. " +
+                            "Russian numbers must begin with 7 or 8.", exception.getMessage());
                 },
                 () -> {
-                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> StringProcessor.formatPhoneNumber_append(str));
-                    assertEquals("Please check that your phone number is entered correctly. Russian numbers must begin with 7 or 8.", exception.getMessage());
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                            () -> StringProcessor.formatPhoneNumber_append(str));
+
+                    assertEquals("Please check that your phone number is entered correctly. " +
+                            "Russian numbers must begin with 7 or 8.", exception.getMessage());
                 }
         );
     }

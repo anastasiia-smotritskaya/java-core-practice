@@ -2,6 +2,9 @@ package com.github.anastasiiasmotritskaya.javacore.exceptionstest;
 
 import com.github.anastasiiasmotritskaya.javacore.exceptions.*;
 import com.github.anastasiiasmotritskaya.javacore.oop.BookStatus;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,6 +16,8 @@ import static com.github.anastasiiasmotritskaya.javacore.oop.BookStatus.RESERVED
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Epic("Java Core")
+@Feature("Exception handling")
 public class ExceptionsTest {
     @Test
     @DisplayName("BookAlreadyExistsException(String isbn) constructor test")

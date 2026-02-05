@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.basicsyntaxtest;
 
 import com.github.anastasiiasmotritskaya.javacore.basicsyntax.Cycles;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -11,6 +14,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("Basic syntax")
+@Story("Cycles")
 public class CyclesTest {
 
     @ParameterizedTest
@@ -71,7 +77,9 @@ public class CyclesTest {
             "5, 3, 'The start must be <= end. Given: start = 5, end = 3.'",
     })
     public void findPrimeNumbersIllegalNumberTest(int start, int end, String expectedMessage) {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> Cycles.findPrimeNumbers(start, end));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> Cycles.findPrimeNumbers(start, end));
+
         assertTrue(exception.getMessage().contains(expectedMessage));
     }
 
@@ -94,18 +102,21 @@ public class CyclesTest {
     @Test
     public void findPrimeNumbersLargeRangeTest() {
         List<Integer> primeNumbers = Cycles.findPrimeNumbers(2, 100_000);
+
         assertEquals(9592, primeNumbers.size());
     }
 
     @Test
     public void multiplicationTableOneTest() {
         int[][] expected = {{1}};
+
         assertArrayEquals(expected, Cycles.multiplicationTable(1));
     }
 
     @Test
     public void multiplicationTableThreeTest() {
         int[][] expected = {{1, 2, 3}, {2, 4, 6}, {3, 6, 9}};
+
         assertArrayEquals(expected, Cycles.multiplicationTable(3));
     }
 
@@ -128,7 +139,9 @@ public class CyclesTest {
     @ParameterizedTest
     @ValueSource(ints = {-1, 0, 11})
     public void multiplicationTableIllegalArgumentTest(int tableLength) {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> Cycles.multiplicationTable(tableLength));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> Cycles.multiplicationTable(tableLength));
+
         assertEquals("The entered value must be between 1 and 10.", exception.getMessage());
     }
 

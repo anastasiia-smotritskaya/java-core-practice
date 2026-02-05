@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("io.qameta.allure") version "2.11.2"
 }
 
 group = "com.github.anastasiia-smotritskaya"
@@ -14,6 +15,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
+    testImplementation("io.qameta.allure:allure-junit5:2.24.0")
 }
 
 tasks.test {

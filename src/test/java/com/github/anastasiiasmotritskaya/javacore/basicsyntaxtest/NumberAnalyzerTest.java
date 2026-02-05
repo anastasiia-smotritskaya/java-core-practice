@@ -1,24 +1,36 @@
 package com.github.anastasiiasmotritskaya.javacore.basicsyntaxtest;
 
 import com.github.anastasiiasmotritskaya.javacore.basicsyntax.NumberAnalyzer;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("Basic syntax")
+@Story("Number Analyzer")
 public class NumberAnalyzerTest {
 
     @Test
     public void isPrimeNullTest() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> NumberAnalyzer.isPrime(0));
-        assertEquals("The number 1 is neither prime nor composite, and numbers less than 1 are not prime numbers.",
-                exception.getMessage());
+        String expected = "The number 1 is neither prime nor composite, and numbers less than 1 are not prime numbers.";
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> NumberAnalyzer.isPrime(0));
+
+        assertEquals(expected, exception.getMessage());
     }
 
     @Test
     public void isPrimeOneTest() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> NumberAnalyzer.isPrime(1));
-        assertEquals("The number 1 is neither prime nor composite, and numbers less than 1 are not prime numbers.",
-                exception.getMessage());
+        String expected = "The number 1 is neither prime nor composite, and numbers less than 1 are not prime numbers.";
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> NumberAnalyzer.isPrime(1));
+
+        assertEquals(expected, exception.getMessage());
     }
 
     @Test

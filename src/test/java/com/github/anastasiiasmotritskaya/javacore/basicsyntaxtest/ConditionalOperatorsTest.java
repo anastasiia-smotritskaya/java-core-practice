@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.basicsyntaxtest;
 
 import com.github.anastasiiasmotritskaya.javacore.basicsyntax.ConditionalOperators;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -8,6 +11,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("Basic syntax")
+@Story("Conditional operators")
 public class ConditionalOperatorsTest {
 
     @ParameterizedTest(name = "Score {0} should be grade {1}")
@@ -123,7 +129,9 @@ public class ConditionalOperatorsTest {
             "0.99, true"
     })
     public void calculateDiscountWithCardIllegalArgumentTest(double price, boolean hasCard) {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConditionalOperators.calculateDiscountWithCard(price, hasCard));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ConditionalOperators.calculateDiscountWithCard(price, hasCard));
+
         assertEquals("The price of a product cannot be less than 1.00.", exception.getMessage());
     }
 
@@ -158,7 +166,9 @@ public class ConditionalOperatorsTest {
             "-3, -4, -5", "-15, -3, -4"
     })
     public void triangleTypeZeroTest(int a, int b, int c) {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConditionalOperators.triangleType(a, b, c));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ConditionalOperators.triangleType(a, b, c));
+
         assertEquals("The length of a side of a triangle must be greater than zero.", exception.getMessage());
     }
 
@@ -167,7 +177,9 @@ public class ConditionalOperatorsTest {
             "15, 3, 4", "3, 15, 4", "3, 4, 15"
     })
     public void triangleTypeGreaterThanThirdTest(int a, int b, int c) {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConditionalOperators.triangleType(a, b, c));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ConditionalOperators.triangleType(a, b, c));
+
         assertEquals("A triangle is possible if the sum of any two sides is greater than the third.", exception.getMessage());
     }
 

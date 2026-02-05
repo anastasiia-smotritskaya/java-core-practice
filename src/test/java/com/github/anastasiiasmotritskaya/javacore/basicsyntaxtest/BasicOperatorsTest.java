@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.basicsyntaxtest;
 
 import com.github.anastasiiasmotritskaya.javacore.basicsyntax.BasicOperators;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -8,6 +11,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("Basic syntax")
+@Story("Basic operators")
 public class BasicOperatorsTest {
 
     @Test
@@ -24,6 +30,7 @@ public class BasicOperatorsTest {
     void divideWithRemainderNullTest() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> BasicOperators.divideWithRemainder(10, 0));
+
         assertEquals("You can't divide by zero", exception.getMessage());
     }
 
@@ -41,6 +48,7 @@ public class BasicOperatorsTest {
     void convertTemperatureFromTest() {
         IllegalArgumentException fromException = assertThrows(IllegalArgumentException.class,
                 () -> BasicOperators.convertTemperature(100, "Цельсий", "K"));
+
         assertEquals("This is not a scale! You must select Celsius (C), Fahrenheit (F), or Kelvin (K).", fromException.getMessage());
     }
 
@@ -48,6 +56,7 @@ public class BasicOperatorsTest {
     void convertTemperatureToTest() {
         IllegalArgumentException toException = assertThrows(IllegalArgumentException.class,
                 () -> BasicOperators.convertTemperature(100.00, "C", "Кельвин"));
+
         assertEquals("This is not a scale! You must select Celsius (C), Fahrenheit (F), or Kelvin (K).", toException.getMessage());
     }
 
@@ -124,6 +133,7 @@ public class BasicOperatorsTest {
     void convertTemperatureToKelvinNegativeTest(double negativeValue) {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> BasicOperators.convertTemperature(negativeValue, "K", "C"));
+
         assertEquals("Kelvins are never negative. Check the data.", exception.getMessage());
     }
 
@@ -132,6 +142,7 @@ public class BasicOperatorsTest {
     void convertTemperatureFromCelsiusToKelvinNegativeTest(double negativeValue) {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> BasicOperators.convertTemperature(negativeValue, "C", "K"));
+
         assertEquals("Kelvins are never negative. Check the data.", exception.getMessage());
     }
 
@@ -140,6 +151,7 @@ public class BasicOperatorsTest {
     void convertTemperatureFromFahrenheitToKelvinNegativeTest(double negativeValue) {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> BasicOperators.convertTemperature(negativeValue, "F", "K"));
+
         assertEquals("Kelvins are never negative. Check the data.", exception.getMessage());
     }
 

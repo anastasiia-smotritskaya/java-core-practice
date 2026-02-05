@@ -1,6 +1,9 @@
 package com.github.anastasiiasmotritskaya.javacore.datatest;
 
 import com.github.anastasiiasmotritskaya.javacore.data.DataTransformer;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -20,6 +23,9 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Epic("Java Core")
+@Feature("Working with data")
+@Story("Data transformer")
 public class DataTransformerTest {
     @TempDir
     Path tempDir;
@@ -32,11 +38,13 @@ public class DataTransformerTest {
 
         assertAll(
                 () -> {
-                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> DataTransformer.filterAndCapitalize(filePath, existingFile.toString()));
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                            () -> DataTransformer.filterAndCapitalize(filePath, existingFile.toString()));
                     assertEquals("Input file path must not be null or empty.", exception.getMessage());
                 },
                 () -> {
-                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> DataTransformer.filterAndCapitalize(existingFile.toString(), filePath));
+                    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                            () -> DataTransformer.filterAndCapitalize(existingFile.toString(), filePath));
                     assertEquals("Output file path must not be null or empty.", exception.getMessage());
                 }
         );
@@ -46,9 +54,12 @@ public class DataTransformerTest {
     @DisplayName("filterAndCapitalize should throw IOException when input or output file path doesn't exist")
     void filterAndCapitalizeTest_IOException() {
         Path existingFile = tempDir.resolve("file-filterAndCapitalizeTest_IOException.txt");
+
         assertAll(
-                () -> assertThrows(IOException.class, () -> DataTransformer.filterAndCapitalize("/nonexistent/file.txt", existingFile.toString())),
-                () -> assertThrows(IOException.class, () -> DataTransformer.filterAndCapitalize(existingFile.toString(), "/nonexistent/file.txt"))
+                () -> assertThrows(IOException.class,
+                        () -> DataTransformer.filterAndCapitalize("/nonexistent/file.txt", existingFile.toString())),
+                () -> assertThrows(IOException.class,
+                        () -> DataTransformer.filterAndCapitalize(existingFile.toString(), "/nonexistent/file.txt"))
         );
     }
 
@@ -111,11 +122,13 @@ public class DataTransformerTest {
 
         String currentLine;
         StringBuilder actual = new StringBuilder();
+
         try (BufferedReader reader = new BufferedReader(new FileReader(tempOutputFile.toString(), StandardCharsets.UTF_8))) {
             while ((currentLine = reader.readLine()) != null) {
                 actual.append(currentLine).append("\n");
             }
         }
+
         assertEquals(expected, actual.toString());
     }
 
@@ -191,6 +204,7 @@ public class DataTransformerTest {
     @Test
     @DisplayName("filterAndCapitalize should overwrite the information in the output file if there is already text there")
     void filterAndCapitalize_outputFileAlreadyHasTextTest() throws IOException {
+        String expected = "A IN THE INPUT FILE\n";
         Path tempInputFile = tempDir.resolve("temp-input-file-filterAndCapitalize_outputFileAlreadyHasTextTest.txt");
         Path tempOutputFile = tempDir.resolve("temp-output-file-filterAndCapitalize_outputFileAlreadyHasTextTest.txt");
 
@@ -201,13 +215,12 @@ public class DataTransformerTest {
 
         String currentLine;
         StringBuilder actual = new StringBuilder();
+
         try (BufferedReader reader = new BufferedReader(new FileReader(tempOutputFile.toString(), StandardCharsets.UTF_8))) {
             while ((currentLine = reader.readLine()) != null) {
                 actual.append(currentLine).append("\n");
             }
         }
-
-        String expected = "A IN THE INPUT FILE\n";
 
         assertEquals(expected, actual.toString());
     }
@@ -215,6 +228,7 @@ public class DataTransformerTest {
     @Test
     @DisplayName("filterAndCapitalize should ignore lines starting with space")
     void filterAndCapitalize_spaceInTheBeginningTest() throws IOException {
+        String expected = "A THE SECOND LINE HAS NO SPACE IN THE BEGINNING\n";
         Path tempInputFile = tempDir.resolve("temp-input-file-filterAndCapitalize_spaceInTheBeginningTest.txt");
         Path tempOutputFile = tempDir.resolve("temp-output-file-filterAndCapitalize_spaceInTheBeginningTest.txt");
 
@@ -224,13 +238,12 @@ public class DataTransformerTest {
 
         String currentLine;
         StringBuilder actual = new StringBuilder();
+
         try (BufferedReader reader = new BufferedReader(new FileReader(tempOutputFile.toString(), StandardCharsets.UTF_8))) {
             while ((currentLine = reader.readLine()) != null) {
                 actual.append(currentLine).append("\n");
             }
         }
-
-        String expected = "A THE SECOND LINE HAS NO SPACE IN THE BEGINNING\n";
 
         assertEquals(expected, actual.toString());
     }
