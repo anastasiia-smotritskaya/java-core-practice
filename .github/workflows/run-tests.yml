@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Получить код из репозитория
+      # 1. Получить код
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -18,27 +18,32 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      # 3. Дать права на выполнение gradlew (для Linux)
-      - name: Make gradlew executable
-        run: chmod +x gradlew
+      # 3. Кэшировать Gradle зависимости
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       # 4. Запустить тесты
-      - name: Run tests with Gradle
-        run: ./gradlew test
+      - name: Run tests
+        run: ./gradlew test --no-daemon
 
-      # 5. Сгенерировать Allure отчёт
+      # 5. Сгенерировать Allure отчёт через Gradle
       - name: Generate Allure Report
-        uses: simple-elf/allure-report-action@master
-        if: always()  # ← выполнить даже если тесты упали
-        with:
-          allure_results: build/allure-results
-          allure_report: allure-report
+        if: always()
+        run: ./gradlew allureReport
 
-      # 6. Сохранить отчёт как артефакт (можно скачать)
-      - name: Upload Allure report
-        uses: actions/upload-artifact@v3
-        if: always()  # ← сохранить даже если тесты упали
+      # 6. Загрузить отчёт как артефакт
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: allure-report
-          path: allure-report
-          retention-days: 7  # хранить 7 дней
+          name: test-report
+          path: |
+            build/reports/tests/test/
+            build/reports/allure-report/
