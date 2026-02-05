@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ master ]
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -46,9 +51,9 @@ jobs:
         if: always()
         run: ./gradlew allureReport
 
-      # 6. Загрузить отчёт как артефакт
+      # 6. Упрощённый деплой: всегда при push (в любую ветку)
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'push'  # ← ПРОЩЕ!
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
