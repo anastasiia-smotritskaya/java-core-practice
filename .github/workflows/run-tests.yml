@@ -1,0 +1,44 @@
+name: Java Tests with Allure
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Получить код из репозитория
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Установить Java 21
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      # 3. Дать права на выполнение gradlew (для Linux)
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      # 4. Запустить тесты
+      - name: Run tests with Gradle
+        run: ./gradlew test
+
+      # 5. Сгенерировать Allure отчёт
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()  # ← выполнить даже если тесты упали
+        with:
+          allure_results: build/allure-results
+          allure_report: allure-report
+
+      # 6. Сохранить отчёт как артефакт (можно скачать)
+      - name: Upload Allure report
+        uses: actions/upload-artifact@v3
+        if: always()  # ← сохранить даже если тесты упали
+        with:
+          name: allure-report
+          path: allure-report
+          retention-days: 7  # хранить 7 дней
