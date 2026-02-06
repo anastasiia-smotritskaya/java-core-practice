@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.introspect.AnnotationCollector;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.groupingBy;
+
 
 /**
  * Класс для работы с коллекциями строк
@@ -295,7 +297,54 @@ public class StringUtils {
 
         return strings.stream()
                 .filter(s -> !s.isEmpty())
-                .collect(Collectors.groupingBy(s -> s.toLowerCase().charAt(0)));
+                .collect(groupingBy(s -> s.toLowerCase().charAt(0)));
+    }
+
+    /**
+     * Считает частоту слов в списке (используется цикл for)
+     *
+     * @param words список слов для подсчета
+     * @return Map, состоящий из ключа (String) - слова и значения (Long) - количества повторений этого слова в списке
+     * {@code countWordFrequency_for(List.of("cat", "dog", "cow")}
+     * вернёт {@code Map.of("cat", 1, "dog", 1, "cow", 1,)}
+     * @throws IllegalArgumentException если список слов или отдельное слово null
+     */
+    public static Map<String, Long> countWordFrequency_for(List<String> words) {
+        validateStrings(words);
+
+        Map<String, Long> result = new HashMap<>();
+
+        for (String word : words) {
+            if (word.isEmpty()) {
+                continue;
+            }
+
+            String normalizedWord = word.trim().toLowerCase();
+
+            long count = result.getOrDefault(normalizedWord, 0L) + 1;
+
+            result.put(normalizedWord, count);
+        }
+
+        return result;
+    }
+
+    /**
+     * Считает частоту слов в списке (используется stream api)
+     *
+     * @param words список слов для подсчета
+     * @return Map, состоящий из ключа (String) - слова и значения (Long) - количества повторений этого слова в списке
+     * {@code countWordFrequency_stream(List.of("cat", "dog", "cow")}
+     * вернёт {@code Map.of("cat", 1, "dog", 1, "cow", 1,)}
+     * @throws IllegalArgumentException если список слов или отдельное слово null
+     */
+    public static Map<String, Long> countWordFrequency_stream(List<String> words) {
+        validateStrings(words);
+
+        return words.stream()
+                .filter(s -> !s.isEmpty())
+                .map(String::trim)
+                .collect(groupingBy(String::toLowerCase, Collectors.counting()));
     }
 
     /**
