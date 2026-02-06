@@ -79,23 +79,34 @@ public abstract class ContainsSubstringAbstractTest {
     private static Stream<Arguments> containsSubstringDataProvider() {
         return Stream.of(
                 Arguments.of(List.of(), "pig", false, "Empty list"),
+
                 Arguments.of(List.of(""), "pig", false, "List with one empty string"),
+
                 Arguments.of(List.of("a"), "a", true, "One letter list and equal one letter substring"),
+
                 Arguments.of(List.of("b"), "a", false,
                         "One letter list and different one letter substring"),
+
                 Arguments.of(List.of("cat"), "a", true, "One word list and one letter substring"),
+
                 Arguments.of(List.of("cat", "dog", "pig"), "g", true,
                         "Several words list and one letter substring"),
+
                 Arguments.of(List.of("cat", "dog", "pig"), "pig", true,
                         "Several words list and one word substring"),
+
                 Arguments.of(List.of("cat", "guinea pig", "dog", "pig"), "pig", true,
                         "Several words list and one word substring"),
+
                 Arguments.of(List.of("cat", "guinea pig", "dog", "pig"), " ", true,
                         "Space as a substring"),
+
                 Arguments.of(List.of("cat", "guinea pig", "dog"), "cow", false,
                         "There are no such substring in the list"),
+
                 Arguments.of(List.of("CAT", "DOG", "PIG"), "pig", true,
                         "Words in the list in upper case, substring is in lower case"),
+
                 Arguments.of(List.of("cat", "dog", "pig"), "PIG", true,
                         "Words in the list in lower case, substring is in upper case")
         );

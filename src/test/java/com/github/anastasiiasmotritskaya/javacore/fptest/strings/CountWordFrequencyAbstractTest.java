@@ -77,11 +77,15 @@ public abstract class CountWordFrequencyAbstractTest {
 
         return Stream.of(
                 Arguments.of(List.of(), Map.of(), "Empty list"),
+
                 Arguments.of(List.of(""), Map.of(), "List with one empty string"),
+
                 Arguments.of(List.of("a"), aMap, "List with one letter in lower case"),
+
                 Arguments.of(List.of("A"), aMap, "List with one letter in upper case"),
-                Arguments.of(List.of("   cat", "@dog   ", "CAT", "   guinea pig   ", "1pig"), variousParametersMap,
-                        "List of various words special characters, numbers and spaces")
+
+                Arguments.of(List.of("   cat", "@dog   ", "CAT", "   guinea pig   ", "1pig"),
+                        variousParametersMap, "List of various words special characters, numbers and spaces")
         );
     }
 }

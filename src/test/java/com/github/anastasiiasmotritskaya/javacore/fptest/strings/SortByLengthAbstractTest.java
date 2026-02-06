@@ -70,11 +70,16 @@ public abstract class SortByLengthAbstractTest {
     private static Stream<Arguments> sortByLengthDataProvider() {
         return Stream.of(
                 Arguments.of(List.of(), List.of(), "Empty list"),
+
                 Arguments.of(List.of(""), List.of(""), "Empty string"),
+
                 Arguments.of(List.of("   "), List.of("   "), "String with spaces"),
+
                 Arguments.of(List.of("cat"), List.of("cat"), "One word list"),
+
                 Arguments.of(List.of("cat", "dog", "pig", "cat"), List.of("cat", "dog", "pig", "cat"),
                         "List of words of the same length"),
+
                 Arguments.of(List.of("guinea pig", "cat", "dog", "pig", "hamster"),
                         List.of("cat", "dog", "pig", "hamster", "guinea pig"), "List of words of different length")
         );

@@ -69,12 +69,17 @@ public abstract class JoinStringsAbstractTest {
     private static Stream<Arguments> joinStringsDataProvider() {
         return Stream.of(
                 Arguments.of(List.of(), "@", "", "Completely empty list"),
+
                 Arguments.of(List.of(""), "@", "", "One empty string list"),
+
                 Arguments.of(List.of("   "), "@", "", "One string with spaces list"),
+
                 Arguments.of(List.of("one", "two", "three"), "@", "one@two@three",
                         "Plain positive test with character delimeter"),
+
                 Arguments.of(List.of("one", "two", "three"), " ", "one two three",
                         "Plain positive test with space delimeter"),
+
                 Arguments.of(List.of("   one   ", "   two   ", "   three   "), "A", "oneAtwoAthree",
                         "Strings have spaces in the end and in the beginning")
         );

@@ -71,16 +71,23 @@ public abstract class ToUpperCaseTrimmedAbstractTest {
     private static Stream<Arguments> toUpperCaseTrimmedDataProvider() {
         return Stream.of(
                 Arguments.of(List.of(), List.of(), "Completely empty list"),
+
                 Arguments.of(List.of(""), List.of(""), "List with one empty string"),
+
                 Arguments.of(List.of("   "), List.of(""), "List with one string with spaces"),
+
                 Arguments.of(List.of("one", "two", "three"), List.of("ONE", "TWO", "THREE"),
                         "Lower case list"),
+
                 Arguments.of(List.of("One", "Two", "Three"), List.of("ONE", "TWO", "THREE"),
                         "Mixed case list"),
+
                 Arguments.of(List.of("ONE", "TWO", "THREE"), List.of("ONE", "TWO", "THREE"),
                         "Upper case list"),
+
                 Arguments.of(List.of("one", "", "three"), List.of("ONE", "", "THREE"),
                         "List has an empty string"),
+
                 Arguments.of(List.of("  one   "), List.of("ONE"),
                         "Spaces in the beginning and in the end")
         );

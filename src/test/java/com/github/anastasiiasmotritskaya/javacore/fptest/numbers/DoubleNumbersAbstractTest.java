@@ -57,8 +57,10 @@ public abstract class DoubleNumbersAbstractTest {
         return Stream.of(
                 Arguments.of(List.of(1, 2, 3, 4, 5), List.of(2, 4, 6, 8, 10),
                         "Positive numbers test"),
+
                 Arguments.of(List.of(-10, -5, 0, 5, 10), List.of(-20, -10, 0, 10, 20),
                         "Mixed numbers test with zero"),
+
                 Arguments.of(new ArrayList<>(), new ArrayList<>(),
                         "Empty list")
         );
