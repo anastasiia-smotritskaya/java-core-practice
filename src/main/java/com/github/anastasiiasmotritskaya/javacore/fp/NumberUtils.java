@@ -234,12 +234,18 @@ public class NumberUtils {
     }
 
     /**
-     * Проверяет, не является ли список чисел null
+     * Проверяет, не является ли список чисел или одно из чисел null
      * Вспомогательный метод
      */
     private static void validateNumbers(List<Integer> numbers) {
         if (numbers == null) {
             throw new IllegalArgumentException("List of numbers must not be null.");
+        }
+
+        for (int i = 0; i < numbers.size(); i++) {
+            if (numbers.get(i) == null) {
+                throw new IllegalArgumentException(String.format("Element at index %d must not be null", i));
+            }
         }
     }
 }

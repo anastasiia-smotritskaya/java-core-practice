@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,6 +40,17 @@ public abstract class FindMaxAbstractTest {
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> findMax(null));
+
+        assertEquals(expected, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("findMax should throw IllegalArgumentException if one of the numbers is null")
+    public void findMax_NullNumberTest() {
+        String expected = String.format("Element at index %d must not be null", 1);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> findMax(Stream.of(1, null, 2).collect(Collectors.toList())));
 
         assertEquals(expected, exception.getMessage());
     }

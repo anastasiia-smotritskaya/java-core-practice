@@ -5,6 +5,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -13,6 +14,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,6 +41,17 @@ public abstract class PartitionEvenOddAbstractTest {
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> partitionEvenOdd(numbers));
+
+        assertEquals(expected, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("partitionEvenOdd should throw IllegalArgumentException if one of the numbers is null")
+    public void partitionEvenOdd_NullNumberTest() {
+        String expected = String.format("Element at index %d must not be null", 1);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> partitionEvenOdd(Stream.of(1, null, 2).collect(Collectors.toList())));
 
         assertEquals(expected, exception.getMessage());
     }
