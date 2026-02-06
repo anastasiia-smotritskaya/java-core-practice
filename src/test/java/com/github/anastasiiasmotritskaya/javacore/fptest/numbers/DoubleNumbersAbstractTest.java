@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,6 +45,17 @@ public abstract class DoubleNumbersAbstractTest {
         assertEquals(expected, exception.getMessage());
     }
 
+    @Test
+    @DisplayName("doubleNumbers should throw IllegalArgumentException if one of the numbers is null")
+    public void doubleNumbers_NullNumberTest() {
+        String expected = String.format("Element at index %d must not be null", 1);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> doubleNumbers(Stream.of(1, null, 2).collect(Collectors.toList())));
+
+        assertEquals(expected, exception.getMessage());
+    }
+
     @ParameterizedTest(name = "[{index}] {2}")
     @DisplayName("doubleNumbers should return a list of doubled numbers")
     @MethodSource("doubleNumbersDataProvider")
@@ -57,8 +69,10 @@ public abstract class DoubleNumbersAbstractTest {
         return Stream.of(
                 Arguments.of(List.of(1, 2, 3, 4, 5), List.of(2, 4, 6, 8, 10),
                         "Positive numbers test"),
+
                 Arguments.of(List.of(-10, -5, 0, 5, 10), List.of(-20, -10, 0, 10, 20),
                         "Mixed numbers test with zero"),
+
                 Arguments.of(new ArrayList<>(), new ArrayList<>(),
                         "Empty list")
         );

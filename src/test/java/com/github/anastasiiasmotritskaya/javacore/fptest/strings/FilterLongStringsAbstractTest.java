@@ -63,7 +63,7 @@ public abstract class FilterLongStringsAbstractTest {
         assertEquals(expected, exception.getMessage());
     }
 
-    @ParameterizedTest(name = "[{index}] {3}} minLength: {1}")
+    @ParameterizedTest(name = "[{index}] {3} minLength: {1}")
     @DisplayName("filterLongStrings tests with various parameters")
     @MethodSource("filterLongStringsDataProvider")
     public void filterLongStrings(List<String> strings, int minLength, List<String> expected, String description) {
@@ -72,65 +72,104 @@ public abstract class FilterLongStringsAbstractTest {
 
     private static Stream<Arguments> filterLongStringsDataProvider() {
         return Stream.of(
-                Arguments.of(List.of(), 5, List.of(), "One empty string"),
+                Arguments.of(List.of(), 5, List.of(), "Empty list"),
+
                 Arguments.of(List.of(""), 5, List.of(), "One empty string"),
+
                 Arguments.of(List.of(""), 0, List.of(), "One empty string"),
+
                 Arguments.of(List.of(" "), 0, List.of(), "One space string"),
+
                 Arguments.of(List.of("   "), 0, List.of(), "Few spaces string"),
+
                 Arguments.of(List.of("", "", ""), 5, List.of(), "Few empty strings"),
+
                 Arguments.of(List.of("", "", ""), 0, List.of(), "Few empty strings"),
+
                 Arguments.of(List.of(" ", " ", " "), 0, List.of(), "Few strings with one space"),
+
                 Arguments.of(List.of("   ", "   ", "   "), 0, List.of(), "Few strings with a few spaces"),
+
                 Arguments.of(List.of("string 1", "string 2", "string 3"), 0,
                         List.of("string 1", "string 2", "string 3"), "Three lines of equal length = 8"),
+
                 Arguments.of(List.of("string 1", "string 2", "string 3"), 1,
                         List.of("string 1", "string 2", "string 3"), "Three lines of equal length = 8"),
+
                 Arguments.of(List.of("string 1", "string 2", "string 3"), 7,
                         List.of("string 1", "string 2", "string 3"), "Three lines of equal length = 8"),
+
                 Arguments.of(List.of("string 1", "string 2", "string 3"), 8,
                         List.of(), "Three lines of equal length = 8"),
+
                 Arguments.of(List.of("string 1", "string 2", "string 3"), 9,
                         List.of(), "Three lines of equal length = 8"),
+
                 Arguments.of(List.of("string 1", "string 22", "string 333"), 7,
                         List.of("string 1", "string 22", "string 333"), "Three lines of different lengths: 8, 9, 10"),
+
                 Arguments.of(List.of("string 1", "string 22", "string 333"), 8,
                         List.of("string 22", "string 333"), "Three lines of different lengths: 8, 9, 10"),
+
                 Arguments.of(List.of("string 1", "string 22", "string 333"), 9,
                         List.of("string 333"), "Three lines of different lengths: 8, 9, 10"),
+
                 Arguments.of(List.of("string 1", "string 22", "string 333"), 10,
                         List.of(), "Three lines of different lengths: 8, 9, 10"),
+
                 Arguments.of(List.of("string 1", "string 22", "string 333"), 11,
                         List.of(), "Three lines of different lengths: 8, 9, 10"),
+
                 Arguments.of(List.of("   string"), 4, List.of("string"), "Few spaces in the beginning"),
+
                 Arguments.of(List.of("   string"), 5, List.of("string"), "Few spaces in the beginning"),
+
                 Arguments.of(List.of("   string"), 6, List.of(), "Few spaces in the beginning"),
+
                 Arguments.of(List.of("   string"), 7, List.of(), "Few spaces in the beginning"),
+
                 Arguments.of(List.of("   string"), 8, List.of(), "Few spaces in the beginning"),
+
                 Arguments.of(List.of("string   "), 4, List.of("string"), "Few spaces in the end"),
+
                 Arguments.of(List.of("string   "), 5, List.of("string"), "Few spaces in the end"),
+
                 Arguments.of(List.of("string   "), 6, List.of(), "Few spaces in the end"),
+
                 Arguments.of(List.of("string   "), 7, List.of(), "Few spaces in the end"),
+
                 Arguments.of(List.of("string   "), 8, List.of(), "Few spaces in the end"),
+
                 Arguments.of(List.of("string   string", "string string"), 11,
                         List.of("string   string", "string string"), "Few spaces in the middle"),
+
                 Arguments.of(List.of("string   string", "string string"), 12,
                         List.of("string   string", "string string"), "Few spaces in the middle"),
+
                 Arguments.of(List.of("string   string", "string string"), 13,
                         List.of("string   string"), "Few spaces in the middle"),
+
                 Arguments.of(List.of("string   string", "string string"), 14,
                         List.of("string   string"), "Few spaces in the middle"),
+
                 Arguments.of(List.of("string   string", "string string"), 15,
                         List.of(), "Few spaces in the middle"),
+
                 Arguments.of(List.of("string   string", "string string"), 16,
                         List.of(), "Few spaces in the middle"),
+
                 Arguments.of(List.of("string 1", "", "string 2", "", "string 3"), 0,
                         List.of("string 1", "string 2", "string 3"), "Few empty strings in the list"),
+
                 Arguments.of(List.of("string 1", "", "string 2", "", "string 3"), 1,
                         List.of("string 1", "string 2", "string 3"), "Few empty strings in the list"),
+
                 Arguments.of(List.of("string 1", "", "string 2", "", "string 3"), 7,
                         List.of("string 1", "string 2", "string 3"), "Few empty strings in the list"),
+
                 Arguments.of(List.of("string 1", "", "string 2", "", "string 3"), 8,
                         List.of(), "Few empty strings in the list"),
+
                 Arguments.of(List.of("string 1", "", "string 2", "", "string 3"), 9,
                         List.of(), "Few empty strings in the list")
         );

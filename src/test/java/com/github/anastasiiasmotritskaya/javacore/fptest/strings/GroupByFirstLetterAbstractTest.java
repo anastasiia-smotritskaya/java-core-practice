@@ -66,27 +66,37 @@ public abstract class GroupByFirstLetterAbstractTest {
     static private Stream<Arguments> groupByFirstLetterDataProvider() {
         return Stream.of(
                 Arguments.of(List.of(), Map.of(), "Empty list"),
+
                 Arguments.of(List.of(""), Map.of(), "List with one empty string"),
+
                 Arguments.of(List.of(" "), Map.of(' ', List.of(" ")),
                         "List with one string with space"),
+
                 Arguments.of(List.of("a"), Map.of('a', List.of("a")),
                         "List with string with one letter"),
+
                 Arguments.of(List.of("a", "b"), Map.of('a', List.of("a"), 'b', List.of("b")),
                         "List with string with one letter"),
+
                 Arguments.of(List.of("cat", "dog", "cow"),
                         Map.of('c', List.of("cat", "cow"), 'd', List.of("dog")),
                         "List has several words with equal first letter"),
+
                 Arguments.of(List.of(" cat", "dog", "cow"),
                         Map.of(' ', List.of(" cat"), 'd', List.of("dog"), 'c', List.of("cow")),
                         "Space in one word"),
+
                 Arguments.of(List.of(" cat", " dog", " cow"),
                         Map.of(' ', List.of(" cat", " dog", " cow")), "Space in several words"),
+
                 Arguments.of(List.of("cat", "dog", "Cow"),
                         Map.of('c', List.of("cat", "Cow"), 'd', List.of("dog")),
                         "Lower case and upper case as first letter in the list"),
+
                 Arguments.of(List.of("@cat", "@dog", "!cow"),
                         Map.of('@', List.of("@cat", "@dog"), '!', List.of("!cow")),
                         "Special characters as first letter"),
+
                 Arguments.of(List.of("1cat", "2dog", "2cow"),
                         Map.of('1', List.of("1cat"), '2', List.of("2dog", "2cow")),
                         "Numbers as first letter")

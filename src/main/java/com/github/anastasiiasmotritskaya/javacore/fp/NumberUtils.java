@@ -1,9 +1,8 @@
 package com.github.anastasiiasmotritskaya.javacore.fp;
 
+import java.net.CookieHandler;
 import java.net.Inet4Address;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -186,6 +185,47 @@ public class NumberUtils {
     }
 
     /**
+     * Делит числа на четные и нечетные (реализовано через цикл for)
+     *
+     * @param numbers список чисел для разделения на четные и нечетные
+     * @return Map, где ключ (boolean) - true (если четное), false (если нечетное)
+     * значение (List) - список чисел, соответствующих критерию четности
+     * {@code partitionEvenOdd_for(List.of(1, 2, 3, 4)  вернёт
+     * {@code Map.of(true, List.of(2, 4), false, List.of(1, 3))}}
+     * @throws IllegalArgumentException если numbers null
+     */
+    public static Map<Boolean, List<Integer>> partitionEvenOdd_for(List<Integer> numbers) {
+        validateNumbers(numbers);
+
+        Map<Boolean, List<Integer>> result = new HashMap<>();
+        result.put(true, new ArrayList<>());
+        result.put(false, new ArrayList<>());
+
+        for (Integer number : numbers) {
+            if (number % 2 == 0) result.get(true).add(number);
+            else result.get(false).add(number);
+        }
+
+        return result;
+    }
+
+    /**
+     * Делит числа на четные и нечетные (реализовано через stream api)
+     *
+     * @param numbers список чисел для разделения на четные и нечетные
+     * @return Map, где ключ (boolean) - true (если четное), false (если нечетное)
+     * значение (List) - список чисел, соответствующих критерию четности
+     * {@code partitionEvenOdd_stream(List.of(1, 2, 3, 4)  вернёт
+     * {@code Map.of(true, List.of(2, 4), false, List.of(1, 3))}}
+     * @throws IllegalArgumentException если numbers null
+     */
+    public static Map<Boolean, List<Integer>> partitionEvenOdd_stream(List<Integer> numbers) {
+        validateNumbers(numbers);
+
+        return numbers.stream().collect(Collectors.partitioningBy(n -> n % 2 == 0));
+    }
+
+    /**
      * Умножает число на 2
      * Вспомогательный метод для doubleNumbers_mr
      */
@@ -194,12 +234,18 @@ public class NumberUtils {
     }
 
     /**
-     * Проверяет, не является ли список чисел null
+     * Проверяет, не является ли список чисел или одно из чисел null
      * Вспомогательный метод
      */
     private static void validateNumbers(List<Integer> numbers) {
         if (numbers == null) {
             throw new IllegalArgumentException("List of numbers must not be null.");
+        }
+
+        for (int i = 0; i < numbers.size(); i++) {
+            if (numbers.get(i) == null) {
+                throw new IllegalArgumentException(String.format("Element at index %d must not be null", i));
+            }
         }
     }
 }
